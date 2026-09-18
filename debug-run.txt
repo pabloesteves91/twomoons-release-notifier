@@ -20,12 +20,11 @@ und ändert state.json nicht. Diese optionalen Zeilen steuern, was geprüft wird
 
 Ohne modus-Zeile läuft ein normaler Dry-Run.
 
-liste: https://www.twomoons.ch/neu-im-shop/
+# liste: https://www.twomoons.ch/neu-im-shop/
 
 
 # Zum Ausprobieren die beiden Zeilen ohne das Gatter davor stehen lassen:
 # quelle: https://www.twomoons.ch/
 # bereich: Neu im Shop
 
-Letzter Anstoss: 2026-09-18 — Kontrolle bestanden: Bild-URLs mit Leerzeichen
-werden kodiert (…/Armory%20Deck%20Malice.webp).
+Letzter Anstoss: 2026-09-18 — Spiegel-Modus: Trockenlauf gegen /neu-im-shop/.

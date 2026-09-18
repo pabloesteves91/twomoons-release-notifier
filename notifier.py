@@ -424,8 +424,11 @@ def urls_from_listing(html: str, page_url: str, heading: str = "") -> list[str]:
     soup = BeautifulSoup(html, "html.parser")
     wanted = clean_text(heading).casefold()
 
+    # Kategorieseiten haben keine benannten Abschnitte — dann zählt die ganze Seite.
+    bloecke = listing_blocks(soup) or [("", soup)]
+
     found: list[str] = []
-    for title, block in listing_blocks(soup):
+    for title, block in bloecke:
         if wanted and wanted not in title.casefold():
             continue
         for card in block.select(".product-box"):
@@ -1285,6 +1288,102 @@ def run_from_listing(
     return posted, report
 
 
+def run_mirror(
+    config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace
+) -> tuple[int, list[str]]:
+    """Spiegelt die obersten Produkte einer Shop-Seite in den Kanal.
+
+    Der Kanal zeigt genau das, was auf "Neu im Shop" zuoberst steht: Kommt ein
+    Produkt dazu, wird es gepostet; fällt eines aus den obersten N heraus, wird
+    seine Nachricht gelöscht. Damit bleibt der Kanal von selbst aktuell und
+    kurz, ohne Alterslogik.
+    """
+    report: list[str] = []
+    channel = config.get("channel", {})
+    discord_config = config.get("discord", {})
+    webhook_env = discord_config.get("webhook_env", "DISCORD_WEBHOOK_RELEASES")
+    webhook_url = os.environ.get(webhook_env, "").strip()
+
+    listing_url = channel.get("listing_url", "")
+    keep = int(channel.get("keep", 20))
+    min_items = int(channel.get("min_listing_items", 10))
+
+    html = fetch_text(listing_url, config.get("request", {}))
+    alle = urls_from_listing(html, listing_url, channel.get("heading", ""))
+    LOG.info("%s Produkt(e) auf %s", len(alle), listing_url)
+
+    if len(alle) < min_items:
+        # Liefert die Seite plötzlich fast nichts (Umbau, Fehlerseite, Bot-Schutz),
+        # darf der Kanal nicht leergeräumt werden.
+        raise RuntimeError(
+            f"Nur {len(alle)} Produkt(e) auf der Seite gefunden, erwartet mindestens {min_items} — "
+            "es wird nichts gepostet und nichts gelöscht"
+        )
+
+    oben = alle[:keep]
+    posted: dict[str, Any] = state.setdefault("products", {})
+    fehlt = [url for url in oben if url not in posted]
+    raus = [url for url in posted if url not in oben]
+    LOG.info("%s davon noch nicht im Kanal, %s Meldung(en) sind nicht mehr oben", len(fehlt), len(raus))
+
+    if not webhook_url and not args.dry_run:
+        LOG.error("%s ist nicht gesetzt — es wird nichts gepostet", webhook_env)
+        return 0, [f"FEHLER  {webhook_env} fehlt"]
+
+    known = set(state.get("known", []))
+    posted_count = 0
+    try:
+        # Umgekehrte Seitenreihenfolge: das älteste der neuen Produkte zuerst,
+        # damit der Kanal von oben nach unten chronologisch liest.
+        limit = args.limit or keep
+        posted_count = post_new_products(
+            list(reversed(fehlt))[:limit], config, state, known, args, webhook_url, report
+        )
+        entfernt = drop_messages(raus, config, state, args, webhook_url)
+        if entfernt:
+            report.append(f"{entfernt} Meldung(en) entfernt, weil nicht mehr unter den obersten {keep}")
+    finally:
+        if not args.dry_run:
+            state["initialized"] = True
+            state["last_run"] = timestamp()
+            save_state(args.state, state, known)
+        else:
+            LOG.info("DRY-RUN — state.json bleibt unverändert")
+    return posted_count, report
+
+
+def drop_messages(
+    urls: list[str],
+    config: dict[str, Any],
+    state: dict[str, Any],
+    args: argparse.Namespace,
+    webhook_url: str,
+) -> int:
+    """Entfernt die Nachrichten der Produkte, die nicht mehr oben stehen."""
+    delay = float(config.get("discord", {}).get("delay_between_posts", 1.5))
+    entfernt = 0
+    for url in urls:
+        record = state["products"].get(url)
+        if not isinstance(record, dict):
+            continue
+        name = record.get("name", url)
+        if args.dry_run:
+            LOG.info("DRY-RUN — würde aus dem Kanal entfernen: %s", name)
+            continue
+        message_id = record.get("message_id", "")
+        if message_id and webhook_url:
+            try:
+                delete_message(webhook_url, message_id)
+            except Exception as error:  # ein Fehler beim Löschen darf den Lauf nicht kippen
+                LOG.warning("Nachricht zu '%s' liess sich nicht löschen: %s", name, error)
+                continue
+            time.sleep(delay)
+        LOG.info("Aus dem Kanal entfernt: %s", name)
+        state["products"].pop(url, None)
+        entfernt += 1
+    return entfernt
+
+
 def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace) -> tuple[int, list[str]]:
     report: list[str] = []
     discord_config = config.get("discord", {})
@@ -1677,7 +1776,12 @@ def main(argv: list[str] | None = None) -> int:
 
     state = load_state(args.state)
     try:
-        posted, report = run_from_listing(config, state, args) if args.post_from else run(config, state, args)
+        if args.post_from:
+            posted, report = run_from_listing(config, state, args)
+        elif config.get("channel", {}).get("mode", "mirror") == "mirror":
+            posted, report = run_mirror(config, state, args)
+        else:
+            posted, report = run(config, state, args)
     except Exception as error:
         LOG.exception("Lauf abgebrochen: %s", error)
         return 1

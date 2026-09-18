@@ -287,6 +287,114 @@ class UrlKodierungTest(unittest.TestCase):
         self.assertNotIn(" ", embed["url"])
 
 
+class SpiegelTest(unittest.TestCase):
+    """Der Kanal zeigt genau die obersten N Produkte der Shop-Seite."""
+
+    LISTE = "https://www.twomoons.ch/neu-im-shop/"
+    _nummer = 0
+
+    def setUp(self):
+        self.tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.state_path = self.tmp / "state.json"
+        self.listing = fixture("neu_im_shop.html")
+        self.config = dict(
+            CONFIG,
+            channel={"mode": "mirror", "listing_url": self.LISTE, "heading": "", "keep": 3, "min_listing_items": 2},
+        )
+
+    def seite(self, url, config):
+        if url == self.LISTE:
+            return self.listing
+        if "search" in url:
+            return fixture("suche.html")
+        return fixture("produkt_mit_badges.html")
+
+    def message_id(self, *args, **kwargs):
+        SpiegelTest._nummer += 1
+        return str(1000 + SpiegelTest._nummer)
+
+    def lauf(self, state, **overrides):
+        args = default_args(state=self.state_path, **overrides)
+        with mock.patch.object(notifier, "fetch_text", side_effect=self.seite), \
+             mock.patch.object(notifier, "post_embed", side_effect=self.message_id) as post, \
+             mock.patch.object(notifier, "delete_message", return_value=True) as geloescht, \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            posted, report = notifier.run_mirror(self.config, state, args)
+        return posted, report, post, geloescht
+
+    def test_erster_lauf_postet_die_obersten_drei(self):
+        state = notifier.empty_state()
+        posted, _, post, geloescht = self.lauf(state)
+
+        self.assertEqual((posted, post.call_count), (3, 3))
+        geloescht.assert_not_called()
+        self.assertEqual(
+            sorted(state["products"]),
+            [f"https://www.twomoons.ch/produkt-{n}" for n in (1, 2, 3)],
+        )
+
+    def test_aeltestes_zuerst_posten(self):
+        """Im Kanal steht das Neueste unten — also umgekehrt zur Seitenreihenfolge."""
+        state = notifier.empty_state()
+        self.lauf(state)
+        reihenfolge = [
+            url for url, record in sorted(state["products"].items(), key=lambda p: p[1]["message_id"])
+        ]
+        self.assertEqual(reihenfolge, [
+            "https://www.twomoons.ch/produkt-3",
+            "https://www.twomoons.ch/produkt-2",
+            "https://www.twomoons.ch/produkt-1",
+        ])
+
+    def test_zweiter_lauf_ohne_aenderung_tut_nichts(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+        posted, _, post, geloescht = self.lauf(state)
+
+        self.assertEqual(posted, 0)
+        post.assert_not_called()
+        geloescht.assert_not_called()
+
+    def test_neues_produkt_oben_verdraengt_das_unterste(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+
+        neue_karte = (
+            '<div class="card product-box box-standard"><div class="card-body">'
+            '<a class="product-name" href="https://www.twomoons.ch/produkt-neu">Ganz neu</a>'
+            "</div></div>"
+        )
+        self.listing = self.listing.replace(
+            '<div class="cms-element-product-listing">',
+            '<div class="cms-element-product-listing">' + neue_karte,
+        )
+        posted, report, post, geloescht = self.lauf(state)
+
+        self.assertEqual((posted, post.call_count), (1, 1))
+        self.assertEqual(geloescht.call_count, 1)
+        self.assertIn("https://www.twomoons.ch/produkt-neu", state["products"])
+        # Produkt 3 stand auf Platz 3 und ist damit herausgefallen.
+        self.assertNotIn("https://www.twomoons.ch/produkt-3", state["products"])
+        self.assertTrue(any("nicht mehr unter den obersten" in line for line in report))
+
+    def test_kaputte_seite_loescht_nichts(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+        self.listing = "<html><body><p>Wartungsarbeiten</p></body></html>"
+
+        with self.assertRaises(RuntimeError):
+            self.lauf(state)
+        self.assertEqual(len(state["products"]), 3)
+
+    def test_dry_run_postet_und_loescht_nichts(self):
+        state = notifier.empty_state()
+        posted, _, post, geloescht = self.lauf(state, dry_run=True)
+        post.assert_not_called()
+        geloescht.assert_not_called()
+        self.assertFalse(self.state_path.exists())
+
+
 class AufraeumenTest(unittest.TestCase):
     """Im Kanal sollen nur die neuesten Meldungen stehen bleiben."""
 

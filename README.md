@@ -1,8 +1,12 @@
 # TwoMoons Release Notifier
 
-Meldet neue Produkte im Shop [twomoons.ch](https://www.twomoons.ch/) stündlich in
-einen Discord-Kanal — mit Name, Preis, Sprachen, Badges („Neu", „Vorbestellung"),
-Produktbild und Link.
+Spiegelt die Seite [„Neu im Shop"](https://www.twomoons.ch/neu-im-shop/) von
+twomoons.ch stündlich in einen Discord-Kanal — mit Name, Preis, Sprachen, Badges
+(„Neu", „Vorbestellung"), Produktbild und Link.
+
+Im Kanal stehen immer genau die **20 obersten Produkte dieser Seite**: Kommt ein
+Produkt dazu, wird es gepostet; rutscht eines aus den obersten 20 heraus,
+verschwindet seine Nachricht wieder.
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -25,7 +29,7 @@ Läuft ausschliesslich über GitHub Actions — kein Server, keine Datenbank.
 3. [Zeitplan und Default-Branch](#zeitplan-und-default-branch)
 4. [Filter: was gemeldet wird und was nicht](#filter-was-gemeldet-wird-und-was-nicht)
 5. [`config.json` im Detail](#configjson-im-detail)
-6. [Kanal sauber halten](#kanal-sauber-halten)
+6. [Was im Kanal steht](#was-im-kanal-steht)
 7. [`state.json` — das Gedächtnis](#statejson--das-gedächtnis)
 8. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
 9. [Lokal ausführen](#lokal-ausführen)
@@ -37,25 +41,28 @@ Läuft ausschliesslich über GitHub Actions — kein Server, keine Datenbank.
 
 Ein Lauf besteht aus vier Schritten:
 
-1. **Produkte finden.** Der Shop läuft auf Shopware 6 und veröffentlicht eine
-   Sitemap: `https://www.twomoons.ch/sitemap.xml` verweist auf eine gepackte
-   Teil-Sitemap mit rund 6600 URLs. Die Sitemap überlebt Umbauten am Layout und
-   ist deshalb die Hauptquelle. Fällt sie aus, können ersatzweise Listing-Seiten
-   abgeklappert werden (`shop.listing_urls`).
-2. **Vergleichen.** Die gefundenen URLs werden gegen `state.json` gehalten. Nur
-   wirklich neue URLs werden weiterverfolgt — deshalb kostet ein stündlicher Lauf
-   im Normalfall nur einen einzigen Abruf.
-3. **Produktseite auswerten.** Von jeder neuen Seite werden Name, Preis,
-   Sprachen, Hersteller/Serie, Bild und Kategorie gelesen. Anschliessend wird das
-   Produkt in der Shop-Suche nachgeschlagen, denn die **Badges stehen nur auf den
-   Listenkarten**, nicht auf der Produktseite selbst.
-4. **Posten, merken, aufräumen.** Je Produkt ein Discord-Embed. Danach werden
-   die ältesten Meldungen gelöscht, sodass im Kanal immer nur die 20 neuesten
-   stehen. Zuletzt wird `state.json` aktualisiert und vom Workflow zurück ins
-   Repo committet.
+1. **Seite holen.** `https://www.twomoons.ch/neu-im-shop/` liefert die Neuheiten
+   in der Reihenfolge „neuste zuerst" — alle Produkte in einem Abruf, ohne
+   Paginierung.
+2. **Vergleichen.** Die obersten 20 werden gegen das gehalten, was laut
+   `state.json` bereits im Kanal steht.
+3. **Produktseiten auswerten.** Nur für die neu hinzugekommenen Produkte werden
+   Name, Preis, Sprachen, Hersteller und Bild von der Produktseite gelesen.
+   Anschliessend wird das Produkt in der Shop-Suche nachgeschlagen, denn die
+   **Badges stehen nur auf den Listenkarten**, nicht auf der Produktseite selbst.
+4. **Posten und aufräumen.** Neue Produkte werden gepostet — das älteste zuerst,
+   damit der Kanal von oben nach unten chronologisch liest. Produkte, die nicht
+   mehr unter den obersten 20 stehen, verlieren ihre Nachricht. Danach wird
+   `state.json` aktualisiert und vom Workflow zurück ins Repo committet.
 
-Beim **allerersten Lauf wird nichts gepostet**: Der Ist-Stand wird nur als bekannt
-gespeichert, sonst landete das komplette Sortiment im Kanal.
+Der Kanal pflegt sich damit von selbst: keine Alterslogik, kein Rückstau, keine
+Obergrenze, die irgendwann Produkte verschluckt. Was im Shop oben steht, steht im
+Kanal.
+
+**Schutz gegen Fehlalarm:** Liefert die Seite plötzlich weniger als
+`channel.min_listing_items` Produkte (Umbau, Wartungsseite, Bot-Schutz), bricht
+der Lauf ab, ohne etwas zu posten oder zu löschen. Der Workflow wird dann rot —
+gewollt, damit es auffällt.
 
 ## Einrichtung Schritt für Schritt
 
@@ -79,25 +86,26 @@ deshalb **nicht** in die `config.json`, sondern in ein GitHub Secret.
 
 ### 3. Workflow manuell testen
 
-**Actions** → **TwoMoons Release Notifier** → **Run workflow**. Empfehlung für den
-ersten Versuch:
+**Actions** → **TwoMoons Release Notifier** → **Run workflow**. Für den ersten
+Versuch `dry_run` anhaken: Der Lauf postet dann nichts und ändert `state.json`
+nicht, zeigt im Log aber, was er täte.
 
-| Schalter | Wert | Wirkung |
-|---|---|---|
-| `dry_run` | ✅ an | postet nichts, ändert `state.json` nicht |
-| `debug` | ✅ an | ausführliches Log |
+Im Log muss stehen, wie viele Produkte die Seite geliefert hat (derzeit rund 88)
+und welche davon in den Kanal kämen.
 
-Im Log muss stehen, wie viele URLs die Sitemap geliefert hat. Sieht das gut aus,
-den Lauf ohne `dry_run` wiederholen — das ist der Erstlauf, der den Ist-Stand
-merkt und noch nichts postet.
+### 4. Ab jetzt läuft es von allein
 
-### 4. Probe mit echten Produkten (optional, empfohlen)
+Sieht der Probelauf gut aus, denselben Lauf ohne `dry_run` starten: Er füllt den
+Kanal mit den obersten 20 Produkten. Danach prüft der Workflow stündlich die
+Seite und hält den Kanal aktuell — neue Produkte kommen dazu, herausgefallene
+verschwinden.
 
-Bis der erste echte Neuzugang im Shop erscheint, kann es dauern. Damit du siehst,
-wie eine Meldung in Discord wirklich aussieht, gibt es eine Probe mit bestehenden
-Produkten aus dem Bereich **„Neu im Shop"** auf der Startseite:
+Mehr ist nicht zu tun.
 
-**Actions** → **Run workflow** mit
+### Optional: einzelne Produkte auf Verdacht posten
+
+Zum Ausprobieren lässt sich ein beliebiger Produktbereich einer Seite posten,
+auch wenn die Produkte längst bekannt sind:
 
 | Schalter | Wert |
 |---|---|
@@ -105,30 +113,9 @@ Produkten aus dem Bereich **„Neu im Shop"** auf der Startseite:
 | `heading` | `Neu im Shop` |
 | `limit` | `3` |
 
-Das postet die ersten drei Produkte dieses Bereichs — echte Produkte mit echten
-Badges, Preisen und Bildern. Vorher ansehen, ohne zu posten: zusätzlich
-`dry_run` anhaken, dann stehen die Embeds nur im Log.
-
-Diese Probe ist bewusst harmlos:
-
-* Sie postet auch Produkte, die schon bekannt sind — sonst käme nichts.
-* Sie setzt den **Erstlauf-Schutz nicht**. Ohne diese Vorsicht würde der nächste
-  reguläre Lauf das ganze übrige Sortiment für neu halten.
-* Die geposteten Produkte werden gemerkt, kommen also später nicht ein zweites Mal.
-
-Die Testnachrichten kannst du danach in Discord einfach löschen.
-
-### 5. Ab jetzt läuft es von allein
-
-Stündlich prüft der Workflow den Shop und postet, was neu dazugekommen ist. Mehr
-ist nicht zu tun.
-
-`post_existing` ist **nicht** der Weg, um den Kanal zu füllen: Der Shop hat rund
-6600 Produkte, gepostet werden höchstens `discord.max_posts_per_run` pro Lauf.
-Deshalb postet ein Erstlauf mit `post_existing` genau diese Obergrenze und merkt
-sich **alle übrigen als bekannt** — sonst tröpfelte das Altsortiment monatelang
-in den Kanal. Für eine Probe mit echten Produkten ist der nächste Abschnitt der
-richtige Weg.
+Das umgeht den Spiegel-Abgleich und ist für den Alltag nicht nötig — die
+Testnachrichten räumt der nächste reguläre Lauf wieder weg, sobald die Produkte
+nicht mehr unter den obersten 20 stehen.
 
 ## Zeitplan und Default-Branch
 
@@ -144,9 +131,11 @@ funktionieren auf jedem Branch.
 
 ## Filter: was gemeldet wird und was nicht
 
-Standardmässig wird **das ganze Sortiment** gemeldet, mit einer Ausnahme:
-Veranstaltungstickets (Breadcrumb-Kategorie „Events") bleiben draussen — dafür
-gibt es den Schwester-Melder
+Die Seite „Neu im Shop" ist bereits eine Auswahl des Shops — viel zu filtern gibt
+es da nicht mehr. Die Listen greifen trotzdem, falls etwas durchrutscht, und sind
+im Sitemap-Modus die Hauptbremse. Standardmässig bleiben nur
+Veranstaltungstickets draussen (Breadcrumb-Kategorie „Events") — dafür gibt es
+den Schwester-Melder
 [`twomoons-discord-notifier`](https://github.com/pabloesteves91/twomoons-discord-notifier).
 
 ```json
@@ -183,7 +172,8 @@ die naheliegenden Kandidaten für `exclude_categories`.
 
 | Bereich | Bedeutung |
 |---|---|
-| `shop.sitemap_url` | Einstieg in die Sitemap (Index oder einzelne Datei, auch `.gz`) |
+| `channel.*` | siehe [Was im Kanal steht](#was-im-kanal-steht) |
+| `shop.sitemap_url` | nur für `mode: "sitemap"`: Einstieg in die Sitemap (auch `.gz`) |
 | `shop.listing_urls` | Ersatzquelle, falls die Sitemap ausfällt; wird Seite für Seite abgeklappert |
 | `shop.always_use_listings` | `true` nutzt beide Quellen gleichzeitig |
 | `request.*` | Zeitlimit, Wiederholungen, Pause zwischen Abrufen, User-Agent |
@@ -201,8 +191,7 @@ die naheliegenden Kandidaten für `exclude_categories`.
 | `discord.max_posts_per_run` | Obergrenze pro Lauf (Standard 10) |
 | `discord.max_detail_fetches_per_run` | Obergrenze an Seitenabrufen pro Lauf (Standard 60) |
 | `update.*` | Nachkontrolle bereits geposteter Produkte (Preisänderungen) |
-| `cleanup.keep_newest` | so viele Meldungen bleiben im Kanal stehen (Standard 20) |
-| `cleanup.delete_after_days` | zusätzlich alles älter als N Tage löschen (`0` = aus) |
+| `cleanup.*` | nur für `mode: "sitemap"`: Kanal nach Anzahl/Alter begrenzen |
 | `inspect.*` | nur für Diagnose-Läufe |
 
 Eine Änderung an `config.json` wirkt ab dem nächsten Lauf. Änderungen an Farbe
@@ -210,35 +199,34 @@ oder Fusszeile schlagen auch auf **bereits gepostete** Nachrichten durch, sobald
 die Nachkontrolle das Produkt erneut prüft: Der Fingerabdruck wird über das ganze
 Embed gebildet, nicht nur über den Text.
 
-## Kanal sauber halten
-
-Der Kanal soll eine Übersicht der Neuheiten sein, kein endloses Archiv. Nach
-jedem Lauf werden deshalb die ältesten Meldungen wieder gelöscht:
+## Was im Kanal steht
 
 ```json
-"cleanup": {
-  "enabled": true,
-  "keep_newest": 20,
-  "delete_after_days": 0
+"channel": {
+  "mode": "mirror",
+  "listing_url": "https://www.twomoons.ch/neu-im-shop/",
+  "heading": "",
+  "keep": 20,
+  "min_listing_items": 10
 }
 ```
 
-* `keep_newest` — so viele Meldungen bleiben stehen (Standard 20). Alles Ältere
-  wird aus dem Kanal entfernt, **älteste zuerst**. `0` schaltet die Begrenzung ab.
-* `delete_after_days` — zusätzlich alles löschen, was älter als so viele Tage ist.
-  `0` schaltet das ab. Beides lässt sich kombinieren: z. B. „höchstens 20, und
-  nichts älter als 14 Tage".
-* `enabled: false` löscht gar nichts mehr — der Kanal wächst dann unbegrenzt.
+* `listing_url` — die Seite, die gespiegelt wird. Willst du eine andere
+  Sortierung, öffne die Seite im Browser, wähle sie dort aus und kopiere die URL
+  aus der Adresszeile hierher (sie enthält dann einen `?order=`-Teil).
+  Es geht auch jede andere Kategorieseite des Shops.
+* `keep` — so viele Produkte stehen im Kanal (Standard 20).
+* `heading` — nur nötig, wenn die Seite mehrere Produktbereiche hat (z. B. die
+  Startseite): dann hier die Überschrift des gewünschten Bereichs eintragen,
+  etwa `"Neu im Shop"`.
+* `min_listing_items` — Untergrenze für den Schutz oben.
+* `mode` — `"mirror"` spiegelt die Seite. `"sitemap"` schaltet auf das
+  ursprüngliche Verfahren um: ganzer Shop über die Sitemap, nur Neuzugänge
+  melden, Kanal über `cleanup.*` begrenzen. Für den Alltag ist `mirror` gedacht.
 
-Wichtig dabei:
-
-* Gelöscht wird **nur, was dieser Webhook selbst gepostet hat**. Andere
-  Nachrichten im Kanal bleiben unberührt.
-* Ein gelöschtes Produkt bleibt in `state.json` unter `known` — es wird also
-  **nicht erneut gemeldet**, nur seine Nachricht verschwindet.
-* Ein Fehler beim Löschen (z. B. jemand hat die Nachricht schon von Hand
-  entfernt) bricht den Lauf nicht ab.
-* Im Dry-Run wird nichts gelöscht, das Log zeigt nur, was entfernt würde.
+Gelöscht wird nur, was dieser Webhook selbst gepostet hat — andere Nachrichten im
+Kanal bleiben unberührt. Schlägt ein Löschen fehl (jemand hat die Nachricht schon
+von Hand entfernt), läuft der Rest trotzdem durch.
 
 ## `state.json` — das Gedächtnis
 
@@ -259,11 +247,12 @@ Wichtig dabei:
 }
 ```
 
-* `known` — alle je gesehenen URLs. Was hier steht, gilt nicht mehr als neu.
-* `products` — die geposteten Produkte samt Discord-Message-ID. Damit kann eine
-  bestehende Nachricht später aktualisiert oder wieder gelöscht werden, statt
-  dasselbe Produkt ein zweites Mal zu posten. Beim Aufräumen fliegt der Eintrag
-  hier raus — der Eintrag in `known` bleibt.
+* `known` — alle je gesehenen URLs. Im Spiegel-Modus wird die Liste nicht
+  gebraucht; sie stammt aus dem Sitemap-Modus und bleibt nur stehen, damit ein
+  Wechsel dorthin nicht den ganzen Shop erneut für neu hält.
+* `products` — **das ist der Kanal**: Was hier steht, hat eine Nachricht in
+  Discord, samt Message-ID. Verschwindet ein Produkt aus den obersten `keep`,
+  wird die Nachricht gelöscht und der Eintrag entfernt.
 * Ein Produkt wird **erst dann** als gesehen eingetragen, wenn es wirklich
   gepostet wurde. Fehlt das Secret oder ist die Obergrenze erreicht, kommt es im
   nächsten Lauf dran.
