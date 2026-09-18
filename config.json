@@ -17,7 +17,9 @@
     "include_patterns": [],
     "exclude_patterns": [],
     "include_categories": [],
-    "exclude_categories": []
+    "exclude_categories": [
+      "Events"
+    ]
   },
   "product": {
     "product_markers": [

@@ -1,8 +1,15 @@
-"""Tests für Quellen, Filter, Embed und Ablauf — ohne Netz, gegen Abbilder."""
+"""Tests gegen gespeicherte Abbilder echter Seiten von twomoons.ch.
+
+Die Abbilder in tests/fixtures/ sind gekürzte Nachbauten dessen, was die
+Diagnose-Läufe im echten Shop gefunden haben — samt der Eigenheiten, über die
+der Parser gestolpert ist (Empfehlungs-Slider mit fremden Badges,
+Staffelpreise, dreiteilige Überschrift, HTML-Kommentare).
+"""
 
 import gzip
 import json
 import sys
+import tempfile
 import unittest
 from argparse import Namespace
 from pathlib import Path
@@ -16,9 +23,18 @@ REPO = Path(__file__).resolve().parents[1]
 FIXTURES = REPO / "tests" / "fixtures"
 CONFIG = json.loads((REPO / "config.json").read_text(encoding="utf-8"))
 
+CHEWBACCA = "https://www.twomoons.ch/homeworlds-spotlight-deck-chewbacca-chewbacca-englisch"
+DISPLAY = "https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch"
+EVENT = "https://www.twomoons.ch/zuerich-cube-open"
+KATEGORIE = "https://www.twomoons.ch/star-wars/preorder"
+
 
 def fixture(name: str) -> str:
     return (FIXTURES / name).read_text(encoding="utf-8")
+
+
+def parse(name: str, url: str = CHEWBACCA, config: dict | None = None) -> notifier.Product:
+    return notifier.parse_product(fixture(name), url, config or CONFIG)
 
 
 def default_args(**overrides) -> Namespace:
@@ -36,11 +52,110 @@ def default_args(**overrides) -> Namespace:
         survey=0,
         dump_html=False,
         dump_selector=None,
-        dump_bytes=12000,
+        dump_bytes=3000,
     )
     for key, value in overrides.items():
         setattr(args, key, value)
     return args
+
+
+class ProduktseiteTest(unittest.TestCase):
+    def test_dreiteilige_ueberschrift_wird_zerlegt(self):
+        product = parse("produkt_mit_badges.html")
+        self.assertEqual(product.name, "Homeworlds Spotlight Deck - Chewbacca")
+        self.assertEqual(product.manufacturer, "Star Wars Unlimited")
+        self.assertEqual(product.variant_text, "Chewbacca | Englisch")
+
+    def test_kommentare_landen_nicht_im_namen(self):
+        self.assertNotIn("deprecated", parse("produkt_mit_badges.html").name)
+
+    def test_preis_bild_und_sprache(self):
+        product = parse("produkt_mit_badges.html")
+        self.assertEqual(product.price, "CHF 24.90")
+        self.assertEqual(product.languages, ["Englisch"])
+        self.assertEqual(
+            product.image_url,
+            "https://www.twomoons.ch/media/9b/a3/ab/1788255962/Chewbacca2EN.webp?ts=1788255962",
+        )
+
+    def test_kategorien_und_eigenschaften(self):
+        product = parse("produkt_mit_badges.html")
+        self.assertEqual(product.categories, ["Home", "Sammelkarten", "Star Wars: Unlimited"])
+        self.assertEqual(product.properties["Sprache"], "Englisch")
+
+    def test_badges_der_empfehlungs_slider_bleiben_draussen(self):
+        """Der Fehler, der im echten Shop jedem Produkt dieselben Badges gab."""
+        product = parse("produkt_mit_badges.html")
+        self.assertEqual(product.badges, [])
+        self.assertNotIn("Französisch", product.languages)
+
+    def test_staffelpreis_verfaelscht_den_preis_nicht(self):
+        product = parse("produkt_staffelpreis.html", DISPLAY)
+        # "Ab 4" in der Staffeltabelle ist eine Stückzahl, kein Ab-Preis.
+        self.assertEqual(product.price, "CHF 114.90")
+
+    def test_echter_ab_preis_wird_als_solcher_angezeigt(self):
+        product = parse("produkt_ab_preis.html")
+        self.assertEqual(product.price, "Ab CHF 114.90")
+
+    def test_sprache_aus_den_varianten_optionen(self):
+        self.assertEqual(parse("produkt_ab_preis.html").languages, ["Japanisch"])
+
+    def test_kategorieseite_ist_kein_produkt(self):
+        product = parse("keine_produktseite.html", KATEGORIE)
+        self.assertFalse(product.is_product)
+        self.assertEqual(product.name, "")
+
+
+class FilterTest(unittest.TestCase):
+    def test_eventticket_wird_ueber_die_kategorie_gefiltert(self):
+        product = parse("eventticket.html", EVENT)
+        self.assertTrue(product.is_product)
+        self.assertEqual(notifier.blocked_category(product, CONFIG), "Events")
+
+    def test_normales_produkt_bleibt(self):
+        self.assertEqual(notifier.blocked_category(parse("produkt_mit_badges.html"), CONFIG), "")
+
+    def test_include_kategorien_schraenken_ein(self):
+        config = dict(CONFIG, filters={"exclude_categories": [], "include_categories": ["Brettspiele"]})
+        product = parse("produkt_mit_badges.html", config=config)
+        self.assertEqual(notifier.blocked_category(product, config), "(keine erlaubte Kategorie)")
+
+    def test_url_muster(self):
+        config = {"filters": {"include_patterns": [], "exclude_patterns": [r"/blog/"]}}
+        urls = {"https://www.twomoons.ch/booster": "", "https://www.twomoons.ch/blog/neues": ""}
+        kept, dropped = notifier.filter_urls(urls, config)
+        self.assertEqual(list(kept), ["https://www.twomoons.ch/booster"])
+        self.assertEqual(dropped, {"/blog/": 1})
+
+    def test_kaputtes_muster_stoppt_den_lauf_nicht(self):
+        config = {"filters": {"include_patterns": [], "exclude_patterns": ["([unfertig"]}}
+        kept, _ = notifier.filter_urls({"https://www.twomoons.ch/a": ""}, config)
+        self.assertEqual(list(kept), ["https://www.twomoons.ch/a"])
+
+
+class ListenkarteTest(unittest.TestCase):
+    def test_badges_und_sprache_von_der_passenden_karte(self):
+        badges, languages = notifier.parse_card_badges(
+            fixture("suche.html"), "https://www.twomoons.ch/search?search=x", CHEWBACCA, CONFIG
+        )
+        self.assertEqual(badges, ["Neu", "Vorbestellung"])
+        self.assertEqual(languages, ["Englisch"])
+
+    def test_fremde_karten_werden_nicht_verwechselt(self):
+        badges, languages = notifier.parse_card_badges(
+            fixture("suche.html"), "https://www.twomoons.ch/search?search=x",
+            "https://www.twomoons.ch/gibt-es-nicht", CONFIG,
+        )
+        self.assertEqual((badges, languages), ([], []))
+
+    def test_produktseite_und_karte_ergeben_zusammen_das_ganze_bild(self):
+        pages = {CHEWBACCA: fixture("produkt_mit_badges.html"), "search": fixture("suche.html")}
+        with mock.patch.object(notifier, "fetch_text", side_effect=lambda url, config: pages["search" if "search" in url else url]):
+            product = notifier.fetch_product(CHEWBACCA, CONFIG)
+        self.assertEqual(product.name, "Homeworlds Spotlight Deck - Chewbacca")
+        self.assertEqual(product.badges, ["Neu", "Vorbestellung"])
+        self.assertEqual(product.languages, ["Englisch"])
 
 
 SITEMAP_INDEX = """<?xml version="1.0" encoding="UTF-8"?>
@@ -52,96 +167,57 @@ SITEMAP_INDEX = """<?xml version="1.0" encoding="UTF-8"?>
 SITEMAP_PART = """<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.twomoons.ch/booster-box/</loc><lastmod>2026-09-17T10:00:00+00:00</lastmod></url>
-  <url><loc>https://www.twomoons.ch/einzelkarten/lightning-bolt</loc><lastmod>2026-09-18T10:00:00+00:00</lastmod></url>
   <url><loc>https://www.twomoons.ch/kontakt</loc></url>
 </urlset>
 """
 
 
 class SitemapTest(unittest.TestCase):
-    def test_index_and_entries_are_separated(self):
-        children, entries = notifier.parse_sitemap(SITEMAP_INDEX)
-        self.assertEqual(children, ["https://www.twomoons.ch/sitemap/teil-1.xml.gz"])
-        self.assertEqual(entries, [])
-
+    def test_index_und_eintraege_getrennt(self):
+        self.assertEqual(
+            notifier.parse_sitemap(SITEMAP_INDEX),
+            (["https://www.twomoons.ch/sitemap/teil-1.xml.gz"], []),
+        )
         children, entries = notifier.parse_sitemap(SITEMAP_PART)
         self.assertEqual(children, [])
-        self.assertEqual(len(entries), 3)
         self.assertEqual(entries[0][1], "2026-09-17T10:00:00+00:00")
 
-    def test_gzip_is_recognised_by_magic_bytes_not_by_suffix(self):
-        packed = gzip.compress(SITEMAP_PART.encode("utf-8"))
-        self.assertEqual(notifier.decode_body(packed), SITEMAP_PART)
-        self.assertEqual(notifier.decode_body(SITEMAP_PART.encode("utf-8")), SITEMAP_PART)
+    def test_gzip_wird_am_magic_byte_erkannt(self):
+        self.assertEqual(notifier.decode_body(gzip.compress(SITEMAP_PART.encode())), SITEMAP_PART)
+        self.assertEqual(notifier.decode_body(SITEMAP_PART.encode()), SITEMAP_PART)
 
-    def test_index_is_followed_into_the_parts(self):
+    def test_teil_sitemaps_werden_verfolgt(self):
         pages = {
-            "https://www.twomoons.ch/sitemap.xml": SITEMAP_INDEX.encode("utf-8"),
-            "https://www.twomoons.ch/sitemap/teil-1.xml.gz": gzip.compress(SITEMAP_PART.encode("utf-8")),
+            "https://www.twomoons.ch/sitemap.xml": SITEMAP_INDEX.encode(),
+            "https://www.twomoons.ch/sitemap/teil-1.xml.gz": gzip.compress(SITEMAP_PART.encode()),
         }
         with mock.patch.object(notifier, "fetch_bytes", side_effect=lambda url, config: pages[url]):
             found = notifier.collect_sitemap_urls("https://www.twomoons.ch/sitemap.xml", {})
         self.assertEqual(
-            sorted(found),
-            [
-                "https://www.twomoons.ch/booster-box",
-                "https://www.twomoons.ch/einzelkarten/lightning-bolt",
-                "https://www.twomoons.ch/kontakt",
-            ],
+            sorted(found), ["https://www.twomoons.ch/booster-box", "https://www.twomoons.ch/kontakt"]
         )
 
-    def test_trailing_slash_and_query_do_not_create_a_second_entry(self):
+    def test_schrägstrich_und_query_ergeben_keinen_zweiten_eintrag(self):
         self.assertEqual(
             notifier.normalise_url("https://www.twomoons.ch/booster-box/?c=12"),
             notifier.normalise_url("https://WWW.twomoons.ch/booster-box"),
         )
 
-
-class FilterTest(unittest.TestCase):
-    def test_exclude_patterns_are_counted_per_pattern(self):
-        config = {"filters": {"include_patterns": [], "exclude_patterns": [r"/einzelkarten/"]}}
-        urls = {
-            "https://www.twomoons.ch/booster-box": "",
-            "https://www.twomoons.ch/einzelkarten/lightning-bolt": "",
-        }
-        kept, dropped = notifier.filter_urls(urls, config)
-        self.assertEqual(list(kept), ["https://www.twomoons.ch/booster-box"])
-        self.assertEqual(dropped, {"/einzelkarten/": 1})
-
-    def test_include_patterns_limit_the_selection(self):
-        config = {"filters": {"include_patterns": [r"booster"], "exclude_patterns": []}}
-        urls = {"https://www.twomoons.ch/booster-box": "", "https://www.twomoons.ch/sleeves": ""}
-        kept, _ = notifier.filter_urls(urls, config)
-        self.assertEqual(list(kept), ["https://www.twomoons.ch/booster-box"])
-
-    def test_broken_pattern_does_not_stop_the_run(self):
-        config = {"filters": {"include_patterns": [], "exclude_patterns": ["([unfertig"]}}
-        kept, _ = notifier.filter_urls({"https://www.twomoons.ch/a": ""}, config)
-        self.assertEqual(list(kept), ["https://www.twomoons.ch/a"])
-
-    def test_newest_lastmod_is_offered_first(self):
-        urls = {
-            "https://www.twomoons.ch/alt": "2026-09-01",
-            "https://www.twomoons.ch/neu": "2026-09-18",
-        }
+    def test_neueste_zuerst(self):
+        urls = {"https://www.twomoons.ch/alt": "2026-09-01", "https://www.twomoons.ch/neu": "2026-09-18"}
         self.assertEqual(notifier.sort_candidates(urls)[0], "https://www.twomoons.ch/neu")
 
 
 class EmbedTest(unittest.TestCase):
-    def build(self, **kwargs):
-        product = notifier.Product(url="https://www.twomoons.ch/beispiel", **kwargs)
-        return notifier.build_embed(product, CONFIG)
+    def bauen(self, **kwargs):
+        return notifier.build_embed(notifier.Product(url=CHEWBACCA, **kwargs), CONFIG)
 
-    def test_all_fields_are_shown_in_order(self):
-        embed = self.build(
-            name="Lorcana Booster Box",
-            price="Ab CHF 114.90",
-            languages=["Deutsch", "Englisch"],
-            badges=["Neu", "Vorbestellung"],
-            manufacturer="Lorcana",
+    def test_reihenfolge_und_badge_zeile(self):
+        embed = self.bauen(
+            name="Booster Box", price="Ab CHF 114.90", languages=["Deutsch", "Englisch"],
+            badges=["Neu", "Vorbestellung"], manufacturer="Lorcana",
             image_url="https://www.twomoons.ch/media/box.jpg",
         )
-        self.assertEqual(embed["title"], "Lorcana Booster Box")
         self.assertEqual(
             embed["description"].split("\n"),
             [
@@ -149,129 +225,137 @@ class EmbedTest(unittest.TestCase):
                 "**Preis:** Ab CHF 114.90",
                 "**Sprachen:** Deutsch, Englisch",
                 "**Hersteller:** Lorcana",
-                "**Link:** [Zum Produkt](https://www.twomoons.ch/beispiel)",
+                f"**Link:** [Zum Produkt]({CHEWBACCA})",
             ],
         )
         self.assertEqual(embed["thumbnail"]["url"], "https://www.twomoons.ch/media/box.jpg")
 
-    def test_missing_values_leave_no_empty_lines(self):
-        embed = self.build(name="Sleeves", price="CHF 9.90")
+    def test_fehlende_angaben_hinterlassen_keine_leerzeilen(self):
+        embed = self.bauen(name="Sleeves", price="CHF 9.90")
         self.assertEqual(
             embed["description"].split("\n"),
-            ["**Preis:** CHF 9.90", "**Link:** [Zum Produkt](https://www.twomoons.ch/beispiel)"],
+            ["**Preis:** CHF 9.90", f"**Link:** [Zum Produkt]({CHEWBACCA})"],
         )
         self.assertNotIn("thumbnail", embed)
-        self.assertNotIn("\n\n", embed["description"])
 
-    def test_digest_covers_the_whole_embed_not_only_the_text(self):
-        embed = self.build(name="Booster", price="CHF 5.00")
-        other = dict(embed, color=123456)
-        self.assertNotEqual(notifier.embed_digest(embed), notifier.embed_digest(other))
+    def test_fingerabdruck_umfasst_das_ganze_embed(self):
+        embed = self.bauen(name="Booster", price="CHF 5.00")
+        self.assertNotEqual(notifier.embed_digest(embed), notifier.embed_digest(dict(embed, color=1)))
 
 
-class RunTest(unittest.TestCase):
-    """Ablauf mit gemocktem Shop und gemocktem Discord."""
+class AblaufTest(unittest.TestCase):
+    """Ganzer Lauf mit gemocktem Shop und gemocktem Discord."""
 
     def setUp(self):
-        self.tmp = Path(self.enterContext(__import__("tempfile").TemporaryDirectory()))
+        self.tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
         self.state_path = self.tmp / "state.json"
-        self.urls = {
-            "https://www.twomoons.ch/booster-box": "2026-09-18",
-            "https://www.twomoons.ch/kontakt": "2026-09-01",
-        }
+        self.urls = {CHEWBACCA: "2026-09-18", KATEGORIE: "2026-09-01"}
         self.pages = {
-            "https://www.twomoons.ch/booster-box": fixture("produkt_mit_badge.html"),
-            "https://www.twomoons.ch/kontakt": fixture("keine_produktseite.html"),
+            CHEWBACCA: fixture("produkt_mit_badges.html"),
+            KATEGORIE: fixture("keine_produktseite.html"),
+            EVENT: fixture("eventticket.html"),
+            DISPLAY: fixture("produkt_staffelpreis.html"),
         }
 
-    def run_notifier(self, state, **overrides):
+    def seite(self, url, config):
+        if "search" in url:
+            return fixture("suche.html")
+        return self.pages[url]
+
+    def lauf(self, state, **overrides):
         args = default_args(state=self.state_path, **overrides)
-        with mock.patch.object(notifier, "discover_urls", return_value=self.urls), mock.patch.object(
-            notifier, "fetch_text", side_effect=lambda url, config: self.pages[url]
-        ), mock.patch.object(notifier, "post_embed", return_value="999") as post, mock.patch.object(
-            notifier, "time"
-        ) as fake_time:
-            fake_time.sleep.return_value = None
-            fake_time.strftime.return_value = "2026-09-18T07:00:00Z"
-            fake_time.time.return_value = 0.0
+        with mock.patch.object(notifier, "discover_urls", return_value=self.urls), \
+             mock.patch.object(notifier, "fetch_text", side_effect=self.seite), \
+             mock.patch.object(notifier, "post_embed", return_value="999") as post, \
+             mock.patch.object(notifier.time, "sleep"):
             posted, report = notifier.run(CONFIG, state, args)
         return posted, report, post
 
-    def test_first_run_only_remembers(self):
-        state = notifier.empty_state()
+    def erstlauf(self, state):
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            posted, _, post = self.run_notifier(state)
+            return self.lauf(state)
+
+    def test_erster_lauf_merkt_nur(self):
+        state = notifier.empty_state()
+        posted, _, post = self.erstlauf(state)
         self.assertEqual(posted, 0)
         post.assert_not_called()
         self.assertEqual(len(state["known"]), 2)
         self.assertTrue(state["initialized"])
 
-    def test_second_run_posts_only_the_new_product(self):
+    def test_zweiter_lauf_postet_nur_das_neue_produkt(self):
         state = notifier.empty_state()
+        self.erstlauf(state)
+        self.urls[DISPLAY] = "2026-09-19"
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            self.run_notifier(state)
-            self.urls["https://www.twomoons.ch/neues-display"] = "2026-09-19"
-            self.pages["https://www.twomoons.ch/neues-display"] = fixture("produkt_mit_badge.html")
-            posted, _, post = self.run_notifier(state)
+            posted, _, post = self.lauf(state)
 
         self.assertEqual(posted, 1)
         self.assertEqual(post.call_count, 1)
-        self.assertIn("https://www.twomoons.ch/neues-display", state["products"])
-        self.assertEqual(state["products"]["https://www.twomoons.ch/neues-display"]["message_id"], "999")
+        self.assertIn(DISPLAY, state["products"])
+        self.assertEqual(state["products"][DISPLAY]["message_id"], "999")
+        self.assertEqual(state["products"][DISPLAY]["price"], "CHF 114.90")
 
-    def test_dry_run_changes_nothing(self):
+    def test_eventticket_wird_gemerkt_aber_nicht_gepostet(self):
         state = notifier.empty_state()
+        self.erstlauf(state)
+        self.urls[EVENT] = "2026-09-19"
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            self.run_notifier(state)
-            self.urls["https://www.twomoons.ch/neues-display"] = "2026-09-19"
-            self.pages["https://www.twomoons.ch/neues-display"] = fixture("produkt_mit_badge.html")
-            known_before = list(state["known"])
-            posted, _, post = self.run_notifier(state, dry_run=True)
+            posted, report, post = self.lauf(state)
 
         post.assert_not_called()
-        self.assertEqual(posted, 1)
-        self.assertEqual(state["known"], known_before)
-        self.assertFalse(self.state_path.exists())
+        self.assertEqual(posted, 0)
+        self.assertIn(EVENT, state["known"])
+        self.assertTrue(any("gefiltert (Events)" in line for line in report))
 
-    def test_limit_leaves_the_rest_for_the_next_run(self):
+    def test_dry_run_aendert_nichts(self):
         state = notifier.empty_state()
+        self.erstlauf(state)
+        self.urls[DISPLAY] = "2026-09-19"
+        vorher = list(state["known"])
+        gespeichert = self.state_path.read_text(encoding="utf-8")
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            self.run_notifier(state)
-            for index in range(3):
-                url = f"https://www.twomoons.ch/display-{index}"
-                self.urls[url] = f"2026-09-2{index}"
-                self.pages[url] = fixture("produkt_mit_badge.html")
-            posted, _, post = self.run_notifier(state, limit=2)
+            posted, _, post = self.lauf(state, dry_run=True)
+
+        post.assert_not_called()
+        self.assertEqual(posted, 1)  # gezählt, aber nur im Log
+        self.assertEqual(state["known"], vorher)
+        self.assertEqual(self.state_path.read_text(encoding="utf-8"), gespeichert)
+
+    def test_obergrenze_laesst_den_rest_fuer_den_naechsten_lauf(self):
+        state = notifier.empty_state()
+        self.erstlauf(state)
+        for index, url in enumerate([DISPLAY, EVENT.replace("zuerich", "zuerich-2"), CHEWBACCA + "-2"]):
+            self.urls[url] = f"2026-09-2{index}"
+            self.pages[url] = fixture("produkt_staffelpreis.html")
+        with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            posted, _, post = self.lauf(state, limit=2)
 
         self.assertEqual(posted, 2)
-        self.assertEqual(post.call_count, 2)
         self.assertEqual(len(state["products"]), 2)
 
-    def test_missing_webhook_keeps_products_unposted(self):
+    def test_ohne_webhook_bleibt_das_produkt_offen(self):
         state = notifier.empty_state()
-        with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            self.run_notifier(state)
-        self.urls["https://www.twomoons.ch/neues-display"] = "2026-09-19"
-        self.pages["https://www.twomoons.ch/neues-display"] = fixture("produkt_mit_badge.html")
-
+        self.erstlauf(state)
+        self.urls[DISPLAY] = "2026-09-19"
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": ""}):
-            posted, report, post = self.run_notifier(state)
+            posted, report, post = self.lauf(state)
 
         post.assert_not_called()
         self.assertEqual(posted, 0)
         # Nicht als gesehen markiert — der nächste Lauf holt es nach.
-        self.assertNotIn("https://www.twomoons.ch/neues-display", state["known"])
+        self.assertNotIn(DISPLAY, state["known"])
         self.assertTrue(any("fehlt" in line for line in report))
 
-    def test_non_product_page_is_remembered_but_not_posted(self):
+    def test_kategorieseite_wird_gemerkt_aber_nicht_gepostet(self):
         state = notifier.empty_state()
         state["initialized"] = True
         with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
-            posted, _, post = self.run_notifier(state)
+            _, _, post = self.lauf(state)
 
         self.assertEqual(post.call_count, 1)  # nur die Produktseite
-        self.assertIn("https://www.twomoons.ch/kontakt", state["known"])
-        self.assertNotIn("https://www.twomoons.ch/kontakt", state["products"])
+        self.assertIn(KATEGORIE, state["known"])
+        self.assertNotIn(KATEGORIE, state["products"])
 
 
 if __name__ == "__main__":

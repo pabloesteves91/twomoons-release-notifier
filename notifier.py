@@ -75,6 +75,8 @@ SKIP_CLASSES = {
 BADGE_DENYLIST = {"0", "1", "2", "3", "4", "5", "neu!", "%"}
 
 PRICE_RE = re.compile(r"(?:ab\s+)?(?:chf|fr\.?)\s*[\d'’.,]+", re.IGNORECASE)
+# "Ab CHF 114.90" ist ein Ab-Preis; "Ab 4" in der Staffelpreis-Tabelle ist eine Stückzahl.
+FROM_PRICE_RE = re.compile(r"\bab\s+(?:chf|fr\.?)\s*\d", re.IGNORECASE)
 
 
 @dataclass
@@ -238,7 +240,7 @@ def blocked_category(product: "Product", config: dict[str, Any]) -> str:
     trennen. Die Breadcrumb verrät die Kategorie und filtert zuverlässig.
     """
     filters = config.get("filters", {})
-    haystack = " | ".join(product.categories + list(product.properties.values())).casefold()
+    haystack = " | ".join(product.categories).casefold()
     if not haystack:
         return ""
 
@@ -562,7 +564,9 @@ def parse_price(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) -> 
 
     scope = price_block if price_block is not None else container
     text = element_text(scope)
-    starts_from = re.search(r"\bab\b", text, re.IGNORECASE) is not None
+    # "Ab CHF 114.90" ist ein Ab-Preis; "Ab 4" in der Staffelpreis-Tabelle
+    # ist eine Stückzahl und darf den Preis nicht verfälschen.
+    starts_from = FROM_PRICE_RE.search(text) is not None
 
     meta = scope.select_one("meta[itemprop='price']") or soup.select_one("meta[itemprop='price']")
     if meta is not None and clean_text(meta.get("content")):
@@ -1092,11 +1096,13 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
     webhook_url = os.environ.get(webhook_env, "").strip()
 
     if args.reset:
+        # Auch im Dry-Run zurücksetzen: Gespeichert wird dort ohnehin nichts, und
+        # nur so lässt sich nach dem Erstlauf überhaupt eine Vorschau erzeugen
+        # ("--dry-run --reset --post-existing --limit 3").
         LOG.warning("Reset: %s gemerkte URL(s) werden vergessen", len(state.get("known", [])))
-        if not args.dry_run:
-            state["known"] = []
-            state["products"] = {}
-            state["initialized"] = False
+        state["known"] = []
+        state["products"] = {}
+        state["initialized"] = False
 
     urls = discover_urls(config)
     if not urls:

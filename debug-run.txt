@@ -12,8 +12,7 @@ und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
   stichprobe: 30              Nur für inspect: so viele zufällige Produktseiten
                               abrufen und ihre Kategorien zählen.
 
-modus: inspect+dump
-urls: https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch
-stichprobe: 30
+modus: inspect
+urls: https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch, https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch, https://www.twomoons.ch/armory-deck-malice-englisch
 
-Letzter Anstoss: 2026-09-18 — Preisblock mit Staffelpreisen prüfen.
+Letzter Anstoss: 2026-09-18 — Abnahme: Embeds mehrerer echter Produkte.
