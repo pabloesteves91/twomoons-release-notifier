@@ -82,14 +82,50 @@
     ]
   },
   "languages": {
-    "Deutsch": ["deutsch", "german", "(de)", "de-de"],
-    "Englisch": ["englisch", "english", "(en)", "en-en"],
-    "Französisch": ["französisch", "franzoesisch", "french", "(fr)"],
-    "Italienisch": ["italienisch", "italian", "(it)"],
-    "Spanisch": ["spanisch", "spanish", "(es)"],
-    "Japanisch": ["japanisch", "japanese", "(jp)", "(ja)"],
-    "Koreanisch": ["koreanisch", "korean", "(kr)"],
-    "Chinesisch": ["chinesisch", "chinese", "(cn)"]
+    "Deutsch": [
+      "deutsch",
+      "german",
+      "(de)",
+      "de-de"
+    ],
+    "Englisch": [
+      "englisch",
+      "english",
+      "(en)",
+      "en-en"
+    ],
+    "Französisch": [
+      "französisch",
+      "franzoesisch",
+      "french",
+      "(fr)"
+    ],
+    "Italienisch": [
+      "italienisch",
+      "italian",
+      "(it)"
+    ],
+    "Spanisch": [
+      "spanisch",
+      "spanish",
+      "(es)"
+    ],
+    "Japanisch": [
+      "japanisch",
+      "japanese",
+      "(jp)",
+      "(ja)"
+    ],
+    "Koreanisch": [
+      "koreanisch",
+      "korean",
+      "(kr)"
+    ],
+    "Chinesisch": [
+      "chinesisch",
+      "chinese",
+      "(cn)"
+    ]
   },
   "discord": {
     "webhook_env": "DISCORD_WEBHOOK_RELEASES",
@@ -105,5 +141,20 @@
     "enabled": true,
     "recheck_hours": 24,
     "max_rechecks_per_run": 10
+  },
+  "inspect": {
+    "ancestors_of": [
+      "div.product-detail-buy",
+      ".product-badges",
+      ".twomoons-language-badges"
+    ],
+    "dump_selectors": [
+      ".product-badges",
+      ".twomoons-language-badges",
+      ".product-detail-price-container",
+      ".product-detail-properties",
+      ".product-detail-configurator",
+      ".product-detail-delivery-information"
+    ]
   }
 }

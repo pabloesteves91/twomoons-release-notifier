@@ -34,6 +34,7 @@ def default_args(**overrides) -> Namespace:
         inspect_url=None,
         samples=5,
         dump_html=False,
+        dump_selector=None,
         dump_bytes=12000,
     )
     for key, value in overrides.items():

@@ -967,6 +967,17 @@ DUMP_NOISE = (
 DUMP_NOISE_CLASSES = ("review", "point-rating", "point-container", "cookie", "breadcrumb")
 
 
+def describe_chain(node: Tag, depth: int = 6) -> list[str]:
+    """Element und seine Vorfahren als "tag.klasse" — zeigt den echten Produktbereich."""
+    chain: list[str] = []
+    current: Tag | None = node
+    while current is not None and len(chain) < depth and getattr(current, "name", None):
+        classes = ".".join(current.get("class") or [])
+        chain.append(f"{current.name}.{classes}" if classes else str(current.name))
+        current = current.parent
+    return chain
+
+
 def tidy_dump(container: Tag) -> str:
     """HTML-Abbild ohne Rauschen — brauchbar als Grundlage für eine Fixture."""
     copy = BeautifulSoup(container.decode(), "html.parser")
@@ -1015,10 +1026,20 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Bild: %s", product.image_url or "(nichts)")
         LOG.info("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
 
+        for selector in config.get("inspect", {}).get("ancestors_of", []):
+            node = soup.select_one(selector)
+            if node is not None:
+                LOG.info("  Eltern von '%s': %s", selector, " < ".join(describe_chain(node)))
+
         if args.dump_html:
-            container, selector = product_container(soup, config)
-            dump = tidy_dump(container)[: int(args.dump_bytes)]
-            LOG.info("  Abbild von '%s':\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, url, dump)
+            wanted = args.dump_selector or config.get("inspect", {}).get("dump_selectors", [])
+            for selector in wanted:
+                node = soup.select_one(selector)
+                if node is None:
+                    LOG.info("  Abbild '%s': nicht vorhanden", selector)
+                    continue
+                dump = tidy_dump(node)[: int(args.dump_bytes)]
+                LOG.info("  Abbild '%s':\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, selector, dump)
         time.sleep(float(request_config.get("delay_between_requests", 1.0)))
     return 0
 
@@ -1049,7 +1070,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--samples", type=int, default=5, help="Anzahl Stichproben für --inspect")
     parser.add_argument("--dump-html", action="store_true", help="HTML-Abbild des Produktbereichs ins Log")
-    parser.add_argument("--dump-bytes", type=int, default=12000, help="Länge des HTML-Abbilds")
+    parser.add_argument(
+        "--dump-selector",
+        action="append",
+        help="Nur diese Bereiche abbilden (mehrfach möglich); sonst inspect.dump_selectors",
+    )
+    parser.add_argument("--dump-bytes", type=int, default=3000, help="Länge je HTML-Abbild")
     return parser
 
 
