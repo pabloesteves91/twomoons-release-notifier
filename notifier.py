@@ -27,7 +27,7 @@ import xml.etree.ElementTree as ElementTree
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from urllib.parse import urljoin, urlsplit, urlunsplit
+from urllib.parse import quote_plus, urljoin, urlsplit, urlunsplit
 from urllib.request import url2pathname
 
 import requests
@@ -698,9 +698,78 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
     return product
 
 
+def parse_card_badges(html: str, page_url: str, product_url: str, config: dict[str, Any]) -> tuple[list[str], list[str]]:
+    """Badges und Sprachflagge aus der Listenkarte eines Produkts.
+
+    Die Produktseite selbst rendert keine Badges — "Neu" und "Vorbestellung"
+    stehen ausschliesslich auf den Karten in Listen, Suche und Slidern. Gesucht
+    wird deshalb die Karte, deren Link auf genau dieses Produkt zeigt.
+    """
+    card_config = config.get("card_lookup", {})
+    aliases = {key.lower(): value for key, value in config.get("product", {}).get("badge_aliases", {}).items()}
+    soup = BeautifulSoup(html, "html.parser")
+    wanted = normalise_url(product_url)
+
+    for card in soup.select(card_config.get("card_selector", ".product-box")):
+        links = {normalise_url(urljoin(page_url, str(anchor.get("href") or ""))) for anchor in card.select("a[href]")}
+        if wanted not in links:
+            continue
+
+        badges: list[str] = []
+        for node in card.select(card_config.get("badge_selector", ".product-badges .badge")):
+            text = element_text(node)
+            if not text or len(text) > 40 or text.lower() in BADGE_DENYLIST:
+                continue
+            label = aliases.get(text.lower(), text)
+            if label not in badges:
+                badges.append(label)
+
+        languages: list[str] = []
+        for node in card.select(card_config.get("language_selector", "img.twomoons-language-badge")):
+            label = clean_text(node.get("title") or node.get("alt"))
+            if label and label not in languages:
+                languages.append(label)
+        return badges, languages
+    return [], []
+
+
+def fetch_card_details(product: Product, config: dict[str, Any]) -> bool:
+    """Sucht das Produkt in der Shop-Suche, um an seine Karte zu kommen."""
+    card_config = config.get("card_lookup", {})
+    if not card_config.get("enabled", True) or not product.name:
+        return False
+
+    template = card_config.get("url_template", "")
+    if not template:
+        return False
+
+    query = quote_plus(product.name[: int(card_config.get("max_query_length", 60))])
+    url = template.format(query=query)
+    try:
+        html = fetch_text(url, config.get("request", {}))
+    except Exception as error:  # ohne Karte fehlen nur die Badges, nicht das Produkt
+        LOG.warning("Suchseite für '%s' nicht lesbar: %s", product.name, error)
+        return False
+
+    badges, languages = parse_card_badges(html, url, product.url, config)
+    if badges:
+        product.badges = badges
+    if languages and not product.languages:
+        product.languages = languages
+    if badges or languages:
+        product.matched["badges"] = "Listenkarte aus der Suche"
+        return True
+
+    LOG.debug("Keine Listenkarte für '%s' in der Suche gefunden", product.name)
+    return False
+
+
 def fetch_product(url: str, config: dict[str, Any]) -> Product:
     html = fetch_text(url, config.get("request", {}))
-    return parse_product(html, url, config)
+    product = parse_product(html, url, config)
+    if product.is_product:
+        fetch_card_details(product, config)
+    return product
 
 
 # --------------------------------------------------------------------------- #
@@ -1151,6 +1220,9 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
 
         soup = BeautifulSoup(html, "html.parser")
         product = parse_product(html, url, config)
+        if product.is_product:
+            found = fetch_card_details(product, config)
+            LOG.info("  Listenkarte in der Suche gefunden: %s", "ja" if found else "nein")
         LOG.info("  HTML-Grösse: %s Zeichen", len(html))
         LOG.info("  Treffer je Feld: %s", json.dumps(product.matched, ensure_ascii=False))
         LOG.info("  Name: %s", product.name or "(nichts)")
@@ -1165,14 +1237,13 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Filter würde greifen: %s", blocked_category(product, config) or "nein")
         LOG.info("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
 
-        for node in soup.select("[class*=badge]")[:20]:
-            text = element_text(node)
-            LOG.info(
-                "  Badge-Kandidat '%s' = %r | %s",
-                ".".join(node.get("class") or []),
-                text[:40],
-                " < ".join(describe_chain(node, 5)[1:]),
-            )
+        for card in soup.select(".product-box"):
+            badges = [element_text(node) for node in card.select(".product-badges .badge")]
+            badges = [text for text in badges if text]
+            if not badges:
+                continue
+            link = card.select_one("a[href]")
+            LOG.info("  Karte mit Badges %s -> %s", badges, link.get("href") if link else "(kein Link)")
 
         for selector in config.get("inspect", {}).get("ancestors_of", []):
             node = soup.select_one(selector)

@@ -169,5 +169,13 @@
       "nav.breadcrumb, .breadcrumb",
       ".product-detail-headline, .product-detail-name"
     ]
+  },
+  "card_lookup": {
+    "enabled": true,
+    "url_template": "https://www.twomoons.ch/search?search={query}",
+    "card_selector": ".product-box",
+    "badge_selector": ".product-badges .badge",
+    "language_selector": "img.twomoons-language-badge",
+    "max_query_length": 60
   }
 }
