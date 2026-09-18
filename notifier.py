@@ -1235,15 +1235,16 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Kategorien: %s", product.categories or "(keine)")
         LOG.info("  Eigenschaften: %s", json.dumps(product.properties, ensure_ascii=False)[:400])
         LOG.info("  Filter würde greifen: %s", blocked_category(product, config) or "nein")
-        LOG.info("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
+        LOG.debug("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
 
+        gezeigt = 0
         for card in soup.select(".product-box"):
-            badges = [element_text(node) for node in card.select(".product-badges .badge")]
-            badges = [text for text in badges if text]
-            if not badges:
+            badges = [text for text in (element_text(node) for node in card.select(".product-badges .badge")) if text]
+            if not badges or gezeigt >= 5:
                 continue
             link = card.select_one("a[href]")
-            LOG.info("  Karte mit Badges %s -> %s", badges, link.get("href") if link else "(kein Link)")
+            LOG.info("  Fremde Karte mit Badges %s -> %s", badges, link.get("href") if link else "(kein Link)")
+            gezeigt += 1
 
         for selector in config.get("inspect", {}).get("ancestors_of", []):
             node = soup.select_one(selector)

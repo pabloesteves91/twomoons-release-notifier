@@ -5,12 +5,12 @@ und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
 
   modus: inspect              Shop analysieren: Sitemap-Übersicht und je
                               Stichprobe, welcher Selektor was gefunden hat.
-  modus: inspect+dump         Zusätzlich ein aufgeräumtes HTML-Abbild des
+  modus: inspect         Zusätzlich ein aufgeräumtes HTML-Abbild des
                               Produktbereichs ins Log.
                               Ohne diese Zeile: normaler Dry-Run mit Embeds.
   urls: <URL>, <URL>          Nur für inspect: genau diese Produktseiten ansehen.
 
-modus: inspect+dump
+modus: inspect
 urls: https://www.twomoons.ch/zubat-zubat, https://www.twomoons.ch/zug-um-zug-weltreise-deutsch, https://www.twomoons.ch/zuerich-cube-open
 
-Letzter Anstoss: 2026-09-18 — Badge-Nachschlag über die Suchseite prüfen.
+Letzter Anstoss: 2026-09-18 — Badge-Nachschlag über die Suche, kompaktes Log.
