@@ -119,12 +119,16 @@ jobs:
             stichprobe="$(grep -i -m1 '^stichprobe:' debug-run.txt | cut -d: -f2- | xargs || true)"
             quelle="$(grep -i -m1 '^quelle:' debug-run.txt | cut -d: -f2- | xargs || true)"
             bereich="$(grep -i -m1 '^bereich:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            liste="$(grep -i -m1 '^liste:' debug-run.txt | cut -d: -f2- | xargs || true)"
             args=(--verbose)
             case "$modus" in
               inspect) args+=(--inspect) ;;
               inspect+dump) args+=(--inspect --dump-html) ;;
               *) args+=(--dry-run) ;;
             esac
+            if [ -n "$liste" ]; then
+              args+=(--inspect --probe-listing "$liste")
+            fi
             if [ -n "$quelle" ]; then
               args+=(--post-from "$quelle")
               if [ -n "$bereich" ]; then

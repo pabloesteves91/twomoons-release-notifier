@@ -1483,8 +1483,48 @@ def survey(urls: dict[str, str], config: dict[str, Any], count: int) -> None:
     LOG.info("  ohne Breadcrumb (keine Produktseite): %s", keine)
 
 
+def probe_listing(url: str, config: dict[str, Any]) -> None:
+    """Zeigt Aufbau einer Listenseite: Sortier-Optionen, Karten, Paginierung.
+
+    Grundlage dafür, den Kanal an eine Shop-Seite zu binden ("Neu im Shop",
+    neuste zuerst) statt an einen Sitemap-Abgleich.
+    """
+    html = fetch_text(url, config.get("request", {}))
+    soup = BeautifulSoup(html, "html.parser")
+    LOG.info("=== Listenseite %s (%s Zeichen) ===", url, len(html))
+
+    for select in soup.select("select"):
+        kennung = " ".join(filter(None, [select.get("id"), select.get("name"), " ".join(select.get("class") or [])]))
+        optionen = [(option.get("value"), element_text(option)) for option in select.select("option")]
+        if optionen:
+            LOG.info("  Auswahlfeld '%s': %s", kennung, optionen)
+
+    karten = soup.select(".product-box")
+    LOG.info("  Produktkarten auf dieser Seite: %s", len(karten))
+    for platz, card in enumerate(karten[:12], start=1):
+        link = card.select_one("a[href]")
+        name = element_text(card.select_one(".product-name")) or element_text(card.select_one("a[title]"))
+        badges = [text for text in (element_text(node) for node in card.select(".product-badges .badge")) if text]
+        LOG.info("  %2s. %s | %s | %s", platz, name[:60], badges or "-", link.get("href") if link else "-")
+
+    for selector in (".pagination", ".cms-element-product-listing-actions", "[data-listing-pagination]"):
+        node = soup.select_one(selector)
+        if node is not None:
+            LOG.info("  Paginierung '%s': %s", selector, element_text(node)[:200])
+            break
+
+    gesamt = soup.select_one(".cms-element-product-listing .filter-panel-item-count, .listing-count, .filter-panel")
+    if gesamt is not None:
+        LOG.info("  Zähler: %s", element_text(gesamt)[:160])
+
+
 def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
     """Zeigt, wie der Shop wirklich aussieht — Grundlage für die Selektoren."""
+    if args.probe_listing:
+        for url in args.probe_listing:
+            probe_listing(url, config)
+        return 0
+
     urls = discover_urls(config)
     LOG.info("=== Übersicht: %s URL(s) gefunden ===", len(urls))
     for prefix, count in url_statistics(urls)[:30]:
@@ -1597,6 +1637,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Konkrete Produktseite für --inspect (mehrfach möglich)",
     )
     parser.add_argument("--samples", type=int, default=5, help="Anzahl Stichproben für --inspect")
+    parser.add_argument(
+        "--probe-listing",
+        action="append",
+        help="Zu --inspect: Aufbau dieser Listenseite zeigen (Sortier-Optionen, Karten)",
+    )
     parser.add_argument(
         "--survey",
         type=int,

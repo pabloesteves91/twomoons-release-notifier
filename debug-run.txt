@@ -15,7 +15,12 @@ und ändert state.json nicht. Diese optionalen Zeilen steuern, was geprüft wird
   bereich: Neu im Shop        würden — echtes Posten geht nur über "Run workflow"
                               mit post_from/heading.
 
+  liste: <URL>                Aufbau einer Listenseite zeigen: Sortier-Optionen,
+                              Produktkarten in ihrer Reihenfolge, Paginierung.
+
 Ohne modus-Zeile läuft ein normaler Dry-Run.
+
+liste: https://www.twomoons.ch/neu-im-shop/
 
 
 # Zum Ausprobieren die beiden Zeilen ohne das Gatter davor stehen lassen:
