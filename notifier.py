@@ -1075,11 +1075,7 @@ def refresh_posted_products(
         checked = record.get("last_checked", "")
         if not checked:
             return True
-        try:
-            parsed = time.mktime(time.strptime(checked, "%Y-%m-%dT%H:%M:%SZ"))
-        except ValueError:
-            return True
-        return (now - parsed) >= recheck_seconds
+        return (now - parse_timestamp(checked)) >= recheck_seconds
 
     candidates = [
         (url, record)
@@ -1127,6 +1123,85 @@ def refresh_posted_products(
     return updated
 
 
+def delete_message(webhook_url: str, message_id: str) -> bool:
+    """Löscht eine gepostete Nachricht. False = war schon weg."""
+    base = webhook_url.split("?")[0].rstrip("/")
+    response = discord_request("DELETE", f"{base}/messages/{message_id}", {})
+    if response.status_code == 404:
+        return False
+    if response.status_code not in (200, 204):
+        raise RuntimeError(f"Discord lehnte das Löschen ab ({response.status_code}): {response.text[:300]}")
+    return True
+
+
+def parse_timestamp(value: str) -> float:
+    """ISO-Zeitstempel aus state.json als Sekunden; unlesbar = "sehr alt"."""
+    try:
+        return time.mktime(time.strptime(value, "%Y-%m-%dT%H:%M:%SZ"))
+    except (ValueError, TypeError):
+        return 0.0
+
+
+def cleanup_channel(
+    config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace, webhook_url: str
+) -> int:
+    """Löscht alte Meldungen, damit im Kanal nur die neuesten stehen bleiben.
+
+    Gelöscht wird nur, was dieser Webhook selbst gepostet hat. Die URL bleibt in
+    `known`, das Produkt wird also nicht erneut gemeldet — nur seine Nachricht
+    verschwindet aus dem Kanal.
+    """
+    cleanup = config.get("cleanup", {})
+    if not cleanup.get("enabled", False) or not webhook_url:
+        return 0
+
+    keep = int(cleanup.get("keep_newest", 0))
+    max_age_days = float(cleanup.get("delete_after_days", 0))
+    if keep <= 0 and max_age_days <= 0:
+        return 0
+
+    lebend = [
+        (url, record)
+        for url, record in state.get("products", {}).items()
+        if isinstance(record, dict) and record.get("message_id")
+    ]
+    # Neueste zuerst — gepostet wird in derselben Reihenfolge, in der gemerkt wird.
+    lebend.sort(key=lambda item: parse_timestamp(item[1].get("first_seen", "")), reverse=True)
+
+    veraltet: dict[str, dict[str, Any]] = {}
+    if keep > 0:
+        for url, record in lebend[keep:]:
+            veraltet[url] = record
+    if max_age_days > 0:
+        grenze = time.time() - max_age_days * 86400
+        for url, record in lebend:
+            if parse_timestamp(record.get("first_seen", "")) < grenze:
+                veraltet[url] = record
+
+    if not veraltet:
+        return 0
+
+    delay = float(config.get("discord", {}).get("delay_between_posts", 1.5))
+    entfernt = 0
+    # Älteste zuerst: Bricht der Lauf ab, ist das Aufgeräumte das am längsten Stehende.
+    reihenfolge = sorted(veraltet.items(), key=lambda item: parse_timestamp(item[1].get("first_seen", "")))
+    for url, record in reihenfolge:
+        name = record.get("name", url)
+        if args.dry_run:
+            LOG.info("DRY-RUN — würde aus dem Kanal entfernen: %s", name)
+            continue
+        try:
+            delete_message(webhook_url, record["message_id"])
+        except Exception as error:  # ein Fehler beim Löschen darf den Lauf nicht kippen
+            LOG.warning("Nachricht zu '%s' liess sich nicht löschen: %s", name, error)
+            continue
+        LOG.info("Aus dem Kanal entfernt: %s", name)
+        state["products"].pop(url, None)
+        entfernt += 1
+        time.sleep(delay)
+    return entfernt
+
+
 def run_from_listing(
     config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace
 ) -> tuple[int, list[str]]:
@@ -1161,6 +1236,10 @@ def run_from_listing(
     known = set(state.get("known", []))
     limit = args.limit or int(discord_config.get("max_posts_per_run", 10))
     posted = post_new_products(urls[:limit], config, state, known, args, webhook_url, report)
+
+    entfernt = cleanup_channel(config, state, args, webhook_url)
+    if entfernt:
+        report.append(f"{entfernt} alte Meldung(en) aus dem Kanal entfernt")
 
     if not args.dry_run:
         state["last_run"] = timestamp()
@@ -1223,6 +1302,11 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
                 report.append(f"{updated} bestehende Nachricht(en) aktualisiert")
         except Exception as error:
             LOG.exception("Nachkontrolle fehlgeschlagen: %s", error)
+
+    # Erst nach dem Posten aufräumen, damit die neuen Meldungen mitzählen.
+    entfernt = cleanup_channel(config, state, args, webhook_url)
+    if entfernt:
+        report.append(f"{entfernt} alte Meldung(en) aus dem Kanal entfernt")
 
     if args.dry_run:
         LOG.info("DRY-RUN — state.json bleibt unverändert")

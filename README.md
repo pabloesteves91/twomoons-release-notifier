@@ -25,11 +25,12 @@ Läuft ausschliesslich über GitHub Actions — kein Server, keine Datenbank.
 3. [Zeitplan und Default-Branch](#zeitplan-und-default-branch)
 4. [Filter: was gemeldet wird und was nicht](#filter-was-gemeldet-wird-und-was-nicht)
 5. [`config.json` im Detail](#configjson-im-detail)
-6. [`state.json` — das Gedächtnis](#statejson--das-gedächtnis)
-7. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
-8. [Lokal ausführen](#lokal-ausführen)
-9. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
-10. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
+6. [Kanal sauber halten](#kanal-sauber-halten)
+7. [`state.json` — das Gedächtnis](#statejson--das-gedächtnis)
+8. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
+9. [Lokal ausführen](#lokal-ausführen)
+10. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
+11. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
 
 ## Wie es funktioniert
 
@@ -47,8 +48,10 @@ Ein Lauf besteht aus vier Schritten:
    Sprachen, Hersteller/Serie, Bild und Kategorie gelesen. Anschliessend wird das
    Produkt in der Shop-Suche nachgeschlagen, denn die **Badges stehen nur auf den
    Listenkarten**, nicht auf der Produktseite selbst.
-4. **Posten und merken.** Je Produkt ein Discord-Embed, danach wird `state.json`
-   aktualisiert und vom Workflow zurück ins Repo committet.
+4. **Posten, merken, aufräumen.** Je Produkt ein Discord-Embed. Danach werden
+   die ältesten Meldungen gelöscht, sodass im Kanal immer nur die 20 neuesten
+   stehen. Zuletzt wird `state.json` aktualisiert und vom Workflow zurück ins
+   Repo committet.
 
 Beim **allerersten Lauf wird nichts gepostet**: Der Ist-Stand wird nur als bekannt
 gespeichert, sonst landete das komplette Sortiment im Kanal.
@@ -193,12 +196,44 @@ die naheliegenden Kandidaten für `exclude_categories`.
 | `discord.max_posts_per_run` | Obergrenze pro Lauf (Standard 10) |
 | `discord.max_detail_fetches_per_run` | Obergrenze an Seitenabrufen pro Lauf (Standard 60) |
 | `update.*` | Nachkontrolle bereits geposteter Produkte (Preisänderungen) |
+| `cleanup.keep_newest` | so viele Meldungen bleiben im Kanal stehen (Standard 20) |
+| `cleanup.delete_after_days` | zusätzlich alles älter als N Tage löschen (`0` = aus) |
 | `inspect.*` | nur für Diagnose-Läufe |
 
 Eine Änderung an `config.json` wirkt ab dem nächsten Lauf. Änderungen an Farbe
 oder Fusszeile schlagen auch auf **bereits gepostete** Nachrichten durch, sobald
 die Nachkontrolle das Produkt erneut prüft: Der Fingerabdruck wird über das ganze
 Embed gebildet, nicht nur über den Text.
+
+## Kanal sauber halten
+
+Der Kanal soll eine Übersicht der Neuheiten sein, kein endloses Archiv. Nach
+jedem Lauf werden deshalb die ältesten Meldungen wieder gelöscht:
+
+```json
+"cleanup": {
+  "enabled": true,
+  "keep_newest": 20,
+  "delete_after_days": 0
+}
+```
+
+* `keep_newest` — so viele Meldungen bleiben stehen (Standard 20). Alles Ältere
+  wird aus dem Kanal entfernt, **älteste zuerst**. `0` schaltet die Begrenzung ab.
+* `delete_after_days` — zusätzlich alles löschen, was älter als so viele Tage ist.
+  `0` schaltet das ab. Beides lässt sich kombinieren: z. B. „höchstens 20, und
+  nichts älter als 14 Tage".
+* `enabled: false` löscht gar nichts mehr — der Kanal wächst dann unbegrenzt.
+
+Wichtig dabei:
+
+* Gelöscht wird **nur, was dieser Webhook selbst gepostet hat**. Andere
+  Nachrichten im Kanal bleiben unberührt.
+* Ein gelöschtes Produkt bleibt in `state.json` unter `known` — es wird also
+  **nicht erneut gemeldet**, nur seine Nachricht verschwindet.
+* Ein Fehler beim Löschen (z. B. jemand hat die Nachricht schon von Hand
+  entfernt) bricht den Lauf nicht ab.
+* Im Dry-Run wird nichts gelöscht, das Log zeigt nur, was entfernt würde.
 
 ## `state.json` — das Gedächtnis
 
@@ -221,8 +256,9 @@ Embed gebildet, nicht nur über den Text.
 
 * `known` — alle je gesehenen URLs. Was hier steht, gilt nicht mehr als neu.
 * `products` — die geposteten Produkte samt Discord-Message-ID. Damit kann eine
-  bestehende Nachricht später aktualisiert werden, statt dasselbe Produkt ein
-  zweites Mal zu posten.
+  bestehende Nachricht später aktualisiert oder wieder gelöscht werden, statt
+  dasselbe Produkt ein zweites Mal zu posten. Beim Aufräumen fliegt der Eintrag
+  hier raus — der Eintrag in `known` bleibt.
 * Ein Produkt wird **erst dann** als gesehen eingetragen, wenn es wirklich
   gepostet wurde. Fehlt das Secret oder ist die Obergrenze erreicht, kommt es im
   nächsten Lauf dran.

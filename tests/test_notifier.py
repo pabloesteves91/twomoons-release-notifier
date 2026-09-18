@@ -257,6 +257,85 @@ class SitemapTest(unittest.TestCase):
         self.assertEqual(notifier.sort_candidates(urls)[0], "https://www.twomoons.ch/neu")
 
 
+class AufraeumenTest(unittest.TestCase):
+    """Im Kanal sollen nur die neuesten Meldungen stehen bleiben."""
+
+    def zustand(self, anzahl: int) -> dict:
+        state = notifier.empty_state()
+        for index in range(anzahl):
+            state["products"][f"https://www.twomoons.ch/produkt-{index:02d}"] = {
+                "name": f"Produkt {index:02d}",
+                "message_id": f"{1000 + index}",
+                # Je höher der Index, desto neuer.
+                "first_seen": f"2026-09-{index + 1:02d}T07:00:00Z",
+            }
+        state["known"] = list(state["products"])
+        return state
+
+    def aufraeumen(self, state, config, **overrides):
+        args = default_args(**overrides)
+        with mock.patch.object(notifier, "delete_message", return_value=True) as geloescht, \
+             mock.patch.object(notifier.time, "sleep"):
+            entfernt = notifier.cleanup_channel(config, state, args, "https://discord.test/hook")
+        return entfernt, geloescht
+
+    def test_die_zwanzig_neuesten_bleiben(self):
+        state = self.zustand(25)
+        config = dict(CONFIG, cleanup={"enabled": True, "keep_newest": 20, "delete_after_days": 0})
+        entfernt, geloescht = self.aufraeumen(state, config)
+
+        self.assertEqual(entfernt, 5)
+        self.assertEqual(len(state["products"]), 20)
+        # Gelöscht werden die ältesten, nicht die neuesten.
+        self.assertNotIn("https://www.twomoons.ch/produkt-00", state["products"])
+        self.assertIn("https://www.twomoons.ch/produkt-24", state["products"])
+        self.assertEqual([call.args[1] for call in geloescht.call_args_list], ["1000", "1001", "1002", "1003", "1004"])
+
+    def test_geloeschte_produkte_bleiben_bekannt(self):
+        state = self.zustand(22)
+        config = dict(CONFIG, cleanup={"enabled": True, "keep_newest": 20, "delete_after_days": 0})
+        self.aufraeumen(state, config)
+        # Sonst würde das Produkt beim nächsten Lauf erneut gemeldet.
+        self.assertIn("https://www.twomoons.ch/produkt-00", state["known"])
+
+    def test_unter_der_grenze_wird_nichts_geloescht(self):
+        state = self.zustand(5)
+        config = dict(CONFIG, cleanup={"enabled": True, "keep_newest": 20, "delete_after_days": 0})
+        entfernt, geloescht = self.aufraeumen(state, config)
+        self.assertEqual(entfernt, 0)
+        geloescht.assert_not_called()
+
+    def test_abgeschaltet_loescht_nie(self):
+        state = self.zustand(25)
+        config = dict(CONFIG, cleanup={"enabled": False, "keep_newest": 20, "delete_after_days": 0})
+        entfernt, geloescht = self.aufraeumen(state, config)
+        self.assertEqual(entfernt, 0)
+        geloescht.assert_not_called()
+
+    def test_dry_run_loescht_nichts(self):
+        state = self.zustand(25)
+        config = dict(CONFIG, cleanup={"enabled": True, "keep_newest": 20, "delete_after_days": 0})
+        entfernt, geloescht = self.aufraeumen(state, config, dry_run=True)
+        self.assertEqual(entfernt, 0)
+        geloescht.assert_not_called()
+        self.assertEqual(len(state["products"]), 25)
+
+    def test_zusaetzlich_nach_alter(self):
+        import time as uhr
+
+        def vor_tagen(tage: float) -> str:
+            return uhr.strftime("%Y-%m-%dT%H:%M:%SZ", uhr.localtime(uhr.time() - tage * 86400))
+
+        state = self.zustand(3)
+        state["products"]["https://www.twomoons.ch/produkt-00"]["first_seen"] = vor_tagen(40)
+        state["products"]["https://www.twomoons.ch/produkt-01"]["first_seen"] = vor_tagen(31)
+        state["products"]["https://www.twomoons.ch/produkt-02"]["first_seen"] = vor_tagen(1)
+        config = dict(CONFIG, cleanup={"enabled": True, "keep_newest": 0, "delete_after_days": 30})
+        entfernt, _ = self.aufraeumen(state, config)
+        self.assertEqual(entfernt, 2)
+        self.assertEqual(list(state["products"]), ["https://www.twomoons.ch/produkt-02"])
+
+
 class EmbedTest(unittest.TestCase):
     def bauen(self, **kwargs):
         return notifier.build_embed(notifier.Product(url=CHEWBACCA, **kwargs), CONFIG)

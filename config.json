@@ -178,5 +178,10 @@
     "badge_selector": ".product-badges .badge",
     "language_selector": "img.twomoons-language-badge",
     "max_query_length": 60
+  },
+  "cleanup": {
+    "enabled": true,
+    "keep_newest": 20,
+    "delete_after_days": 0
   }
 }
