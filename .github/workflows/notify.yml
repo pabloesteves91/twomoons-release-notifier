@@ -1,0 +1,148 @@
+name: TwoMoons Release Notifier
+
+on:
+  schedule:
+    # Stündlich, bewusst versetzt zur vollen Stunde: Zur Minute 0 sind die
+    # GitHub-Runner am stärksten belegt und Läufe starten verspätet.
+    - cron: "17 * * * *"
+  # Diagnose ohne Knopfdruck: eine Änderung an debug-run.txt startet einen Lauf,
+  # der zwingend im Dry-Run läuft — er kann nichts posten und nichts speichern.
+  push:
+    paths:
+      - "debug-run.txt"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Nur loggen, nichts posten und state.json nicht ändern"
+        type: boolean
+        default: false
+      post_existing:
+        description: "Beim ersten Lauf die bereits vorhandenen Produkte posten (statt nur zu merken)"
+        type: boolean
+        default: false
+      reset:
+        description: "Gemerkte Produkte vergessen — zusammen mit post_existing für den Kanalwechsel"
+        type: boolean
+        default: false
+      limit:
+        description: "Maximale Anzahl Posts pro Lauf (0 = Wert aus config.json)"
+        type: string
+        default: "0"
+      debug:
+        description: "Ausführliches Log (zeigt die fertigen Embeds)"
+        type: boolean
+        default: false
+      inspect:
+        description: "Shop analysieren statt posten (Sitemap-Übersicht und Stichproben)"
+        type: boolean
+        default: false
+      inspect_url:
+        description: "Nur für inspect: konkrete Produktseiten, mit Komma getrennt"
+        type: string
+        default: ""
+      dump_html:
+        description: "Nur für inspect: HTML-Abbild des Produktbereichs ins Log schreiben"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: twomoons-release-notifier
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # "Re-run jobs" wiederholt den ursprünglichen Commit: alter Code und ein
+      # state.json-Stand von damals, wodurch bereits gepostete Produkte erneut als
+      # neu gelten. Abbrechen, bevor Duplikate im Kanal landen.
+      - name: Re-runs abweisen
+        if: ${{ github.run_attempt != 1 }}
+        run: |
+          echo "::error::Dieser Lauf ist ein Re-run des Commits ${GITHUB_SHA} und würde alten Code mit altem Stand ausführen. Bitte stattdessen über 'Run workflow' neu starten."
+          exit 1
+
+      # Jeder Lauf committet state.json. Wurde kurz zuvor einer ausgeführt, hat der
+      # Checkout einen älteren Stand — ohne Abgleich würden dessen Produkte erneut
+      # gepostet. Deshalb hier den aktuellen Stand nachziehen statt abzubrechen.
+      - name: Aktuellen state.json-Stand holen
+        run: |
+          git fetch --quiet origin "$GITHUB_REF_NAME"
+          if git checkout "origin/$GITHUB_REF_NAME" -- state.json 2>/dev/null; then
+            echo "state.json vom Branch übernommen"
+          else
+            echo "Noch keine state.json im Repo — erster Lauf"
+          fi
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Notifier ausführen
+        env:
+          DISCORD_WEBHOOK_RELEASES: ${{ secrets.DISCORD_WEBHOOK_RELEASES }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          POST_EXISTING: ${{ inputs.post_existing }}
+          RESET: ${{ inputs.reset }}
+          LIMIT: ${{ inputs.limit }}
+          DEBUG: ${{ inputs.debug }}
+          INSPECT: ${{ inputs.inspect }}
+          INSPECT_URL: ${{ inputs.inspect_url }}
+          DUMP_HTML: ${{ inputs.dump_html }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            # Von debug-run.txt ausgelöst: analysieren, aber niemals posten.
+            python notifier.py --dry-run --verbose
+            exit $?
+          fi
+
+          args=()
+          if [ "$INSPECT" = "true" ]; then
+            args+=(--inspect)
+            if [ "$DUMP_HTML" = "true" ]; then
+              args+=(--dump-html)
+            fi
+            if [ -n "$INSPECT_URL" ]; then
+              IFS=',' read -ra urls <<< "$INSPECT_URL"
+              for url in "${urls[@]}"; do
+                trimmed="$(echo "$url" | xargs)"
+                if [ -n "$trimmed" ]; then
+                  args+=(--inspect-url "$trimmed")
+                fi
+              done
+            fi
+          fi
+          if [ "$DRY_RUN" = "true" ]; then
+            args+=(--dry-run)
+          fi
+          if [ "$RESET" = "true" ]; then
+            args+=(--reset)
+          fi
+          if [ "$POST_EXISTING" = "true" ]; then
+            args+=(--post-existing)
+          fi
+          if [ "$DEBUG" = "true" ] || [ "$INSPECT" = "true" ]; then
+            args+=(--verbose)
+          fi
+          if [ -n "$LIMIT" ] && [ "$LIMIT" != "0" ]; then
+            args+=(--limit "$LIMIT")
+          fi
+          python notifier.py ${args[@]+"${args[@]}"}
+
+      # always(): Auch wenn der Lauf mitten in einem Fehler endet, muss der Stand der
+      # bereits geposteten Produkte gesichert werden — sonst werden sie erneut gepostet.
+      - name: state.json zurück ins Repo committen
+        if: ${{ always() && github.event_name != 'push' && inputs.dry_run != true && inputs.inspect != true }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: state.json aktualisiert [skip ci]"
+          file_pattern: state.json

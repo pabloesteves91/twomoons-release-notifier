@@ -1,0 +1,7 @@
+Diese Datei ist ein Auslöser für einen Diagnose-Lauf.
+
+Jede Änderung hier startet den Workflow zwingend im Dry-Run mit ausführlichem
+Log: Er liest die Sitemap, wertet neue Produktseiten aus und zeigt die fertigen
+Embeds im Log — postet aber nichts nach Discord und ändert state.json nicht.
+
+Letzter Anstoss: 2026-09-18 — Erstaufbau des Release-Notifiers.

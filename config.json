@@ -1,0 +1,109 @@
+{
+  "shop": {
+    "base_url": "https://www.twomoons.ch/",
+    "sitemap_url": "https://www.twomoons.ch/sitemap.xml",
+    "max_sitemaps": 50,
+    "listing_urls": [],
+    "max_listing_pages": 10,
+    "always_use_listings": false
+  },
+  "request": {
+    "timeout": 30,
+    "retries": 3,
+    "delay_between_requests": 0.8,
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+  },
+  "filters": {
+    "include_patterns": [],
+    "exclude_patterns": []
+  },
+  "product": {
+    "product_markers": [
+      "div.product-detail-buy",
+      "meta[itemprop='price']",
+      "[itemprop='productID']",
+      "div.product-detail"
+    ],
+    "container_selectors": [
+      "div.product-detail",
+      "div.cms-element-product-description-reviews",
+      "div.cms-page",
+      "main"
+    ],
+    "name_selectors": [
+      "h1.product-detail-name",
+      ".product-detail-name",
+      "h1[itemprop='name']",
+      "h1"
+    ],
+    "variant_text_selectors": [
+      ".product-detail-configurator",
+      ".product-detail-variant-characteristics",
+      ".product-detail-ordernumber-container"
+    ],
+    "price_selectors": [
+      ".product-detail-price-container .product-detail-price",
+      ".product-detail-price",
+      ".product-price",
+      ".product-detail-from-price"
+    ],
+    "manufacturer_selectors": [
+      ".product-detail-manufacturer-link",
+      ".product-detail-manufacturer-logo-link img[alt]",
+      "[itemprop='brand'] [itemprop='name']"
+    ],
+    "badge_selectors": [
+      ".product-detail-badges .badge",
+      ".product-badges .badge",
+      ".product-detail .badge",
+      ".product-badge"
+    ],
+    "badge_aliases": {
+      "neu": "Neu",
+      "new": "Neu",
+      "vorbestellung": "Vorbestellung",
+      "pre-order": "Vorbestellung",
+      "preorder": "Vorbestellung",
+      "aktion": "Aktion",
+      "sale": "Aktion",
+      "%": "Aktion"
+    },
+    "variant_selectors": [
+      ".product-detail-configurator-option-label",
+      ".product-detail-configurator-option",
+      ".product-detail-properties-table td",
+      ".product-detail-variant-characteristics-text"
+    ],
+    "image_selectors": [
+      "meta[property='og:image']",
+      ".gallery-slider-single-image img",
+      ".product-detail-media img",
+      "img.product-image"
+    ]
+  },
+  "languages": {
+    "Deutsch": ["deutsch", "german", "(de)", "de-de"],
+    "Englisch": ["englisch", "english", "(en)", "en-en"],
+    "Französisch": ["französisch", "franzoesisch", "french", "(fr)"],
+    "Italienisch": ["italienisch", "italian", "(it)"],
+    "Spanisch": ["spanisch", "spanish", "(es)"],
+    "Japanisch": ["japanisch", "japanese", "(jp)", "(ja)"],
+    "Koreanisch": ["koreanisch", "korean", "(kr)"],
+    "Chinesisch": ["chinesisch", "chinese", "(cn)"]
+  },
+  "discord": {
+    "webhook_env": "DISCORD_WEBHOOK_RELEASES",
+    "username": "TwoMoons Releases",
+    "avatar_url": "",
+    "color": "#6C4BF4",
+    "footer": "Neu im Shop · twomoons.ch",
+    "delay_between_posts": 1.5,
+    "max_posts_per_run": 10,
+    "max_detail_fetches_per_run": 60
+  },
+  "update": {
+    "enabled": true,
+    "recheck_hours": 24,
+    "max_rechecks_per_run": 10
+  }
+}
