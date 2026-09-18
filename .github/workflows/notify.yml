@@ -101,7 +101,28 @@ jobs:
         run: |
           if [ "$EVENT_NAME" = "push" ]; then
             # Von debug-run.txt ausgelöst: analysieren, aber niemals posten.
-            python notifier.py --dry-run --verbose
+            # Zwei optionale Zeilen in debug-run.txt steuern, was geprüft wird:
+            #   modus: inspect      -> Shop analysieren statt Embeds bauen
+            #   urls: <URL>, <URL>  -> genau diese Produktseiten ansehen
+            modus="$(grep -i -m1 '^modus:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            urls="$(grep -i -m1 '^urls:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            args=(--verbose)
+            if [ "$modus" = "inspect" ]; then
+              args+=(--inspect --dump-html)
+            else
+              args+=(--dry-run)
+            fi
+            if [ -n "$urls" ]; then
+              IFS=',' read -ra wanted <<< "$urls"
+              for url in "${wanted[@]}"; do
+                trimmed="$(echo "$url" | xargs)"
+                if [ -n "$trimmed" ]; then
+                  args+=(--inspect-url "$trimmed")
+                fi
+              done
+            fi
+            echo "Diagnose-Lauf: notifier.py ${args[*]}"
+            python notifier.py "${args[@]}"
             exit $?
           fi
 

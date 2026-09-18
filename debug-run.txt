@@ -1,7 +1,13 @@
 Diese Datei ist ein Auslöser für einen Diagnose-Lauf.
 
-Jede Änderung hier startet den Workflow zwingend im Dry-Run mit ausführlichem
-Log: Er liest die Sitemap, wertet neue Produktseiten aus und zeigt die fertigen
-Embeds im Log — postet aber nichts nach Discord und ändert state.json nicht.
+Jede Änderung hier startet den Workflow zwingend ohne Discord: Er postet nichts
+und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
 
-Letzter Anstoss: 2026-09-18 — Erstaufbau des Release-Notifiers.
+  modus: inspect              Shop analysieren (Sitemap-Übersicht, Stichproben,
+                              HTML-Abbild des Produktbereichs im Log).
+                              Ohne diese Zeile: normaler Dry-Run mit Embeds.
+  urls: <URL>, <URL>          Nur für inspect: genau diese Produktseiten ansehen.
+
+modus: inspect
+
+Letzter Anstoss: 2026-09-18 — Struktur der Produktseiten ermitteln.
