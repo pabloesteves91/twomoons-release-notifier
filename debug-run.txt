@@ -17,7 +17,8 @@ und ändert state.json nicht. Diese optionalen Zeilen steuern, was geprüft wird
 
 Ohne modus-Zeile läuft ein normaler Dry-Run.
 
-quelle: https://www.twomoons.ch/
-bereich: Neu im Shop
+# Zum Ausprobieren die beiden Zeilen ohne das Gatter davor stehen lassen:
+# quelle: https://www.twomoons.ch/
+# bereich: Neu im Shop
 
-Letzter Anstoss: 2026-09-18 — Vorschau des Bereichs "Neu im Shop" der Startseite.
+Letzter Anstoss: 2026-09-18 — Aufräumen des Kanals ergänzt, normaler Dry-Run.
