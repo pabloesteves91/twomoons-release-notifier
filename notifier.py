@@ -540,32 +540,43 @@ def parse_categories(soup: BeautifulSoup) -> list[str]:
     return categories
 
 
+def format_amount(amount: str, currency: str) -> str:
+    """"19.9" wird zu "CHF 19.90" — so, wie der Shop es schreibt."""
+    try:
+        return f"{currency} {float(amount.replace(chr(39), '').replace(',', '.')):.2f}"
+    except ValueError:
+        return clean_text(f"{currency} {amount}")
+
+
 def parse_price(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) -> tuple[str, str]:
-    """Preis als Text, inklusive der Form "Ab CHF 114.90" bei Varianten."""
+    """Preis des gezeigten Produkts, inklusive der Form "Ab CHF 114.90".
+
+    Zuerst der ausgezeichnete Wert (``meta[itemprop=price]``) aus dem
+    Preisblock: Bei Produkten mit Staffelpreisen stehen im sichtbaren Text
+    mehrere Beträge, und der erste ist dann der falsche.
+    """
     product_config = config.get("product", {})
-    text, selector = text_from(container, product_config.get("price_selectors", []))
-    if not text:
-        text, selector = text_from(soup, product_config.get("price_selectors", []))
+    price_block, selector = select_first(container, product_config.get("price_selectors", []))
+    if price_block is None:
+        price_block, selector = select_first(soup, product_config.get("price_selectors", []))
 
-    if text:
-        # Der Preisblock enthält teils Zusatzzeilen ("inkl. MwSt.", Streichpreis).
-        matches = PRICE_RE.findall(text)
-        if matches:
-            starts_from = re.search(r"\bab\b", text, re.IGNORECASE) is not None
-            price = clean_text(matches[-1] if len(matches) > 1 and starts_from else matches[0])
-            price = re.sub(r"^ab\s+", "", price, flags=re.IGNORECASE)
-            price = re.sub(r"^chf", "CHF", price, flags=re.IGNORECASE)
-            return (f"Ab {price}" if starts_from else price), selector
-        return text[:120], selector
+    scope = price_block if price_block is not None else container
+    text = element_text(scope)
+    starts_from = re.search(r"\bab\b", text, re.IGNORECASE) is not None
 
-    meta = soup.select_one("meta[itemprop='price'], meta[property='product:price:amount']")
-    if meta is not None:
-        amount = clean_text(meta.get("content"))
-        currency_node = soup.select_one("meta[itemprop='priceCurrency'], meta[property='product:price:currency']")
+    meta = scope.select_one("meta[itemprop='price']") or soup.select_one("meta[itemprop='price']")
+    if meta is not None and clean_text(meta.get("content")):
+        currency_node = soup.select_one("meta[itemprop='priceCurrency']")
         currency = clean_text(currency_node.get("content")) if currency_node else "CHF"
-        if amount:
-            return f"{currency} {amount}", "meta[itemprop=price]"
-    return "", ""
+        price = format_amount(clean_text(meta.get("content")), currency or "CHF")
+        return (f"Ab {price}" if starts_from else price), f"{selector} (meta[itemprop=price])"
+
+    matches = PRICE_RE.findall(text)
+    if matches:
+        price = re.sub(r"^ab\s+", "", clean_text(matches[0]), flags=re.IGNORECASE)
+        price = re.sub(r"^chf", "CHF", price, flags=re.IGNORECASE)
+        return (f"Ab {price}" if starts_from else price), selector
+    return "", selector
 
 
 def parse_badges(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) -> tuple[list[str], str]:
@@ -1243,9 +1254,6 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
     LOG.info("Nach Filter: %s URL(s), ausgefiltert: %s", len(kept), sum(dropped.values()))
 
     request_config = config.get("request", {})
-    if args.survey:
-        survey(kept, config, int(args.survey))
-
     samples = args.inspect_url or sort_candidates(kept)[: int(args.samples)]
 
     for url in samples:
@@ -1307,6 +1315,10 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
                 dump = tidy_dump(node)[: int(args.dump_bytes)]
                 LOG.info("  Abbild '%s' (%s):\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, herkunft, selector, dump)
         time.sleep(float(request_config.get("delay_between_requests", 1.0)))
+
+    # Die Übersicht gehört ans Ende des Laufs — dort ist sie bequem lesbar.
+    if args.survey:
+        survey(kept, config, int(args.survey))
     return 0
 
 

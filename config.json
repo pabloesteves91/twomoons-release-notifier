@@ -44,10 +44,10 @@
       ".product-detail-ordernumber-container"
     ],
     "price_selectors": [
-      ".product-detail-price-container .product-detail-price",
+      ".product-detail-price-container",
+      ".product-detail-price-wrapper",
       ".product-detail-price",
-      ".product-price",
-      ".product-detail-from-price"
+      ".product-price"
     ],
     "manufacturer_selectors": [
       ".product-detail-manufacturer-link",
@@ -164,10 +164,9 @@
       "div.product-detail-buy"
     ],
     "dump_selectors": [
-      ".product-badges",
-      ".twomoons-language-badges",
-      "nav.breadcrumb, .breadcrumb",
-      ".product-detail-headline, .product-detail-name"
+      ".product-detail-price-container",
+      ".product-block-prices",
+      ".product-detail-configurator"
     ]
   },
   "card_lookup": {
