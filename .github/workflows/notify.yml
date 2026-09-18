@@ -32,6 +32,14 @@ on:
         description: "Ausführliches Log (zeigt die fertigen Embeds)"
         type: boolean
         default: false
+      post_from:
+        description: "Probe: Produkte von dieser Seite posten, z. B. https://www.twomoons.ch/"
+        type: string
+        default: ""
+      heading:
+        description: "Zu post_from: nur dieser Bereich, z. B. Neu im Shop"
+        type: string
+        default: ""
       inspect:
         description: "Shop analysieren statt posten (Sitemap-Übersicht und Stichproben)"
         type: boolean
@@ -94,6 +102,8 @@ jobs:
           RESET: ${{ inputs.reset }}
           LIMIT: ${{ inputs.limit }}
           DEBUG: ${{ inputs.debug }}
+          POST_FROM: ${{ inputs.post_from }}
+          HEADING: ${{ inputs.heading }}
           INSPECT: ${{ inputs.inspect }}
           INSPECT_URL: ${{ inputs.inspect_url }}
           DUMP_HTML: ${{ inputs.dump_html }}
@@ -107,12 +117,20 @@ jobs:
             modus="$(grep -i -m1 '^modus:' debug-run.txt | cut -d: -f2- | xargs || true)"
             urls="$(grep -i -m1 '^urls:' debug-run.txt | cut -d: -f2- | xargs || true)"
             stichprobe="$(grep -i -m1 '^stichprobe:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            quelle="$(grep -i -m1 '^quelle:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            bereich="$(grep -i -m1 '^bereich:' debug-run.txt | cut -d: -f2- | xargs || true)"
             args=(--verbose)
             case "$modus" in
               inspect) args+=(--inspect) ;;
               inspect+dump) args+=(--inspect --dump-html) ;;
               *) args+=(--dry-run) ;;
             esac
+            if [ -n "$quelle" ]; then
+              args+=(--post-from "$quelle")
+              if [ -n "$bereich" ]; then
+                args+=(--heading "$bereich")
+              fi
+            fi
             if [ -n "$urls" ]; then
               IFS=',' read -ra wanted <<< "$urls"
               for url in "${wanted[@]}"; do
@@ -144,6 +162,12 @@ jobs:
                   args+=(--inspect-url "$trimmed")
                 fi
               done
+            fi
+          fi
+          if [ -n "$POST_FROM" ]; then
+            args+=(--post-from "$POST_FROM")
+            if [ -n "$HEADING" ]; then
+              args+=(--heading "$HEADING")
             fi
           fi
           if [ "$DRY_RUN" = "true" ]; then

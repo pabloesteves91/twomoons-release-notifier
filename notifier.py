@@ -404,6 +404,44 @@ def collect_listing_urls(config: dict[str, Any]) -> dict[str, str]:
     return found
 
 
+def listing_blocks(soup: BeautifulSoup) -> list[tuple[str, Tag]]:
+    """Abschnitte einer Seite als (Überschrift, Block) — z. B. "Neu im Shop"."""
+    blocks: list[tuple[str, Tag]] = []
+    for block in soup.select("div.cms-block"):
+        if not block.select(".product-box"):
+            continue
+        heading_node = block.select_one("h1, h2, h3, h4, .base-slider-controls-title")
+        blocks.append((element_text(heading_node), block))
+    return blocks
+
+
+def urls_from_listing(html: str, page_url: str, heading: str = "") -> list[str]:
+    """Produktlinks eines Abschnitts, in der Reihenfolge der Seite.
+
+    Ohne `heading` werden alle Abschnitte genommen. Mit `heading` nur der, dessen
+    Überschrift den Text enthält ("Neu im Shop").
+    """
+    soup = BeautifulSoup(html, "html.parser")
+    wanted = clean_text(heading).casefold()
+
+    found: list[str] = []
+    for title, block in listing_blocks(soup):
+        if wanted and wanted not in title.casefold():
+            continue
+        for card in block.select(".product-box"):
+            for anchor in card.select("a[href]"):
+                href = str(anchor.get("href") or "")
+                if not href or href.startswith("#"):
+                    continue
+                url = normalise_url(urljoin(page_url, href))
+                if url not in found:
+                    found.append(url)
+                break
+        if wanted:
+            break
+    return found
+
+
 def discover_urls(config: dict[str, Any]) -> dict[str, str]:
     """Produktkandidaten ermitteln — Sitemap zuerst, Listing-Seiten als Ersatz."""
     shop = config.get("shop", {})
@@ -1089,6 +1127,49 @@ def refresh_posted_products(
     return updated
 
 
+def run_from_listing(
+    config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace
+) -> tuple[int, list[str]]:
+    """Postet Produkte aus einem Bereich einer Seite — auch schon bekannte.
+
+    Gedacht als Probe mit echten Produkten ("Neu im Shop" auf der Startseite),
+    bevor der erste echte Neuzugang kommt. Der Erstlauf-Schutz (`initialized`)
+    wird dabei bewusst nicht gesetzt: Sonst gälte beim nächsten regulären Lauf
+    das ganze übrige Sortiment als neu.
+    """
+    report: list[str] = []
+    discord_config = config.get("discord", {})
+    webhook_url = os.environ.get(discord_config.get("webhook_env", "DISCORD_WEBHOOK_RELEASES"), "").strip()
+
+    html = fetch_text(args.post_from, config.get("request", {}))
+    urls = urls_from_listing(html, args.post_from, args.heading or "")
+    LOG.info(
+        "%s Produkt(e) im Bereich '%s' von %s",
+        len(urls),
+        args.heading or "(ganze Seite)",
+        args.post_from,
+    )
+    if not urls:
+        titel = [title for title, _ in listing_blocks(BeautifulSoup(html, "html.parser")) if title]
+        LOG.error("Kein passender Bereich gefunden. Vorhandene Überschriften: %s", titel[:15])
+        return 0, ["FEHLER  kein passender Bereich auf der Seite"]
+
+    if not webhook_url and not args.dry_run:
+        LOG.error("%s ist nicht gesetzt — es wird nichts gepostet", discord_config.get("webhook_env"))
+        return 0, ["FEHLER  Webhook-Secret fehlt"]
+
+    known = set(state.get("known", []))
+    limit = args.limit or int(discord_config.get("max_posts_per_run", 10))
+    posted = post_new_products(urls[:limit], config, state, known, args, webhook_url, report)
+
+    if not args.dry_run:
+        state["last_run"] = timestamp()
+        save_state(args.state, state, known)
+    else:
+        LOG.info("DRY-RUN — state.json bleibt unverändert")
+    return posted, report
+
+
 def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace) -> tuple[int, list[str]]:
     report: list[str] = []
     discord_config = config.get("discord", {})
@@ -1346,6 +1427,16 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--reset", action="store_true", help="Gemerkte Produkte vergessen")
     parser.add_argument("--limit", type=int, default=0, help="Maximale Anzahl Posts pro Lauf")
     parser.add_argument("--verbose", action="store_true", help="Ausführliches Log")
+    parser.add_argument(
+        "--post-from",
+        default="",
+        help="Probe: Produkte aus einem Bereich dieser Seite posten (auch schon bekannte)",
+    )
+    parser.add_argument(
+        "--heading",
+        default="",
+        help="Zu --post-from: nur der Bereich mit dieser Überschrift, z. B. 'Neu im Shop'",
+    )
     parser.add_argument("--inspect", action="store_true", help="Shop analysieren statt posten")
     parser.add_argument(
         "--inspect-url",
@@ -1388,7 +1479,7 @@ def main(argv: list[str] | None = None) -> int:
 
     state = load_state(args.state)
     try:
-        posted, report = run(config, state, args)
+        posted, report = run_from_listing(config, state, args) if args.post_from else run(config, state, args)
     except Exception as error:
         LOG.exception("Lauf abgebrochen: %s", error)
         return 1

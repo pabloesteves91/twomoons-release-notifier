@@ -87,7 +87,34 @@ Im Log muss stehen, wie viele URLs die Sitemap geliefert hat. Sieht das gut aus,
 den Lauf ohne `dry_run` wiederholen — das ist der Erstlauf, der den Ist-Stand
 merkt und noch nichts postet.
 
-### 4. Ab jetzt läuft es von allein
+### 4. Probe mit echten Produkten (optional, empfohlen)
+
+Bis der erste echte Neuzugang im Shop erscheint, kann es dauern. Damit du siehst,
+wie eine Meldung in Discord wirklich aussieht, gibt es eine Probe mit bestehenden
+Produkten aus dem Bereich **„Neu im Shop"** auf der Startseite:
+
+**Actions** → **Run workflow** mit
+
+| Schalter | Wert |
+|---|---|
+| `post_from` | `https://www.twomoons.ch/` |
+| `heading` | `Neu im Shop` |
+| `limit` | `3` |
+
+Das postet die ersten drei Produkte dieses Bereichs — echte Produkte mit echten
+Badges, Preisen und Bildern. Vorher ansehen, ohne zu posten: zusätzlich
+`dry_run` anhaken, dann stehen die Embeds nur im Log.
+
+Diese Probe ist bewusst harmlos:
+
+* Sie postet auch Produkte, die schon bekannt sind — sonst käme nichts.
+* Sie setzt den **Erstlauf-Schutz nicht**. Ohne diese Vorsicht würde der nächste
+  reguläre Lauf das ganze übrige Sortiment für neu halten.
+* Die geposteten Produkte werden gemerkt, kommen also später nicht ein zweites Mal.
+
+Die Testnachrichten kannst du danach in Discord einfach löschen.
+
+### 5. Ab jetzt läuft es von allein
 
 Stündlich prüft der Workflow den Shop und postet, was neu dazugekommen ist. Mehr
 ist nicht zu tun.
@@ -237,6 +264,9 @@ python notifier.py --inspect --samples 3
 
 # Kategorien des Sortiments zählen
 python notifier.py --inspect --samples 0 --survey 30
+
+# Probe mit echten Produkten aus "Neu im Shop"
+python notifier.py --post-from https://www.twomoons.ch/ --heading "Neu im Shop" --limit 3 --dry-run
 
 # Echter Lauf
 export DISCORD_WEBHOOK_RELEASES="https://discord.com/api/webhooks/..."

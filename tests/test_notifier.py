@@ -42,6 +42,8 @@ def default_args(**overrides) -> Namespace:
         config=REPO / "config.json",
         state=REPO / "state.json",
         dry_run=False,
+        post_from="",
+        heading="",
         post_existing=False,
         reset=False,
         limit=0,
@@ -156,6 +158,53 @@ class ListenkarteTest(unittest.TestCase):
         self.assertEqual(product.name, "Homeworlds Spotlight Deck - Chewbacca")
         self.assertEqual(product.badges, ["Neu", "Vorbestellung"])
         self.assertEqual(product.languages, ["Englisch"])
+
+
+class StartseiteTest(unittest.TestCase):
+    """Probe mit echten Produkten aus dem Bereich "Neu im Shop"."""
+
+    def test_nur_der_gewaehlte_bereich(self):
+        urls = notifier.urls_from_listing(fixture("startseite.html"), "https://www.twomoons.ch/", "Neu im Shop")
+        self.assertEqual(urls, [
+            "https://www.twomoons.ch/armory-deck-malice-englisch",
+            DISPLAY,
+        ])
+
+    def test_ohne_bereich_alle_slider(self):
+        urls = notifier.urls_from_listing(fixture("startseite.html"), "https://www.twomoons.ch/")
+        self.assertIn("https://www.twomoons.ch/ein-bestseller", urls)
+        self.assertEqual(len(urls), 3)
+
+    def test_unbekannter_bereich_liefert_nichts(self):
+        self.assertEqual(
+            notifier.urls_from_listing(fixture("startseite.html"), "https://www.twomoons.ch/", "Gibt es nicht"),
+            [],
+        )
+
+    def test_probe_postet_auch_bekannte_produkte_ohne_den_erstlauf_schutz_zu_setzen(self):
+        state = notifier.empty_state()
+        state["known"] = [CHEWBACCA]
+        with tempfile.TemporaryDirectory() as tmp:
+            args = default_args(
+                state=Path(tmp) / "state.json",
+                post_from="https://www.twomoons.ch/",
+                heading="Neu im Shop",
+                limit=1,
+            )
+            seiten = {
+                "https://www.twomoons.ch/": fixture("startseite.html"),
+                "https://www.twomoons.ch/armory-deck-malice-englisch": fixture("produkt_mit_badges.html"),
+            }
+            with mock.patch.object(notifier, "fetch_text", side_effect=lambda url, config: seiten.get(url, fixture("suche.html"))), \
+                 mock.patch.object(notifier, "post_embed", return_value="777") as post, \
+                 mock.patch.object(notifier.time, "sleep"), \
+                 mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+                posted, _ = notifier.run_from_listing(CONFIG, state, args)
+
+        self.assertEqual((posted, post.call_count), (1, 1))
+        # Der Erstlauf-Schutz darf nicht anspringen, sonst gälte beim nächsten
+        # regulären Lauf das ganze übrige Sortiment als schon bekannt.
+        self.assertFalse(state["initialized"])
 
 
 SITEMAP_INDEX = """<?xml version="1.0" encoding="UTF-8"?>

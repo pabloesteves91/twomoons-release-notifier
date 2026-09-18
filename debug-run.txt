@@ -1,7 +1,7 @@
 Diese Datei ist ein Auslöser für einen Diagnose-Lauf.
 
 Jede Änderung hier startet den Workflow zwingend ohne Discord: Er postet nichts
-und ändert state.json nicht. Drei optionale Zeilen steuern, was geprüft wird:
+und ändert state.json nicht. Diese optionalen Zeilen steuern, was geprüft wird:
 
   modus: inspect              Shop analysieren: Sitemap-Übersicht und je
                               Stichprobe, welcher Selektor was gefunden hat —
@@ -11,9 +11,13 @@ und ändert state.json nicht. Drei optionale Zeilen steuern, was geprüft wird:
   urls: <URL>, <URL>          Nur für inspect: genau diese Produktseiten ansehen.
   stichprobe: 30              Nur für inspect: so viele zufällige Produktseiten
                               abrufen und ihre Kategorien zählen.
+  quelle: <URL>               Vorschau: welche Produkte dieser Seite gepostet
+  bereich: Neu im Shop        würden — echtes Posten geht nur über "Run workflow"
+                              mit post_from/heading.
 
 Ohne modus-Zeile läuft ein normaler Dry-Run.
 
-Letzter Anstoss: 2026-09-18 — Abnahme bestanden: Name, Preis, Sprachen, Badges,
-Bild und Link stimmten bei Lorcana Hyperia City Display, 30th Celebration
-Display und Armory Deck Malice.
+quelle: https://www.twomoons.ch/
+bereich: Neu im Shop
+
+Letzter Anstoss: 2026-09-18 — Vorschau des Bereichs "Neu im Shop" der Startseite.
