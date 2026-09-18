@@ -47,9 +47,10 @@ Ein Lauf besteht aus vier Schritten:
 2. **Vergleichen.** Die obersten 20 werden gegen das gehalten, was laut
    `state.json` bereits im Kanal steht.
 3. **Produktseiten auswerten.** Nur für die neu hinzugekommenen Produkte werden
-   Name, Preis, Sprachen, Hersteller und Bild von der Produktseite gelesen.
-   Anschliessend wird das Produkt in der Shop-Suche nachgeschlagen, denn die
-   **Badges stehen nur auf den Listenkarten**, nicht auf der Produktseite selbst.
+   Name, Preis, Sprachen, Hersteller und Bild von der Produktseite gelesen. Die
+   **Badges stehen nur auf den Listenkarten**, nicht auf der Produktseite — sie
+   kommen deshalb direkt von der Karte der Listenseite. Nur wenn die Karte keine
+   hergibt, wird das Produkt zusätzlich in der Shop-Suche nachgeschlagen.
 4. **Posten und aufräumen.** Neue Produkte werden gepostet — das älteste zuerst,
    damit der Kanal von oben nach unten chronologisch liest. Produkte, die nicht
    mehr unter den obersten 20 stehen, verlieren ihre Nachricht. Danach wird
@@ -188,7 +189,7 @@ die naheliegenden Kandidaten für `exclude_categories`.
 | `discord.webhook_env` | **Name** der Umgebungsvariable, nicht die URL selbst |
 | `discord.color`, `footer`, `username` | Aussehen der Nachricht |
 | `discord.avatar_url` | Profilbild des Absenders (leer = das in Discord hinterlegte) |
-| `discord.max_posts_per_run` | Obergrenze pro Lauf (Standard 10) |
+| `discord.max_posts_per_run` | Obergrenze pro Lauf im Sitemap-Modus (Standard 10); im Spiegel-Modus zählt `channel.keep` |
 | `discord.max_detail_fetches_per_run` | Obergrenze an Seitenabrufen pro Lauf (Standard 60) |
 | `update.*` | Nachkontrolle bereits geposteter Produkte (Preisänderungen) |
 | `cleanup.*` | nur für `mode: "sitemap"`: Kanal nach Anzahl/Alter begrenzen |

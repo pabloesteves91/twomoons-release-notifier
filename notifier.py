@@ -755,6 +755,42 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
     return product
 
 
+def listing_cards(html: str, page_url: str, config: dict[str, Any]) -> dict[str, dict[str, list[str]]]:
+    """Badges und Sprachflagge je Produkt aus einer Listenseite.
+
+    Die Listenseite hat die Badges ohnehin schon — sie hier mitzunehmen spart je
+    Produkt einen Abruf der Suchseite und ist genauer, weil die Suche ein
+    Produkt auch mal nicht findet.
+    """
+    card_config = config.get("card_lookup", {})
+    aliases = {key.lower(): value for key, value in config.get("product", {}).get("badge_aliases", {}).items()}
+    soup = BeautifulSoup(html, "html.parser")
+
+    karten: dict[str, dict[str, list[str]]] = {}
+    for card in soup.select(card_config.get("card_selector", ".product-box")):
+        badges: list[str] = []
+        for node in card.select(card_config.get("badge_selector", ".product-badges .badge")):
+            text = element_text(node)
+            if not text or len(text) > 40 or text.lower() in BADGE_DENYLIST:
+                continue
+            label = aliases.get(text.lower(), text)
+            if label not in badges:
+                badges.append(label)
+
+        languages: list[str] = []
+        for node in card.select(card_config.get("language_selector", "img.twomoons-language-badge")):
+            label = clean_text(node.get("title") or node.get("alt"))
+            if label and label not in languages:
+                languages.append(label)
+
+        for anchor in card.select("a[href]"):
+            href = str(anchor.get("href") or "")
+            if href and not href.startswith("#"):
+                karten.setdefault(normalise_url(urljoin(page_url, href)), {"badges": badges, "languages": languages})
+                break
+    return karten
+
+
 def parse_card_badges(html: str, page_url: str, product_url: str, config: dict[str, Any]) -> tuple[list[str], list[str]]:
     """Badges und Sprachflagge aus der Listenkarte eines Produkts.
 
@@ -821,10 +857,22 @@ def fetch_card_details(product: Product, config: dict[str, Any]) -> bool:
     return False
 
 
-def fetch_product(url: str, config: dict[str, Any]) -> Product:
+def fetch_product(url: str, config: dict[str, Any], card: dict[str, list[str]] | None = None) -> Product:
+    """Produktseite auswerten; `card` sind Badges/Sprache von der Listenseite."""
     html = fetch_text(url, config.get("request", {}))
     product = parse_product(html, url, config)
-    if product.is_product:
+    if not product.is_product:
+        return product
+
+    if card:
+        if card.get("badges"):
+            product.badges = list(card["badges"])
+            product.matched["badges"] = "Karte der Listenseite"
+        if card.get("languages") and not product.languages:
+            product.languages = list(card["languages"])
+
+    # Nur nachschlagen, wenn die Listenkarte nichts hergab.
+    if not product.badges:
         fetch_card_details(product, config)
     return product
 
@@ -1012,11 +1060,13 @@ def post_new_products(
     args: argparse.Namespace,
     webhook_url: str,
     report: list[str],
+    cards: dict[str, dict[str, list[str]]] | None = None,
+    limit: int | None = None,
 ) -> int:
     """Holt die neuen Seiten, postet die Produkte darunter und merkt sie sich."""
     discord_config = config.get("discord", {})
     request_config = config.get("request", {})
-    limit = args.limit or int(discord_config.get("max_posts_per_run", 10))
+    limit = args.limit or limit or int(discord_config.get("max_posts_per_run", 10))
     max_fetches = int(discord_config.get("max_detail_fetches_per_run", 60))
     pause = float(request_config.get("delay_between_requests", 1.0))
     delay = float(discord_config.get("delay_between_posts", 1.5))
@@ -1030,7 +1080,7 @@ def post_new_products(
             break
         fetched += 1
         try:
-            product = fetch_product(url, config)
+            product = fetch_product(url, config, (cards or {}).get(url))
         except Exception as error:  # ein kaputtes Produkt darf den Lauf nicht abbrechen
             LOG.warning("Produktseite %s nicht lesbar: %s", url, error)
             report.append(f"FEHLER  {url} -> {error}")
@@ -1125,7 +1175,7 @@ def refresh_posted_products(
     updated = 0
     for url, record in candidates[:max_rechecks]:
         try:
-            product = fetch_product(url, config)
+            product = fetch_product(url, config, (cards or {}).get(url))
         except Exception as error:
             LOG.warning("Nachkontrolle für %s fehlgeschlagen: %s", url, error)
             continue
@@ -1335,9 +1385,16 @@ def run_mirror(
     try:
         # Umgekehrte Seitenreihenfolge: das älteste der neuen Produkte zuerst,
         # damit der Kanal von oben nach unten chronologisch liest.
-        limit = args.limit or keep
         posted_count = post_new_products(
-            list(reversed(fehlt))[:limit], config, state, known, args, webhook_url, report
+            list(reversed(fehlt)),
+            config,
+            state,
+            known,
+            args,
+            webhook_url,
+            report,
+            cards=listing_cards(html, listing_url, config),
+            limit=keep,
         )
         entfernt = drop_messages(raus, config, state, args, webhook_url)
         if entfernt:

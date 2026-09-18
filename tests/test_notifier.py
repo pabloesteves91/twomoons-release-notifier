@@ -387,6 +387,41 @@ class SpiegelTest(unittest.TestCase):
             self.lauf(state)
         self.assertEqual(len(state["products"]), 3)
 
+    def test_badges_kommen_von_der_listenseite_ohne_zweiten_abruf(self):
+        """Die Karte der Listenseite hat die Badges schon — das spart die Suche."""
+        karten = notifier.listing_cards(fixture("neu_im_shop.html"), self.LISTE, CONFIG)
+        self.assertEqual(karten["https://www.twomoons.ch/produkt-1"]["badges"], ["Neu"])
+
+        state = notifier.empty_state()
+        with mock.patch.object(notifier, "fetch_card_details") as suche:
+            self.lauf(state)
+        suche.assert_not_called()
+        self.assertEqual(state["products"]["https://www.twomoons.ch/produkt-1"]["badges"], ["Neu"])
+
+    def test_ohne_badge_auf_der_karte_wird_die_suche_befragt(self):
+        self.listing = self.listing.replace(
+            '<div class="product-badges"><span class="badge bg-success badge-new">Neu</span></div>', ""
+        )
+        state = notifier.empty_state()
+        with mock.patch.object(notifier, "fetch_card_details", return_value=False) as suche:
+            self.lauf(state)
+        self.assertEqual(suche.call_count, 3)
+
+    def test_alle_zwanzig_auf_einmal_trotz_max_posts_per_run(self):
+        """Die Obergrenze für den Sitemap-Modus darf den Spiegel nicht bremsen."""
+        karten = "".join(
+            f'<div class="card product-box"><div class="card-body">'
+            f'<a class="product-name" href="https://www.twomoons.ch/p-{n}">P {n}</a>'
+            f"</div></div>"
+            for n in range(25)
+        )
+        self.listing = f'<html><body><div class="cms-element-product-listing">{karten}</div></body></html>'
+        self.config = dict(self.config, channel=dict(self.config["channel"], keep=20))
+
+        state = notifier.empty_state()
+        posted, _, post, _ = self.lauf(state)
+        self.assertEqual((posted, post.call_count), (20, 20))
+
     def test_dry_run_postet_und_loescht_nichts(self):
         state = notifier.empty_state()
         posted, _, post, geloescht = self.lauf(state, dry_run=True)
