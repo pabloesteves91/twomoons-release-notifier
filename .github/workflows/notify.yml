@@ -107,11 +107,11 @@ jobs:
             modus="$(grep -i -m1 '^modus:' debug-run.txt | cut -d: -f2- | xargs || true)"
             urls="$(grep -i -m1 '^urls:' debug-run.txt | cut -d: -f2- | xargs || true)"
             args=(--verbose)
-            if [ "$modus" = "inspect" ]; then
-              args+=(--inspect --dump-html)
-            else
-              args+=(--dry-run)
-            fi
+            case "$modus" in
+              inspect) args+=(--inspect) ;;
+              inspect+dump) args+=(--inspect --dump-html) ;;
+              *) args+=(--dry-run) ;;
+            esac
             if [ -n "$urls" ]; then
               IFS=',' read -ra wanted <<< "$urls"
               for url in "${wanted[@]}"; do

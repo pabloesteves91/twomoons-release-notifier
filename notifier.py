@@ -955,6 +955,32 @@ def interesting_classes(soup: BeautifulSoup) -> list[str]:
     return sorted(classes)
 
 
+# Beim Abbild stört vor allem, was viel Platz braucht und nichts erklärt:
+# Inline-SVG, Skripte und der Bewertungsblock mit seinen Sternen.
+DUMP_NOISE = (
+    "script",
+    "style",
+    "svg",
+    "noscript",
+    "template",
+)
+DUMP_NOISE_CLASSES = ("review", "point-rating", "point-container", "cookie", "breadcrumb")
+
+
+def tidy_dump(container: Tag) -> str:
+    """HTML-Abbild ohne Rauschen — brauchbar als Grundlage für eine Fixture."""
+    copy = BeautifulSoup(container.decode(), "html.parser")
+    for node in copy.find_all(DUMP_NOISE):
+        node.decompose()
+    for node in copy.find_all(True):
+        classes = " ".join(node.get("class") or []).lower()
+        if any(word in classes for word in DUMP_NOISE_CLASSES):
+            node.decompose()
+    for comment in copy.find_all(string=lambda text: isinstance(text, Comment)):
+        comment.extract()
+    return re.sub(r"\n\s*\n+", "\n", copy.decode())
+
+
 def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
     """Zeigt, wie der Shop wirklich aussieht — Grundlage für die Selektoren."""
     urls = discover_urls(config)
@@ -991,7 +1017,7 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
 
         if args.dump_html:
             container, selector = product_container(soup, config)
-            dump = container.decode()[: int(args.dump_bytes)]
+            dump = tidy_dump(container)[: int(args.dump_bytes)]
             LOG.info("  Abbild von '%s':\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, url, dump)
         time.sleep(float(request_config.get("delay_between_requests", 1.0)))
     return 0

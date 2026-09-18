@@ -3,11 +3,13 @@ Diese Datei ist ein Auslöser für einen Diagnose-Lauf.
 Jede Änderung hier startet den Workflow zwingend ohne Discord: Er postet nichts
 und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
 
-  modus: inspect              Shop analysieren (Sitemap-Übersicht, Stichproben,
-                              HTML-Abbild des Produktbereichs im Log).
+  modus: inspect              Shop analysieren: Sitemap-Übersicht und je
+                              Stichprobe, welcher Selektor was gefunden hat.
+  modus: inspect+dump         Zusätzlich ein aufgeräumtes HTML-Abbild des
+                              Produktbereichs ins Log.
                               Ohne diese Zeile: normaler Dry-Run mit Embeds.
   urls: <URL>, <URL>          Nur für inspect: genau diese Produktseiten ansehen.
 
 modus: inspect
 
-Letzter Anstoss: 2026-09-18 — Struktur der Produktseiten ermitteln.
+Letzter Anstoss: 2026-09-18 — Selektoren gegen echte Produktseiten prüfen.
