@@ -483,6 +483,36 @@ def looks_like_product(soup: BeautifulSoup, config: dict[str, Any]) -> str:
     return ""
 
 
+def parse_heading(heading: Tag | None, product: "Product") -> tuple[str, str]:
+    """Zerlegt die Überschrift der Produktseite in ihre drei Teile.
+
+    Der Shop baut sie so auf:
+        <h1 class="product-detail-name">
+          <span class="subheadings">Rebel Sp. z o.o.</span><br>
+          Zug um Zug Weltreise<br>
+          <span class="product-variant-characteristics-option">Deutsch</span>
+        </h1>
+    Ohne diese Zerlegung stünden Serie und Variante mitten im Produktnamen.
+    """
+    if heading is None:
+        return "", ""
+
+    variant_nodes = heading.select(".product-variant-characteristics-option")
+    product.variant_text = " ".join(filter(None, (element_text(node) for node in variant_nodes)))
+
+    series_node = heading.select_one(".subheadings")
+    if series_node is not None and not has_class(series_node, "product-variant-characteristics-option"):
+        series = element_text(series_node)
+        if series:
+            product.manufacturer = series
+
+    for node in heading.select(".subheadings, .product-variant-characteristics-option"):
+        node.extract()
+
+    name = element_text(heading)
+    return name, "h1.product-detail-name (ohne Serie und Variante)"
+
+
 def parse_properties(soup: BeautifulSoup) -> dict[str, str]:
     """Die Eigenschaften-Tabelle der Produktseite ("Brand: Pokémon, Sitting Cuties").
 
@@ -564,8 +594,24 @@ def parse_badges(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) ->
 
 
 def parse_languages(product: Product, container: Tag, config: dict[str, Any]) -> list[str]:
-    """Sprachen aus Varianten-Optionen und aus Name/Variantenzeile."""
+    """Sprachen aus der Sprachflagge des Shops, den Varianten und dem Namen.
+
+    Der Shop setzt eine eigene Flagge (``img.twomoons-language-badge``) mit der
+    Sprache im ``title``/``alt``. Das ist die verlässlichste Quelle — nur eben
+    ausschliesslich innerhalb des Produktbereichs, weil die Empfehlungskarten
+    dieselbe Flagge für fremde Produkte tragen.
+    """
     product_config = config.get("product", {})
+    languages: list[str] = []
+
+    for selector in product_config.get("language_badge_selectors", []):
+        for node in container.select(selector):
+            label = clean_text(node.get("title") or node.get("alt") or node.get_text())
+            if label and label not in languages:
+                languages.append(label)
+    if languages:
+        return languages
+
     haystack_parts = [product.name, product.variant_text]
 
     for selector in product_config.get("variant_selectors", []):
@@ -579,7 +625,6 @@ def parse_languages(product: Product, container: Tag, config: dict[str, Any]) ->
             haystack_parts.append(clean_text(node.get("title")))
 
     haystack = " ".join(part for part in haystack_parts if part).lower()
-    languages: list[str] = []
     for label, markers in config.get("languages", {}).items():
         for marker in markers:
             if re.search(rf"(?<![\wäöüéèà]){re.escape(marker.lower())}(?![\wäöüéèà])", haystack):
@@ -602,7 +647,10 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
     container, container_selector = product_container(soup, config)
     product_config = config.get("product", {})
 
-    name, name_selector = text_from(container, product_config.get("name_selectors", []))
+    heading = container.select_one("h1.product-detail-name") or container.select_one(".product-detail-name")
+    name, name_selector = parse_heading(heading, product)
+    if not name:
+        name, name_selector = text_from(container, product_config.get("name_selectors", []))
     if not name:
         node, name_selector = select_first(soup, ["meta[property='og:title']", "title"])
         name = element_text(node)
@@ -611,12 +659,16 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
         return product
     product.name = name
 
-    product.variant_text, variant_selector = text_from(container, product_config.get("variant_text_selectors", []))
+    variant_selector = "Überschrift" if product.variant_text else ""
+    if not product.variant_text:
+        product.variant_text, variant_selector = text_from(container, product_config.get("variant_text_selectors", []))
     product.price, price_selector = parse_price(soup, container, config)
     product.properties = parse_properties(soup)
     product.categories = parse_categories(soup)
 
-    product.manufacturer, manufacturer_selector = text_from(container, product_config.get("manufacturer_selectors", []))
+    manufacturer_selector = "Überschrift" if product.manufacturer else ""
+    if not product.manufacturer:
+        product.manufacturer, manufacturer_selector = text_from(container, product_config.get("manufacturer_selectors", []))
     if not product.manufacturer:
         wanted = [key.lower() for key in product_config.get("manufacturer_properties", [])]
         for label, value in product.properties.items():
@@ -1112,6 +1164,15 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Eigenschaften: %s", json.dumps(product.properties, ensure_ascii=False)[:400])
         LOG.info("  Filter würde greifen: %s", blocked_category(product, config) or "nein")
         LOG.info("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
+
+        for node in soup.select("[class*=badge]")[:20]:
+            text = element_text(node)
+            LOG.info(
+                "  Badge-Kandidat '%s' = %r | %s",
+                ".".join(node.get("class") or []),
+                text[:40],
+                " < ".join(describe_chain(node, 5)[1:]),
+            )
 
         for selector in config.get("inspect", {}).get("ancestors_of", []):
             node = soup.select_one(selector)

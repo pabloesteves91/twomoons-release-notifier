@@ -92,6 +92,10 @@
       "marke",
       "serie",
       "set"
+    ],
+    "language_badge_selectors": [
+      "img.twomoons-language-badge",
+      ".twomoons-language-badges img"
     ]
   },
   "languages": {

@@ -13,4 +13,4 @@ und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
 modus: inspect+dump
 urls: https://www.twomoons.ch/zubat-zubat, https://www.twomoons.ch/zug-um-zug-weltreise-deutsch, https://www.twomoons.ch/zuerich-cube-open
 
-Letzter Anstoss: 2026-09-18 — Produktbereich, Badges, Sprache und Kategorien prüfen.
+Letzter Anstoss: 2026-09-18 — herausfinden, wo die Badges der Produktseite stecken.
