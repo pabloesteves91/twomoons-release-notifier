@@ -33,6 +33,7 @@ def default_args(**overrides) -> Namespace:
         inspect=False,
         inspect_url=None,
         samples=5,
+        survey=0,
         dump_html=False,
         dump_selector=None,
         dump_bytes=12000,

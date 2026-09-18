@@ -20,6 +20,7 @@ import itertools
 import json
 import logging
 import os
+import random
 import re
 import sys
 import time
@@ -1197,6 +1198,40 @@ def tidy_dump(container: Tag) -> str:
     return re.sub(r"\n\s*\n+", "\n", copy.decode())
 
 
+def survey(urls: dict[str, str], config: dict[str, Any], count: int) -> None:
+    """Zufallsstichprobe: welche Kategorien stecken überhaupt im Sortiment?
+
+    Die Produkte liegen alle auf der Wurzelebene, die URL verrät also nichts.
+    Erst die Breadcrumb zeigt, wie viel davon Einzelkarten, Zubehör oder
+    Veranstaltungen sind — die Grundlage für sinnvolle Filterlisten.
+    """
+    pool = sorted(urls)
+    picked = random.Random(20260918).sample(pool, min(count, len(pool)))
+    request_config = config.get("request", {})
+    pause = float(request_config.get("delay_between_requests", 1.0))
+
+    counter: dict[str, int] = {}
+    keine = 0
+    for url in picked:
+        try:
+            html = fetch_text(url, request_config)
+        except Exception as error:
+            LOG.warning("  Stichprobe %s nicht lesbar: %s", url, error)
+            continue
+        soup = BeautifulSoup(html, "html.parser")
+        categories = parse_categories(soup)[1:]  # "Home" sagt nichts
+        if not categories:
+            keine += 1
+        for category in categories:
+            counter[category] = counter.get(category, 0) + 1
+        time.sleep(pause)
+
+    LOG.info("=== Kategorien in %s Stichproben ===", len(picked))
+    for category, number in sorted(counter.items(), key=lambda item: -item[1]):
+        LOG.info("  %-45s %s", category, number)
+    LOG.info("  ohne Breadcrumb (keine Produktseite): %s", keine)
+
+
 def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
     """Zeigt, wie der Shop wirklich aussieht — Grundlage für die Selektoren."""
     urls = discover_urls(config)
@@ -1207,8 +1242,11 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
     kept, dropped = filter_urls(urls, config)
     LOG.info("Nach Filter: %s URL(s), ausgefiltert: %s", len(kept), sum(dropped.values()))
 
-    samples = args.inspect_url or sort_candidates(kept)[: int(args.samples)]
     request_config = config.get("request", {})
+    if args.survey:
+        survey(kept, config, int(args.survey))
+
+    samples = args.inspect_url or sort_candidates(kept)[: int(args.samples)]
 
     for url in samples:
         LOG.info("=== Produktseite %s ===", url)
@@ -1235,6 +1273,8 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Kategorien: %s", product.categories or "(keine)")
         LOG.info("  Eigenschaften: %s", json.dumps(product.properties, ensure_ascii=False)[:400])
         LOG.info("  Filter würde greifen: %s", blocked_category(product, config) or "nein")
+        if product.is_product:
+            LOG.info("  Embed:\n%s", json.dumps(build_embed(product, config), indent=2, ensure_ascii=False))
         LOG.debug("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
 
         gezeigt = 0
@@ -1295,6 +1335,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Konkrete Produktseite für --inspect (mehrfach möglich)",
     )
     parser.add_argument("--samples", type=int, default=5, help="Anzahl Stichproben für --inspect")
+    parser.add_argument(
+        "--survey",
+        type=int,
+        default=0,
+        help="Zufällige Produktseiten abrufen und ihre Kategorien zählen (für die Filterlisten)",
+    )
     parser.add_argument("--dump-html", action="store_true", help="HTML-Abbild des Produktbereichs ins Log")
     parser.add_argument(
         "--dump-selector",

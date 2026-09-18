@@ -106,6 +106,7 @@ jobs:
             #   urls: <URL>, <URL>  -> genau diese Produktseiten ansehen
             modus="$(grep -i -m1 '^modus:' debug-run.txt | cut -d: -f2- | xargs || true)"
             urls="$(grep -i -m1 '^urls:' debug-run.txt | cut -d: -f2- | xargs || true)"
+            stichprobe="$(grep -i -m1 '^stichprobe:' debug-run.txt | cut -d: -f2- | xargs || true)"
             args=(--verbose)
             case "$modus" in
               inspect) args+=(--inspect) ;;
@@ -120,6 +121,9 @@ jobs:
                   args+=(--inspect-url "$trimmed")
                 fi
               done
+            fi
+            if [ -n "$stichprobe" ]; then
+              args+=(--survey "$stichprobe")
             fi
             echo "Diagnose-Lauf: notifier.py ${args[*]}"
             python notifier.py "${args[@]}"
