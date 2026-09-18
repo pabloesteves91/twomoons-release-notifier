@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Profilbild des Discord-Webhooks "TwoMoons Releases".
+
+  Reines Vektor-SVG, 512x512 — in Illustrator, Inkscape oder Figma zu öffnen und
+  frei zu bearbeiten. Discord zeigt das Bild rund beschnitten: Das Motiv bleibt
+  deshalb im inneren Kreis, die Ecken tragen nichts Wichtiges.
+
+  Die Sichel ist ein Pfad aus zwei Kreisbögen (bewusst kein zusammengesetzter
+  Pfad: "evenodd" ergibt bei zwei Kreisen die symmetrische Differenz statt der
+  Subtraktion, und Masken übersteht nicht jeder Konverter).
+      grosser Bogen: Kreis um (248,266), r=126
+      kleiner Bogen: Kreis um (284,239), r=126
+  Wer die Sichel dicker will, schiebt den zweiten Kreismittelpunkt weiter weg
+  und rechnet die beiden Schnittpunkte neu.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <radialGradient id="hintergrund" cx="50%" cy="38%" r="78%">
+      <stop offset="0" stop-color="#23304f"/>
+      <stop offset="1" stop-color="#0b0f1a"/>
+    </radialGradient>
+    <linearGradient id="mondfarbe" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#8E6BFF"/>
+      <stop offset="1" stop-color="#5A36E8"/>
+    </linearGradient>
+  </defs>
+
+  <g id="Hintergrund">
+    <rect width="512" height="512" fill="url(#hintergrund)"/>
+  </g>
+
+  <g id="Mond-gross">
+    <path fill="url(#mondfarbe)" d="
+      M 191.6,153.3
+      A 126,126 0 1,0 340.4,351.7
+      A 126,126 0 0,1 191.6,153.3 Z"/>
+  </g>
+
+  <g id="Mond-klein">
+    <circle cx="318" cy="214" r="30" fill="#A78BFA"/>
+  </g>
+
+  <g id="Funke-neu">
+    <!-- Vierzackiger Funke: steht für "neu im Shop". -->
+    <path fill="#F2F6FF" d="
+      M 396,110
+      C 401,148 410,157 448,162
+      C 410,167 401,176 396,214
+      C 391,176 382,167 344,162
+      C 382,157 391,148 396,110 Z"/>
+  </g>
+</svg>

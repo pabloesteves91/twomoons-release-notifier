@@ -149,7 +149,7 @@
   "discord": {
     "webhook_env": "DISCORD_WEBHOOK_RELEASES",
     "username": "TwoMoons Releases",
-    "avatar_url": "",
+    "avatar_url": "https://raw.githubusercontent.com/pabloesteves91/twomoons-release-notifier/claude/wizardly-einstein-58ebps/assets/bot-avatar.png",
     "color": "#6C4BF4",
     "footer": "Neu im Shop · twomoons.ch",
     "delay_between_posts": 1.5,

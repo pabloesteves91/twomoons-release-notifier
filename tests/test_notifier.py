@@ -257,6 +257,36 @@ class SitemapTest(unittest.TestCase):
         self.assertEqual(notifier.sort_candidates(urls)[0], "https://www.twomoons.ch/neu")
 
 
+class UrlKodierungTest(unittest.TestCase):
+    """Discord lehnt Embeds mit ungültigen URLs ab (400 {"embeds": ["0"]})."""
+
+    def test_leerzeichen_werden_kodiert(self):
+        self.assertEqual(
+            notifier.safe_url("https://www.twomoons.ch/media/1/Armory Deck Malice.webp?ts=17"),
+            "https://www.twomoons.ch/media/1/Armory%20Deck%20Malice.webp?ts=17",
+        )
+
+    def test_klammern_und_umlaute(self):
+        kodiert = notifier.safe_url("https://www.twomoons.ch/media/30th Display_(1).jpg")
+        self.assertNotIn(" ", kodiert)
+        self.assertIn("(1)", kodiert)
+        self.assertNotIn(" ", notifier.safe_url("https://www.twomoons.ch/media/Würfel Set.png"))
+
+    def test_bereits_kodierte_urls_bleiben_wie_sie_sind(self):
+        fertig = "https://www.twomoons.ch/media/Bereits%20Kodiert.png"
+        self.assertEqual(notifier.safe_url(fertig), fertig)
+
+    def test_embed_bekommt_die_kodierte_bild_url(self):
+        product = notifier.Product(
+            url=CHEWBACCA,
+            name="Armory Deck Malice",
+            image_url="https://www.twomoons.ch/media/1/Armory Deck Malice.webp?ts=17",
+        )
+        embed = notifier.build_embed(product, CONFIG)
+        self.assertNotIn(" ", embed["thumbnail"]["url"])
+        self.assertNotIn(" ", embed["url"])
+
+
 class AufraeumenTest(unittest.TestCase):
     """Im Kanal sollen nur die neuesten Meldungen stehen bleiben."""
 
@@ -474,6 +504,63 @@ class AblaufTest(unittest.TestCase):
         # Nicht als gesehen markiert — der nächste Lauf holt es nach.
         self.assertNotIn(DISPLAY, state["known"])
         self.assertTrue(any("fehlt" in line for line in report))
+
+    def test_ein_abgelehntes_produkt_stoppt_die_uebrigen_nicht(self):
+        """Der Fehler, der den ersten echten Lauf nach vier Posts beendet hat."""
+        state = notifier.empty_state()
+        self.erstlauf(state)
+        for index, url in enumerate([DISPLAY, CHEWBACCA + "-2", CHEWBACCA + "-3"]):
+            self.urls[url] = f"2026-09-2{index}"
+            self.pages[url] = fixture("produkt_staffelpreis.html")
+
+        args = default_args(state=self.state_path)
+        abgelehnt = RuntimeError('Discord lehnte den Post ab (400): {"embeds": ["0"]}')
+        with mock.patch.object(notifier, "discover_urls", return_value=self.urls), \
+             mock.patch.object(notifier, "fetch_text", side_effect=self.seite), \
+             mock.patch.object(notifier, "post_embed", side_effect=["111", abgelehnt, "333"]) as post, \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            posted, report = notifier.run(CONFIG, state, args)
+
+        self.assertEqual(post.call_count, 3)
+        self.assertEqual(posted, 2)
+        self.assertTrue(any("FEHLER" in line for line in report))
+        # Der Stand muss trotz des Fehlers auf der Platte liegen.
+        gespeichert = json.loads(self.state_path.read_text(encoding="utf-8"))
+        self.assertEqual(len(gespeichert["products"]), 2)
+
+    def test_stand_ueberlebt_einen_absturz_nach_dem_posten(self):
+        state = notifier.empty_state()
+        self.erstlauf(state)
+        self.urls[DISPLAY] = "2026-09-19"
+
+        args = default_args(state=self.state_path)
+        with mock.patch.object(notifier, "discover_urls", return_value=self.urls), \
+             mock.patch.object(notifier, "fetch_text", side_effect=self.seite), \
+             mock.patch.object(notifier, "post_embed", return_value="999"), \
+             mock.patch.object(notifier, "cleanup_channel", side_effect=RuntimeError("Discord kaputt")), \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            with self.assertRaises(RuntimeError):
+                notifier.run(CONFIG, state, args)
+
+        gespeichert = json.loads(self.state_path.read_text(encoding="utf-8"))
+        self.assertIn(DISPLAY, gespeichert["products"])
+        self.assertIn(DISPLAY, gespeichert["known"])
+
+    def test_post_existing_merkt_sich_auch_die_nicht_geposteten(self):
+        """Sonst tröpfelte das Altsortiment jahrelang in den Kanal."""
+        state = notifier.empty_state()
+        for index, url in enumerate([DISPLAY, CHEWBACCA + "-2", CHEWBACCA + "-3"]):
+            self.urls[url] = f"2026-09-2{index}"
+            self.pages[url] = fixture("produkt_staffelpreis.html")
+
+        with mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            posted, report = self.lauf(state, post_existing=True, limit=1)[:2]
+
+        self.assertEqual(posted, 1)
+        self.assertEqual(sorted(state["known"]), sorted(self.urls))
+        self.assertTrue(any("nur gemerkt" in line for line in report))
 
     def test_kategorieseite_wird_gemerkt_aber_nicht_gepostet(self):
         state = notifier.empty_state()

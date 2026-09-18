@@ -29,8 +29,9 @@ Läuft ausschliesslich über GitHub Actions — kein Server, keine Datenbank.
 7. [`state.json` — das Gedächtnis](#statejson--das-gedächtnis)
 8. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
 9. [Lokal ausführen](#lokal-ausführen)
-10. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
-11. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
+10. [Profilbild des Absenders](#profilbild-des-absenders)
+11. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
+12. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
 
 ## Wie es funktioniert
 
@@ -122,9 +123,12 @@ Die Testnachrichten kannst du danach in Discord einfach löschen.
 Stündlich prüft der Workflow den Shop und postet, was neu dazugekommen ist. Mehr
 ist nicht zu tun.
 
-Soll der Kanal bewusst mit dem aktuellen Sortiment gefüllt werden, hilft
-`post_existing` zusammen mit `reset` — Achtung, das postet sehr viel (die
-Obergrenze `discord.max_posts_per_run` bremst pro Lauf).
+`post_existing` ist **nicht** der Weg, um den Kanal zu füllen: Der Shop hat rund
+6600 Produkte, gepostet werden höchstens `discord.max_posts_per_run` pro Lauf.
+Deshalb postet ein Erstlauf mit `post_existing` genau diese Obergrenze und merkt
+sich **alle übrigen als bekannt** — sonst tröpfelte das Altsortiment monatelang
+in den Kanal. Für eine Probe mit echten Produkten ist der nächste Abschnitt der
+richtige Weg.
 
 ## Zeitplan und Default-Branch
 
@@ -192,7 +196,8 @@ die naheliegenden Kandidaten für `exclude_categories`.
 | `languages` | Stichwörter je Sprache, falls es keine Sprachflagge gibt |
 | `card_lookup.*` | Nachschlag der Badges über die Shop-Suche |
 | `discord.webhook_env` | **Name** der Umgebungsvariable, nicht die URL selbst |
-| `discord.color`, `footer`, `username`, `avatar_url` | Aussehen der Nachricht |
+| `discord.color`, `footer`, `username` | Aussehen der Nachricht |
+| `discord.avatar_url` | Profilbild des Absenders (leer = das in Discord hinterlegte) |
 | `discord.max_posts_per_run` | Obergrenze pro Lauf (Standard 10) |
 | `discord.max_detail_fetches_per_run` | Obergrenze an Seitenabrufen pro Lauf (Standard 60) |
 | `update.*` | Nachkontrolle bereits geposteter Produkte (Preisänderungen) |
@@ -311,6 +316,34 @@ python notifier.py
 # Tests
 python -m unittest discover -s tests
 ```
+
+## Profilbild des Absenders
+
+Im Ordner `assets/` liegen zwei Dateien:
+
+| Datei | Wofür |
+|---|---|
+| `bot-avatar.png` | 512×512, das Bild, das Discord tatsächlich anzeigt |
+| `bot-avatar.svg` | dieselbe Grafik als Vektor — zum Bearbeiten in Illustrator, Inkscape oder Figma |
+
+Der Webhook holt sich das PNG über `discord.avatar_url` in der `config.json`
+direkt aus diesem Repo. **Der Branchname steht in der URL** — wird der Branch
+später umbenannt oder nach `main` gemerget, muss die URL mitgezogen werden,
+sonst zeigt Discord wieder das Standardbild.
+
+**Eigenes Bild verwenden**, zwei Wege:
+
+1. *Über das Repo:* `bot-avatar.svg` bearbeiten, als 512×512-PNG exportieren,
+   beide Dateien ersetzen, committen. Ab dem nächsten Post gilt das neue Bild —
+   für **neue** Nachrichten; bereits gepostete behalten das alte Bild.
+2. *Direkt in Discord:* Im Webhook (Kanal bearbeiten → Integrationen → Webhooks)
+   ein Bild hochladen und in der `config.json` `"avatar_url": ""` setzen. Dann
+   bestimmt Discord das Bild, das Repo redet nicht mehr mit.
+
+Zum SVG: Die Sichel ist ein Pfad aus zwei Kreisbögen statt eines
+zusammengesetzten Pfads. Grund steht als Kommentar in der Datei — `evenodd`
+ergibt bei zwei Kreisen die symmetrische Differenz statt der Subtraktion, was
+beim Bauen erst wie ein Ring aussah.
 
 ## Wenn etwas nicht klappt
 

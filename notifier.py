@@ -28,7 +28,7 @@ import xml.etree.ElementTree as ElementTree
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote_plus, urljoin, urlsplit, urlunsplit
+from urllib.parse import quote, quote_plus, urljoin, urlsplit, urlunsplit
 from urllib.request import url2pathname
 
 import requests
@@ -831,6 +831,28 @@ def fetch_product(url: str, config: dict[str, Any]) -> Product:
 # --------------------------------------------------------------------------- #
 
 
+def safe_url(url: str) -> str:
+    """Macht eine URL für Discord tauglich.
+
+    Die Medien-URLs des Shops enthalten echte Leerzeichen und Klammern
+    ("…/Armory Deck Malice.webp"). Discord lehnt dann die ganze Nachricht mit
+    400 {"embeds": ["0"]} ab. Das Prozentzeichen bleibt "sicher", damit bereits
+    kodierte URLs nicht ein zweites Mal kodiert werden.
+    """
+    parts = urlsplit(clean_text(url))
+    if not parts.scheme:
+        return clean_text(url)
+    return urlunsplit(
+        (
+            parts.scheme,
+            parts.netloc,
+            quote(parts.path, safe="/%:@!$&'()*+,;=~-._"),
+            quote(parts.query, safe="%:@/?!$&'()*+,;=~-._"),
+            quote(parts.fragment, safe="%:@/?"),
+        )
+    )
+
+
 def color_to_int(color: str) -> int:
     try:
         return int(str(color).lstrip("#"), 16)
@@ -852,17 +874,18 @@ def build_embed(product: Product, config: dict[str, Any]) -> dict[str, Any]:
         lines.append(f"**Sprachen:** {', '.join(product.languages)}")
     if product.manufacturer:
         lines.append(f"**Hersteller:** {product.manufacturer}")
-    lines.append(f"**Link:** [Zum Produkt]({product.url})")
+    link = safe_url(product.url)
+    lines.append(f"**Link:** [Zum Produkt]({link})")
 
     embed: dict[str, Any] = {
         "title": product.name[:256],
-        "url": product.url,
+        "url": link,
         "description": "\n".join(lines)[:4096],
         "color": color_to_int(discord_config.get("color", "#5865F2")),
         "footer": {"text": discord_config.get("footer", "twomoons.ch")},
     }
     if product.image_url:
-        embed["thumbnail"] = {"url": product.image_url}
+        embed["thumbnail"] = {"url": safe_url(product.image_url)}
     return embed
 
 
@@ -907,7 +930,12 @@ def post_embed(webhook_url: str, embed: dict[str, Any], username: str, avatar_ur
     separator = "&" if "?" in webhook_url else "?"
     response = discord_request("POST", f"{webhook_url}{separator}wait=true", payload)
     if response.status_code not in (200, 204):
-        raise RuntimeError(f"Discord lehnte den Post ab ({response.status_code}): {response.text[:300]}")
+        # Ohne die beteiligten URLs ist "{"embeds": ["0"]}" nicht zu deuten.
+        raise RuntimeError(
+            f"Discord lehnte den Post ab ({response.status_code}): {response.text[:300]} "
+            f"| Titel: {embed.get('title')!r} | Link: {embed.get('url')!r} "
+            f"| Bild: {embed.get('thumbnail', {}).get('url')!r}"
+        )
     try:
         return str(response.json().get("id", ""))
     except ValueError:
@@ -1026,7 +1054,14 @@ def post_new_products(
         if args.dry_run:
             LOG.info("DRY-RUN — würde posten: %s", product.name)
         else:
-            message_id = post_embed(webhook_url, embed, username, avatar_url)
+            try:
+                message_id = post_embed(webhook_url, embed, username, avatar_url)
+            except Exception as error:
+                # Lehnt Discord ein Embed ab, sollen die übrigen Produkte trotzdem
+                # durchkommen — und der bisherige Stand erhalten bleiben.
+                LOG.error("'%s' wurde nicht gepostet: %s", product.name, error)
+                report.append(f"FEHLER  {product.name} -> {error}")
+                continue
             LOG.info("Gepostet: %s", product.name)
             time.sleep(delay)
 
@@ -1235,17 +1270,18 @@ def run_from_listing(
 
     known = set(state.get("known", []))
     limit = args.limit or int(discord_config.get("max_posts_per_run", 10))
-    posted = post_new_products(urls[:limit], config, state, known, args, webhook_url, report)
-
-    entfernt = cleanup_channel(config, state, args, webhook_url)
-    if entfernt:
-        report.append(f"{entfernt} alte Meldung(en) aus dem Kanal entfernt")
-
-    if not args.dry_run:
-        state["last_run"] = timestamp()
-        save_state(args.state, state, known)
-    else:
-        LOG.info("DRY-RUN — state.json bleibt unverändert")
+    posted = 0
+    try:
+        posted = post_new_products(urls[:limit], config, state, known, args, webhook_url, report)
+        entfernt = cleanup_channel(config, state, args, webhook_url)
+        if entfernt:
+            report.append(f"{entfernt} alte Meldung(en) aus dem Kanal entfernt")
+    finally:
+        if not args.dry_run:
+            state["last_run"] = timestamp()
+            save_state(args.state, state, known)
+        else:
+            LOG.info("DRY-RUN — state.json bleibt unverändert")
     return posted, report
 
 
@@ -1280,6 +1316,35 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
     first_run = not state.get("initialized", False)
     posted = 0
 
+    try:
+        posted = post_round(
+            config, state, args, report, known, new_urls, first_run, webhook_url, webhook_env
+        )
+    finally:
+        # Auch wenn es unterwegs kracht: Was gepostet wurde, muss gemerkt sein —
+        # sonst kommt es beim nächsten Lauf ein zweites Mal.
+        if not args.dry_run:
+            state["initialized"] = True
+            state["last_run"] = timestamp()
+            save_state(args.state, state, known)
+        else:
+            LOG.info("DRY-RUN — state.json bleibt unverändert")
+    return posted, report
+
+
+def post_round(
+    config: dict[str, Any],
+    state: dict[str, Any],
+    args: argparse.Namespace,
+    report: list[str],
+    known: set[str],
+    new_urls: list[str],
+    first_run: bool,
+    webhook_url: str,
+    webhook_env: str,
+) -> int:
+    """Posten, nachkontrollieren, aufräumen — der Teil, der schiefgehen darf."""
+    posted = 0
     if first_run and not args.post_existing:
         LOG.info(
             "Erster Lauf — %s URL(s) werden nur als bekannt gespeichert, es wird nichts gepostet",
@@ -1294,6 +1359,18 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
         report.append(f"FEHLER  {webhook_env} fehlt — {len(new_urls)} neue URL(s) bleiben offen")
     else:
         posted = post_new_products(new_urls, config, state, known, args, webhook_url, report)
+        if first_run and args.post_existing:
+            # Sonst tröpfelte das Altsortiment mit jedem Lauf weiter in den Kanal:
+            # 6600 Produkte bei 10 Posts pro Stunde wären Jahre.
+            uebrig = [url for url in new_urls if url not in known]
+            LOG.warning(
+                "Erster Lauf mit post_existing: %s Produkt(e) gepostet, die übrigen %s "
+                "gelten ab jetzt als bekannt und werden nicht nachgereicht",
+                posted,
+                len(uebrig),
+            )
+            known.update(uebrig)
+            report.append(f"Erstlauf: {posted} gepostet, {len(uebrig)} weitere nur gemerkt")
 
     if webhook_url and not first_run:
         try:
@@ -1307,15 +1384,7 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
     entfernt = cleanup_channel(config, state, args, webhook_url)
     if entfernt:
         report.append(f"{entfernt} alte Meldung(en) aus dem Kanal entfernt")
-
-    if args.dry_run:
-        LOG.info("DRY-RUN — state.json bleibt unverändert")
-        return posted, report
-
-    state["initialized"] = True
-    state["last_run"] = timestamp()
-    save_state(args.state, state, known)
-    return posted, report
+    return posted
 
 
 # --------------------------------------------------------------------------- #
