@@ -88,6 +88,8 @@ class Product:
     manufacturer: str = ""
     image_url: str = ""
     variant_text: str = ""
+    categories: list[str] = field(default_factory=list)
+    properties: dict[str, str] = field(default_factory=dict)
     matched: dict[str, str] = field(default_factory=dict)
 
     @property
@@ -225,6 +227,28 @@ def compile_patterns(patterns: list[str]) -> list[re.Pattern[str]]:
         except re.error as error:
             LOG.error("Filter-Muster '%s' ist kein gültiger Ausdruck: %s", pattern, error)
     return compiled
+
+
+def blocked_category(product: "Product", config: dict[str, Any]) -> str:
+    """Prüft den Kategorienpfad gegen die Filterlisten.
+
+    Einzelkarten und Zubehör liegen auf twomoons.ch wie alle Produkte direkt
+    auf der Wurzelebene (/zubat-zubat) — über die URL sind sie nicht zu
+    trennen. Die Breadcrumb verrät die Kategorie und filtert zuverlässig.
+    """
+    filters = config.get("filters", {})
+    haystack = " | ".join(product.categories + list(product.properties.values())).casefold()
+    if not haystack:
+        return ""
+
+    for wanted in filters.get("exclude_categories", []):
+        if str(wanted).casefold() in haystack:
+            return str(wanted)
+
+    includes = filters.get("include_categories", [])
+    if includes and not any(str(wanted).casefold() in haystack for wanted in includes):
+        return "(keine erlaubte Kategorie)"
+    return ""
 
 
 def url_matches(url: str, patterns: list[re.Pattern[str]]) -> str:
@@ -422,11 +446,26 @@ def filter_urls(urls: dict[str, str], config: dict[str, Any]) -> tuple[dict[str,
 
 
 def product_container(soup: BeautifulSoup, config: dict[str, Any]) -> tuple[Tag, str]:
-    """Nur der Produktbereich wird ausgewertet — nie die ganze Seite.
+    """Nur der Bereich des gezeigten Produkts — nie die ganze Seite.
 
-    Sonst landen Mega-Menü, Bewertungen und GTIN/EAN im Embed.
+    Auf twomoons.ch stehen unter dem Produkt Empfehlungs-Slider, deren Karten
+    dieselben Klassen tragen (.product-badges, .twomoons-language-badges).
+    Wer die ganze Seite auswertet, übernimmt deren Badges und Sprachflaggen.
+    Der Kaufen-Bereich steckt im CMS-Block des Produkts — von dort aus nach
+    oben bis zum umschliessenden cms-block ist genau die richtige Grenze.
     """
-    selectors = config.get("product", {}).get("container_selectors", ["main"])
+    product_config = config.get("product", {})
+    anchor, _ = select_first(soup, product_config.get("container_anchors", ["div.product-detail-buy"]))
+    if anchor is not None:
+        for parent in anchor.parents:
+            if not isinstance(parent, Tag):
+                continue
+            classes = parent.get("class") or []
+            if "cms-block" in classes:
+                name = next((css for css in classes if css.startswith("cms-block-")), "cms-block")
+                return parent, f"div.{name}"
+
+    selectors = product_config.get("container_selectors", ["main"])
     node, selector = select_first(soup, selectors)
     if node is not None:
         return node, selector
@@ -442,6 +481,32 @@ def looks_like_product(soup: BeautifulSoup, config: dict[str, Any]) -> str:
         except Exception as error:
             LOG.warning("Marker-Selektor '%s' ist ungültig: %s", selector, error)
     return ""
+
+
+def parse_properties(soup: BeautifulSoup) -> dict[str, str]:
+    """Die Eigenschaften-Tabelle der Produktseite ("Brand: Pokémon, Sitting Cuties").
+
+    Die Tabelle gibt es nur beim gezeigten Produkt, nicht in den Slider-Karten.
+    """
+    properties: dict[str, str] = {}
+    for row in soup.select(".product-detail-properties-table tr"):
+        label_node = row.select_one("th, .properties-label")
+        value_node = row.select_one("td, .properties-value")
+        label = clean_text(label_node.get_text() if label_node else "").rstrip(":")
+        value = clean_text(value_node.get_text() if value_node else "")
+        if label and value:
+            properties[label] = value
+    return properties
+
+
+def parse_categories(soup: BeautifulSoup) -> list[str]:
+    """Kategorienpfad aus der Breadcrumb — Grundlage für die Filterlisten."""
+    categories: list[str] = []
+    for item in soup.select(".breadcrumb .breadcrumb-link, .breadcrumb .breadcrumb-title, .breadcrumb li"):
+        text = clean_text(item.get_text())
+        if text and text not in categories:
+            categories.append(text)
+    return categories
 
 
 def parse_price(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) -> tuple[str, str]:
@@ -481,7 +546,9 @@ def parse_badges(soup: BeautifulSoup, container: Tag, config: dict[str, Any]) ->
 
     for selector in product_config.get("badge_selectors", []):
         try:
-            nodes = container.select(selector) or soup.select(selector)
+            # Bewusst ohne Rückfall auf die ganze Seite: die Empfehlungs-Slider
+            # tragen dieselben Klassen und lieferten sonst fremde Badges.
+            nodes = container.select(selector)
         except Exception as error:
             LOG.warning("Badge-Selektor '%s' ist ungültig: %s", selector, error)
             continue
@@ -546,7 +613,17 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
 
     product.variant_text, variant_selector = text_from(container, product_config.get("variant_text_selectors", []))
     product.price, price_selector = parse_price(soup, container, config)
+    product.properties = parse_properties(soup)
+    product.categories = parse_categories(soup)
+
     product.manufacturer, manufacturer_selector = text_from(container, product_config.get("manufacturer_selectors", []))
+    if not product.manufacturer:
+        wanted = [key.lower() for key in product_config.get("manufacturer_properties", [])]
+        for label, value in product.properties.items():
+            if label.lower() in wanted:
+                product.manufacturer = value
+                manufacturer_selector = f"Eigenschaft '{label}'"
+                break
     product.badges, badge_selector = parse_badges(soup, container, config)
     product.languages = parse_languages(product, container, config)
 
@@ -760,6 +837,13 @@ def post_new_products(
             known.add(url)
             continue
 
+        blocked = blocked_category(product, config)
+        if blocked:
+            LOG.info("Gefiltert (%s): %s", blocked, product.name)
+            report.append(f"gefiltert ({blocked})  {product.name} | {url}")
+            known.add(url)
+            continue
+
         embed = build_embed(product, config)
         LOG.debug("Embed für %s:\n%s", url, json.dumps(embed, indent=2, ensure_ascii=False))
 
@@ -964,7 +1048,7 @@ DUMP_NOISE = (
     "noscript",
     "template",
 )
-DUMP_NOISE_CLASSES = ("review", "point-rating", "point-container", "cookie", "breadcrumb")
+DUMP_NOISE_CLASSES = ("review", "point-rating", "point-container", "cookie")
 
 
 def describe_chain(node: Tag, depth: int = 6) -> list[str]:
@@ -1024,6 +1108,9 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
         LOG.info("  Badges: %s", product.badges or "(keine)")
         LOG.info("  Sprachen: %s", product.languages or "(keine)")
         LOG.info("  Bild: %s", product.image_url or "(nichts)")
+        LOG.info("  Kategorien: %s", product.categories or "(keine)")
+        LOG.info("  Eigenschaften: %s", json.dumps(product.properties, ensure_ascii=False)[:400])
+        LOG.info("  Filter würde greifen: %s", blocked_category(product, config) or "nein")
         LOG.info("  Klassen mit badge/option/price/…: %s", interesting_classes(soup)[:60])
 
         for selector in config.get("inspect", {}).get("ancestors_of", []):
@@ -1033,13 +1120,19 @@ def inspect(config: dict[str, Any], args: argparse.Namespace) -> int:
 
         if args.dump_html:
             wanted = args.dump_selector or config.get("inspect", {}).get("dump_selectors", [])
+            container, container_selector = product_container(soup, config)
+            LOG.info("  Produktbereich: %s", container_selector)
             for selector in wanted:
-                node = soup.select_one(selector)
+                node = container.select_one(selector)
+                herkunft = "im Produktbereich"
+                if node is None:
+                    node = soup.select_one(selector)
+                    herkunft = "ausserhalb des Produktbereichs"
                 if node is None:
                     LOG.info("  Abbild '%s': nicht vorhanden", selector)
                     continue
                 dump = tidy_dump(node)[: int(args.dump_bytes)]
-                LOG.info("  Abbild '%s':\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, selector, dump)
+                LOG.info("  Abbild '%s' (%s):\n<<<DUMP %s>>>\n%s\n<<<ENDE>>>", selector, herkunft, selector, dump)
         time.sleep(float(request_config.get("delay_between_requests", 1.0)))
     return 0
 

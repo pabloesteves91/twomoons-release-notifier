@@ -15,7 +15,9 @@
   },
   "filters": {
     "include_patterns": [],
-    "exclude_patterns": []
+    "exclude_patterns": [],
+    "include_categories": [],
+    "exclude_categories": []
   },
   "product": {
     "product_markers": [
@@ -25,9 +27,9 @@
       "div.product-detail"
     ],
     "container_selectors": [
+      "div.cms-block-zen-gallery-description-heading-buybox",
       "div.product-detail",
       "div.cms-element-product-description-reviews",
-      "div.cms-page",
       "main"
     ],
     "name_selectors": [
@@ -79,6 +81,17 @@
       ".gallery-slider-single-image img",
       ".product-detail-media img",
       "img.product-image"
+    ],
+    "container_anchors": [
+      "div.product-detail-buy",
+      "div.product-detail-ordernumber-container"
+    ],
+    "manufacturer_properties": [
+      "brand",
+      "hersteller",
+      "marke",
+      "serie",
+      "set"
     ]
   },
   "languages": {
@@ -144,17 +157,13 @@
   },
   "inspect": {
     "ancestors_of": [
-      "div.product-detail-buy",
-      ".product-badges",
-      ".twomoons-language-badges"
+      "div.product-detail-buy"
     ],
     "dump_selectors": [
       ".product-badges",
       ".twomoons-language-badges",
-      ".product-detail-price-container",
-      ".product-detail-properties",
-      ".product-detail-configurator",
-      ".product-detail-delivery-information"
+      "nav.breadcrumb, .breadcrumb",
+      ".product-detail-headline, .product-detail-name"
     ]
   }
 }

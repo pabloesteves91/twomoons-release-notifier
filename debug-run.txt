@@ -11,6 +11,6 @@ und ändert state.json nicht. Zwei optionale Zeilen steuern, was geprüft wird:
   urls: <URL>, <URL>          Nur für inspect: genau diese Produktseiten ansehen.
 
 modus: inspect+dump
-urls: https://www.twomoons.ch/zug-um-zug-weltreise-deutsch, https://www.twomoons.ch/zubat-zubat
+urls: https://www.twomoons.ch/zubat-zubat, https://www.twomoons.ch/zug-um-zug-weltreise-deutsch, https://www.twomoons.ch/zuerich-cube-open
 
-Letzter Anstoss: 2026-09-18 — Badge- und Sprachmarkierung im echten HTML ansehen.
+Letzter Anstoss: 2026-09-18 — Produktbereich, Badges, Sprache und Kategorien prüfen.
