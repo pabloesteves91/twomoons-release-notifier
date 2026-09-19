@@ -31,6 +31,7 @@
     "https://www.twomoons.ch/3-x-4-regular-toploaders-card-sleeves-100",
     "https://www.twomoons.ch/3-x-4-regular-toploaders-card-sleeves-200",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
+    "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
@@ -6649,8 +6650,22 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-19T14:27:20Z",
+  "last_run": "2026-09-19T18:03:18Z",
   "products": {
+    "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "d1beef074c6c7f04",
+      "first_seen": "2026-09-19T18:03:16Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-09-19T18:03:16Z",
+      "message_id": "1550930281689784381",
+      "name": "30th Celebration 2-Pack Blister",
+      "price": "CHF 17.90"
+    },
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch": {
       "badges": [
         "Neu",
@@ -6845,16 +6860,6 @@
       "message_id": "1550426032975388703",
       "name": "Palworld TCG BP01 Dawn of Palpagos Booster Box",
       "price": "CHF 109.90"
-    },
-    "https://www.twomoons.ch/pokemon-music-box-diorama-relaxo": {
-      "badges": [],
-      "digest": "79602164f251d79e",
-      "first_seen": "2026-09-18T08:39:13Z",
-      "languages": [],
-      "last_checked": "2026-09-18T08:39:13Z",
-      "message_id": "1550425948673806397",
-      "name": "Pokémon Music Box Diorama",
-      "price": "CHF 14.90"
     },
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-booster-box": {
       "badges": [
