@@ -35,6 +35,7 @@
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
+    "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
     "https://www.twomoons.ch/3d-druck-filamente",
     "https://www.twomoons.ch/3d-druck-filamente/panchroma",
     "https://www.twomoons.ch/3d-druck-filamente/polylite",
@@ -6650,22 +6651,8 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-19T20:43:21Z",
+  "last_run": "2026-09-19T23:09:01Z",
   "products": {
-    "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "d1beef074c6c7f04",
-      "first_seen": "2026-09-19T18:03:16Z",
-      "languages": [
-        "Französisch"
-      ],
-      "last_checked": "2026-09-19T18:03:16Z",
-      "message_id": "1550930281689784381",
-      "name": "30th Celebration 2-Pack Blister",
-      "price": "CHF 17.90"
-    },
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch": {
       "badges": [
         "Neu",
@@ -6695,6 +6682,20 @@
       "message_id": "1550426307282731029",
       "name": "30th Celebration Japanese",
       "price": "CHF 179.90"
+    },
+    "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "2c1240619979cd61",
+      "first_seen": "2026-09-19T23:08:59Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-09-19T23:08:59Z",
+      "message_id": "1551007215949713439",
+      "name": "30th Celebration Poster Kollektion",
+      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/armory-deck-malice-englisch": {
       "badges": [
