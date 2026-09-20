@@ -755,18 +755,19 @@ def parse_product(html: str, url: str, config: dict[str, Any]) -> Product:
     return product
 
 
-def listing_cards(html: str, page_url: str, config: dict[str, Any]) -> dict[str, dict[str, list[str]]]:
-    """Badges und Sprachflagge je Produkt aus einer Listenseite.
+def listing_cards(html: str, page_url: str, config: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """Name, Badges und Sprachflagge je Produkt aus einer Listenseite.
 
-    Die Listenseite hat die Badges ohnehin schon — sie hier mitzunehmen spart je
+    Die Listenseite hat das alles ohnehin schon — es hier mitzunehmen spart je
     Produkt einen Abruf der Suchseite und ist genauer, weil die Suche ein
-    Produkt auch mal nicht findet.
+    Produkt auch mal nicht findet. Der Name dient nur dem Log: Damit lässt sich
+    die Reihenfolge der Seite nachvollziehen, ohne jede Produktseite zu holen.
     """
     card_config = config.get("card_lookup", {})
     aliases = {key.lower(): value for key, value in config.get("product", {}).get("badge_aliases", {}).items()}
     soup = BeautifulSoup(html, "html.parser")
 
-    karten: dict[str, dict[str, list[str]]] = {}
+    karten: dict[str, dict[str, Any]] = {}
     for card in soup.select(card_config.get("card_selector", ".product-box")):
         badges: list[str] = []
         for node in card.select(card_config.get("badge_selector", ".product-badges .badge")):
@@ -783,10 +784,16 @@ def listing_cards(html: str, page_url: str, config: dict[str, Any]) -> dict[str,
             if label and label not in languages:
                 languages.append(label)
 
+        name_node = card.select_one(".product-name") or card.select_one("a[title]")
+        name = element_text(name_node) or (clean_text(name_node.get("title")) if name_node else "")
+
         for anchor in card.select("a[href]"):
             href = str(anchor.get("href") or "")
             if href and not href.startswith("#"):
-                karten.setdefault(normalise_url(urljoin(page_url, href)), {"badges": badges, "languages": languages})
+                karten.setdefault(
+                    normalise_url(urljoin(page_url, href)),
+                    {"name": name, "badges": badges, "languages": languages},
+                )
                 break
     return karten
 
@@ -1374,7 +1381,29 @@ def run_mirror(
     posted: dict[str, Any] = state.setdefault("products", {})
     fehlt = [url for url in oben if url not in posted]
     raus = [url for url in posted if url not in oben]
+    karten = listing_cards(html, listing_url, config)
+
+    # Die Reihenfolge der Seite gehört ins Log: Nur daran ist zu erkennen, ob der
+    # Melder dieselbe Liste sieht wie der Shop im Browser — eine falsche
+    # Sortierung fällt sonst erst auf, wenn der Kanal voller fremder Produkte ist.
+    LOG.info("Kanal-Soll, oberste %s von %s:", keep, listing_url)
+    for platz, url in enumerate(oben, start=1):
+        stand = "NEU" if url in fehlt else "steht im Kanal"
+        LOG.info("  %2s. %-55s %s", platz, (karten.get(url, {}).get("name") or url)[:55], stand)
+    for url in raus:
+        LOG.info("   –  %-55s fällt raus", (posted[url].get("name") or url)[:55])
     LOG.info("%s davon noch nicht im Kanal, %s Meldung(en) sind nicht mehr oben", len(fehlt), len(raus))
+
+    max_churn = int(channel.get("max_churn", 0))
+    if max_churn and len(fehlt) + len(raus) > max_churn and not args.force:
+        # Ein Totalumbau heisst fast immer: Die Seite liefert eine andere
+        # Sortierung als gedacht. Dann lieber rot werden als den Kanal
+        # stillschweigend mit den falschen Produkten füllen.
+        raise RuntimeError(
+            f"{len(fehlt)} neue und {len(raus)} entfallene Meldung(en) auf einmal — mehr als "
+            f"channel.max_churn ({max_churn}). Es wird nichts gepostet und nichts gelöscht. "
+            "Stimmt die Reihenfolge oben, den Lauf mit 'force' wiederholen."
+        )
 
     if not webhook_url and not args.dry_run:
         LOG.error("%s ist nicht gesetzt — es wird nichts gepostet", webhook_env)
@@ -1393,7 +1422,7 @@ def run_mirror(
             args,
             webhook_url,
             report,
-            cards=listing_cards(html, listing_url, config),
+            cards=karten,
             limit=keep,
         )
         entfernt = drop_messages(raus, config, state, args, webhook_url)
@@ -1774,6 +1803,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Auch beim allerersten Lauf die bereits vorhandenen Produkte posten",
     )
     parser.add_argument("--reset", action="store_true", help="Gemerkte Produkte vergessen")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Riegel channel.max_churn übergehen (Erstbefüllung, Reparatur nach Sortierwechsel)",
+    )
     parser.add_argument("--limit", type=int, default=0, help="Maximale Anzahl Posts pro Lauf")
     parser.add_argument("--verbose", action="store_true", help="Ausführliches Log")
     parser.add_argument(

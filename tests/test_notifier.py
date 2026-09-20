@@ -46,6 +46,7 @@ def default_args(**overrides) -> Namespace:
         heading="",
         post_existing=False,
         reset=False,
+        force=False,
         limit=0,
         verbose=False,
         inspect=False,
@@ -421,6 +422,65 @@ class SpiegelTest(unittest.TestCase):
         state = notifier.empty_state()
         posted, _, post, _ = self.lauf(state)
         self.assertEqual((posted, post.call_count), (20, 20))
+
+    def test_name_kommt_von_der_karte(self):
+        karten = notifier.listing_cards(self.listing, self.LISTE, CONFIG)
+        self.assertEqual(karten["https://www.twomoons.ch/produkt-1"]["name"], "Produkt 1")
+
+    def test_riegel_stoppt_einen_totalumbau(self):
+        """Ändert der Shop die Sortierung, darf der Kanal nicht stillschweigend kippen."""
+        state = notifier.empty_state()
+        self.lauf(state)  # Kanal füllen, solange noch keine Grenze gilt
+        self.config = dict(self.config, channel=dict(self.config["channel"], max_churn=2))
+        vorher = dict(state["products"])
+
+        # Die Seite liefert plötzlich drei ganz andere Produkte zuoberst.
+        karten = "".join(
+            '<div class="card product-box"><div class="card-body">'
+            f'<a class="product-name" href="https://www.twomoons.ch/anders-{n}">Anders {n}</a>'
+            "</div></div>"
+            for n in range(3)
+        )
+        self.listing = f'<html><body><div class="cms-element-product-listing">{karten}</div></body></html>'
+
+        with self.assertRaises(RuntimeError) as fehler:
+            self.lauf(state)
+        self.assertIn("max_churn", str(fehler.exception))
+        self.assertEqual(state["products"], vorher)
+
+    def test_force_hebt_den_riegel_auf(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+        self.config = dict(self.config, channel=dict(self.config["channel"], max_churn=2))
+
+        karten = "".join(
+            '<div class="card product-box"><div class="card-body">'
+            f'<a class="product-name" href="https://www.twomoons.ch/anders-{n}">Anders {n}</a>'
+            "</div></div>"
+            for n in range(3)
+        )
+        self.listing = f'<html><body><div class="cms-element-product-listing">{karten}</div></body></html>'
+
+        posted, _, post, geloescht = self.lauf(state, force=True)
+        self.assertEqual((posted, geloescht.call_count), (3, 3))
+        self.assertEqual(sorted(state["products"]), [f"https://www.twomoons.ch/anders-{n}" for n in range(3)])
+
+    def test_unterhalb_der_grenze_laeuft_alles_normal(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+        self.config = dict(self.config, channel=dict(self.config["channel"], max_churn=2))
+
+        neue_karte = (
+            '<div class="card product-box"><div class="card-body">'
+            '<a class="product-name" href="https://www.twomoons.ch/produkt-neu">Ganz neu</a>'
+            "</div></div>"
+        )
+        self.listing = self.listing.replace(
+            '<div class="cms-element-product-listing">',
+            '<div class="cms-element-product-listing">' + neue_karte,
+        )
+        posted, _, post, geloescht = self.lauf(state)
+        self.assertEqual((posted, geloescht.call_count), (1, 1))
 
     def test_dry_run_postet_und_loescht_nichts(self):
         state = notifier.empty_state()

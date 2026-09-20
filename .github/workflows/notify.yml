@@ -32,6 +32,10 @@ on:
         description: "Ausführliches Log (zeigt die fertigen Embeds)"
         type: boolean
         default: false
+      force:
+        description: "Riegel übergehen: auch grosse Umbauten des Kanals zulassen"
+        type: boolean
+        default: false
       post_from:
         description: "Probe: Produkte von dieser Seite posten, z. B. https://www.twomoons.ch/"
         type: string
@@ -102,6 +106,7 @@ jobs:
           RESET: ${{ inputs.reset }}
           LIMIT: ${{ inputs.limit }}
           DEBUG: ${{ inputs.debug }}
+          FORCE: ${{ inputs.force }}
           POST_FROM: ${{ inputs.post_from }}
           HEADING: ${{ inputs.heading }}
           INSPECT: ${{ inputs.inspect }}
@@ -179,6 +184,9 @@ jobs:
           fi
           if [ "$RESET" = "true" ]; then
             args+=(--reset)
+          fi
+          if [ "$FORCE" = "true" ]; then
+            args+=(--force)
           fi
           if [ "$POST_EXISTING" = "true" ]; then
             args+=(--post-existing)

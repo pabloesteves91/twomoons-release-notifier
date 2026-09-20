@@ -27,4 +27,4 @@ Ohne modus-Zeile läuft ein normaler Dry-Run.
 # quelle: https://www.twomoons.ch/
 # bereich: Neu im Shop
 
-Letzter Anstoss: 2026-09-18 — Spiegel-Modus: Badges von der Listenkarte.
+Letzter Anstoss: 2026-09-20 — Soll-Liste im Log, Riegel gegen Totalumbau.

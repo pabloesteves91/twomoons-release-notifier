@@ -124,6 +124,13 @@ Der Cron-Eintrag steht auf `17 * * * *`, also stündlich zur Minute 17 (UTC).
 Bewusst nicht zur vollen Stunde: Dann sind die GitHub-Runner am stärksten belegt
 und Läufe starten verspätet.
 
+**Stündlich ist ein Wunsch, keine Zusage.** Geplante Läufe sind bei GitHub
+Actions ausdrücklich „best effort" und werden bei Andrang verschoben oder ganz
+übersprungen. In der Praxis kommt dieser Workflow auf einen Lauf alle zwei bis
+drei Stunden (gemessen: 05:55, 11:03, 14:27, 18:03, 20:43, 23:08, 01:11, 06:20).
+Daran lässt sich nichts drehen — ein neues Produkt steht also mit etwas mehr
+Verzögerung im Kanal. Wer nicht warten will, startet den Lauf von Hand.
+
 **Wichtig:** GitHub startet geplante Läufe ausschliesslich auf dem
 **Default-Branch** des Repos. Wird die Arbeit später auf einen anderen Branch
 (z. B. `main`) gemerget, muss dieser auch der Default-Branch sein, sonst schweigt
@@ -205,25 +212,45 @@ Embed gebildet, nicht nur über den Text.
 ```json
 "channel": {
   "mode": "mirror",
-  "listing_url": "https://www.twomoons.ch/neu-im-shop/",
+  "listing_url": "https://www.twomoons.ch/neu-im-shop/?order=…",
   "heading": "",
   "keep": 20,
-  "min_listing_items": 10
+  "min_listing_items": 10,
+  "max_churn": 10
 }
 ```
 
-* `listing_url` — die Seite, die gespiegelt wird. Willst du eine andere
-  Sortierung, öffne die Seite im Browser, wähle sie dort aus und kopiere die URL
-  aus der Adresszeile hierher (sie enthält dann einen `?order=`-Teil).
-  Es geht auch jede andere Kategorieseite des Shops.
+> **Die Sortierung muss in der URL stehen.** Ohne `?order=…` liefert der Shop
+> seine Standard-Sortierung — und die ist nicht die, die du im Browser
+> ausgewählt hast. Genau daran ist der Kanal schon einmal abgedriftet: Er
+> spiegelte brav die obersten 20, nur eben einer anderen Liste. Richtig geht es
+> so: Seite im Browser öffnen, gewünschte Sortierung wählen (z. B.
+> „Erscheinungsdatum (Neuste zuerst)"), **die URL aus der Adresszeile** hierher
+> kopieren.
+
+* `listing_url` — die Seite, die gespiegelt wird, samt Sortier-Parameter. Es
+  geht auch jede andere Kategorieseite des Shops.
 * `keep` — so viele Produkte stehen im Kanal (Standard 20).
 * `heading` — nur nötig, wenn die Seite mehrere Produktbereiche hat (z. B. die
   Startseite): dann hier die Überschrift des gewünschten Bereichs eintragen,
   etwa `"Neu im Shop"`.
 * `min_listing_items` — Untergrenze für den Schutz oben.
+* `max_churn` — Riegel gegen den stillen Totalumbau: Stehen auf einmal mehr als
+  so viele Meldungen zur Änderung an (neu + entfallen), bricht der Lauf ab,
+  ohne etwas zu posten oder zu löschen. Das ist fast immer das Zeichen, dass die
+  Seite eine andere Reihenfolge liefert als gedacht. `0` schaltet ihn ab.
 * `mode` — `"mirror"` spiegelt die Seite. `"sitemap"` schaltet auf das
   ursprüngliche Verfahren um: ganzer Shop über die Sitemap, nur Neuzugänge
   melden, Kanal über `cleanup.*` begrenzen. Für den Alltag ist `mirror` gedacht.
+
+Jeder Lauf schreibt die Soll-Liste ins Log — mit Platznummer, Name und Vermerk,
+ob die Meldung schon im Kanal steht. Damit lässt sich in zehn Sekunden
+vergleichen, ob der Melder dieselbe Liste sieht wie der Browser.
+
+War der Umbau beabsichtigt (Erstbefüllung, Wechsel der Sortierung), den Lauf mit
+dem Schalter **`force`** wiederholen: Dann greift der Riegel nicht, und der Kanal
+wird in einem Zug geradegerückt — fehlende Produkte werden gepostet, überzählige
+entfernt.
 
 Gelöscht wird nur, was dieser Webhook selbst gepostet hat — andere Nachrichten im
 Kanal bleiben unberührt. Schlägt ein Löschen fehl (jemand hat die Nachricht schon

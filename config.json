@@ -4,7 +4,8 @@
     "listing_url": "https://www.twomoons.ch/neu-im-shop/",
     "heading": "",
     "keep": 20,
-    "min_listing_items": 10
+    "min_listing_items": 10,
+    "max_churn": 10
   },
   "shop": {
     "base_url": "https://www.twomoons.ch/",
