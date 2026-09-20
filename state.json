@@ -6652,7 +6652,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-20T16:49:50Z",
+  "last_run": "2026-09-20T19:28:25Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
@@ -6667,6 +6667,8 @@
     "https://www.twomoons.ch/charmander-glumanda",
     "https://www.twomoons.ch/detail/01a0563abcef7575960231f021abf599",
     "https://www.twomoons.ch/detail/01a05653c4ed745a856c6d7bf5fbf1ea",
+    "https://www.twomoons.ch/detail/01a0567c0c237003aeb49acc7e429790",
+    "https://www.twomoons.ch/detail/01a0568973a870bda6e7c1c670e52a8c",
     "https://www.twomoons.ch/detail/01a056c4bed570778d47e47c95f319a4",
     "https://www.twomoons.ch/detail/01a056e027b1783f88b69b3ba12ef914",
     "https://www.twomoons.ch/detail/01a0577cf7047c13b6caa5418f1bb714",
@@ -6808,6 +6810,26 @@
       "message_id": "1550426288056049716",
       "name": "Armory Deck Malice",
       "price": "CHF 39.90"
+    },
+    "https://www.twomoons.ch/detail/01a0567c0c237003aeb49acc7e429790": {
+      "badges": [],
+      "digest": "fc90a0c92b881dbf",
+      "first_seen": "2026-09-20T19:28:22Z",
+      "languages": [],
+      "last_checked": "2026-09-20T19:28:22Z",
+      "message_id": "1551314084631281807",
+      "name": "Mimigma",
+      "price": "CHF 17.90"
+    },
+    "https://www.twomoons.ch/detail/01a0568973a870bda6e7c1c670e52a8c": {
+      "badges": [],
+      "digest": "9a1e0a1e20b3f59a",
+      "first_seen": "2026-09-20T19:28:16Z",
+      "languages": [],
+      "last_checked": "2026-09-20T19:28:16Z",
+      "message_id": "1551314059809259521",
+      "name": "Pummeluff",
+      "price": "CHF 17.90"
     },
     "https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch": {
       "badges": [
@@ -6971,28 +6993,6 @@
       "message_id": "1550426134800498800",
       "name": "Topps Chrome Black Basketball 2025-26",
       "price": "CHF 449.90"
-    },
-    "https://www.twomoons.ch/topps-nfl-flagship-football-2026-hobby-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "b0319eb736e07157",
-      "first_seen": "2026-09-18T08:39:53Z",
-      "languages": [],
-      "last_checked": "2026-09-18T08:39:53Z",
-      "message_id": "1550426113040322671",
-      "name": "Topps NFL Flagship Football 2026",
-      "price": "CHF 199.90"
-    },
-    "https://www.twomoons.ch/topps-ufc-stadium-club-2026-hobby-box": {
-      "badges": [],
-      "digest": "53e285cc622931e6",
-      "first_seen": "2026-09-18T08:39:47Z",
-      "languages": [],
-      "last_checked": "2026-09-18T08:39:47Z",
-      "message_id": "1550426090072449118",
-      "name": "Topps UFC Stadium Club 2026",
-      "price": "CHF 159.90"
     },
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto": {
       "badges": [],
