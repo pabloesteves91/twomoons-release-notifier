@@ -6651,7 +6651,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-20T01:12:09Z",
+  "last_run": "2026-09-20T06:20:45Z",
   "products": {
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch": {
       "badges": [
@@ -6711,18 +6711,6 @@
       "name": "Armory Deck Malice",
       "price": "CHF 39.90"
     },
-    "https://www.twomoons.ch/csv9.5c-terastal-festival-badge-box-bundle-chinesisch": {
-      "badges": [],
-      "digest": "06ed60c66f2a30c2",
-      "first_seen": "2026-09-18T08:39:20Z",
-      "languages": [
-        "Chinesisch"
-      ],
-      "last_checked": "2026-09-18T08:39:20Z",
-      "message_id": "1550425977060859946",
-      "name": "CSV9.5C Terastal Festival Badge Box",
-      "price": "CHF 14.90"
-    },
     "https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch": {
       "badges": [
         "Vorbestellung"
@@ -6736,18 +6724,6 @@
       "message_id": "1550426390988587009",
       "name": "Disney Lorcana Hyperia City Booster Display",
       "price": "CHF 119.90"
-    },
-    "https://www.twomoons.ch/evolutions-a-paldea-booster-box-booster-box-franzoesisch": {
-      "badges": [],
-      "digest": "d76c1c389f3d6d98",
-      "first_seen": "2026-09-18T08:39:27Z",
-      "languages": [
-        "Französisch"
-      ],
-      "last_checked": "2026-09-18T08:39:27Z",
-      "message_id": "1550426004630274061",
-      "name": "Évolutions à Paldea Booster Box",
-      "price": "CHF 239.90"
     },
     "https://www.twomoons.ch/homeworlds-booster-display-booster-box-regular-englisch": {
       "badges": [
@@ -6779,6 +6755,20 @@
       "message_id": "1550426349976551466",
       "name": "Homeworlds Spotlight Deck - Chewbacca",
       "price": "CHF 24.90"
+    },
+    "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch": {
+      "badges": [
+        "Aldria Deal!"
+      ],
+      "digest": "56b3569d546f6ee6",
+      "first_seen": "2026-09-20T06:20:27Z",
+      "languages": [
+        "Chinesisch"
+      ],
+      "last_checked": "2026-09-20T06:20:27Z",
+      "message_id": "1551115799907934260",
+      "name": "M6 Storm Emeralda",
+      "price": "CHF 89.90"
     },
     "https://www.twomoons.ch/magnificent-monsters": {
       "badges": [
@@ -6850,17 +6840,15 @@
       "name": "OP17 The Worlds Strongest Warriors",
       "price": "CHF 1999.90"
     },
-    "https://www.twomoons.ch/palworld-tcg-bp01-dawn-of-palpagos-booster-box-booster-box-japanisch": {
+    "https://www.twomoons.ch/pokemon-151-art-figure-blind-box": {
       "badges": [],
-      "digest": "044c061b2ea16fc0",
-      "first_seen": "2026-09-18T08:39:33Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-18T08:39:33Z",
-      "message_id": "1550426032975388703",
-      "name": "Palworld TCG BP01 Dawn of Palpagos Booster Box",
-      "price": "CHF 109.90"
+      "digest": "5135e617549ff1b0",
+      "first_seen": "2026-09-20T06:20:40Z",
+      "languages": [],
+      "last_checked": "2026-09-20T06:20:40Z",
+      "message_id": "1551115854874148968",
+      "name": "Pokémon 151 Art Figure Blind Box",
+      "price": "CHF 29.90"
     },
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-booster-box": {
       "badges": [
@@ -6917,6 +6905,16 @@
       "message_id": "1550426090072449118",
       "name": "Topps UFC Stadium Club 2026",
       "price": "CHF 159.90"
+    },
+    "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto": {
+      "badges": [],
+      "digest": "49b26a0683cde93e",
+      "first_seen": "2026-09-20T06:20:34Z",
+      "languages": [],
+      "last_checked": "2026-09-20T06:20:34Z",
+      "message_id": "1551115828328661003",
+      "name": "Zeitloses Abenteuer Johto Schlüsselanhänger",
+      "price": "CHF 11.90"
     }
   },
   "version": 1
