@@ -1,12 +1,11 @@
 # TwoMoons Release Notifier
 
-Spiegelt die Seite [„Neu im Shop"](https://www.twomoons.ch/neu-im-shop/) von
-twomoons.ch stündlich in einen Discord-Kanal — mit Name, Preis, Sprachen, Badges
-(„Neu", „Vorbestellung"), Produktbild und Link.
+Beobachtet die Seite [„Neu im Shop"](https://www.twomoons.ch/neu-im-shop/) von
+twomoons.ch und meldet jeden Neuzugang in einen Discord-Kanal — mit Name, Preis,
+Sprachen, Badges („Neu", „Vorbestellung"), Produktbild und Link.
 
-Im Kanal stehen immer genau die **20 obersten Produkte dieser Seite**: Kommt ein
-Produkt dazu, wird es gepostet; rutscht eines aus den obersten 20 heraus,
-verschwindet seine Nachricht wieder.
+Im Kanal stehen die **20 jüngsten Meldungen**: Taucht ein Produkt erstmals auf
+der Seite auf, wird es gepostet — und die älteste Meldung verschwindet dafür.
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -44,21 +43,30 @@ Ein Lauf besteht aus vier Schritten:
 1. **Seite holen.** `https://www.twomoons.ch/neu-im-shop/` liefert die Neuheiten
    in der Reihenfolge „neuste zuerst" — alle Produkte in einem Abruf, ohne
    Paginierung.
-2. **Vergleichen.** Die obersten 20 werden gegen das gehalten, was laut
-   `state.json` bereits im Kanal steht.
+2. **Neuzugänge erkennen.** Jede URL, die schon einmal auf der Seite stand,
+   merkt sich `state.json` unter `page_seen`. Neu ist, was dort noch fehlt.
 3. **Produktseiten auswerten.** Nur für die neu hinzugekommenen Produkte werden
    Name, Preis, Sprachen, Hersteller und Bild von der Produktseite gelesen. Die
    **Badges stehen nur auf den Listenkarten**, nicht auf der Produktseite — sie
    kommen deshalb direkt von der Karte der Listenseite. Nur wenn die Karte keine
    hergibt, wird das Produkt zusätzlich in der Shop-Suche nachgeschlagen.
 4. **Posten und aufräumen.** Neue Produkte werden gepostet — das älteste zuerst,
-   damit der Kanal von oben nach unten chronologisch liest. Produkte, die nicht
-   mehr unter den obersten 20 stehen, verlieren ihre Nachricht. Danach wird
-   `state.json` aktualisiert und vom Workflow zurück ins Repo committet.
+   damit der Kanal von oben nach unten chronologisch liest. Stehen danach mehr
+   als 20 Meldungen im Kanal, fallen die ältesten weg. Zuletzt wird `state.json`
+   aktualisiert und vom Workflow zurück ins Repo committet.
 
-Der Kanal pflegt sich damit von selbst: keine Alterslogik, kein Rückstau, keine
-Obergrenze, die irgendwann Produkte verschluckt. Was im Shop oben steht, steht im
-Kanal.
+**Warum nicht einfach „die obersten 20 der Seite spiegeln"?** Genau so war es
+zuerst gebaut, und es ging schief: Produkte fallen mit der Zeit aus der Kategorie
+„Neu im Shop" heraus (88 Produkte am 18.9., 80 am 20.9.), wodurch die
+darunterliegenden **nachrücken**. Ein Positions-Spiegel hält so einen Aufrücker
+für einen Neuzugang und postet ihn — obwohl er das *älteste* Produkt der Liste
+ist. Deshalb zählt nicht die Position, sondern ob eine URL schon einmal auf der
+Seite stand.
+
+Ein weiterer Vorteil: Die Seite ist nach **Erscheinungsdatum** sortiert, nicht
+danach, wann ein Produkt in den Shop kam. Ein Neuzugang mit weiter entferntem
+Erscheinungstermin landet mitten in der Liste statt oben — gemeldet wird er
+trotzdem.
 
 **Schutz gegen Fehlalarm:** Liefert die Seite plötzlich weniger als
 `channel.min_listing_items` Produkte (Umbau, Wartungsseite, Bot-Schutz), bricht
@@ -97,9 +105,9 @@ und welche davon in den Kanal kämen.
 ### 4. Ab jetzt läuft es von allein
 
 Sieht der Probelauf gut aus, denselben Lauf ohne `dry_run` starten: Er füllt den
-Kanal mit den obersten 20 Produkten. Danach prüft der Workflow stündlich die
-Seite und hält den Kanal aktuell — neue Produkte kommen dazu, herausgefallene
-verschwinden.
+Kanal einmalig mit den obersten 20 Produkten. Danach prüft der Workflow
+regelmässig die Seite — jeder Neuzugang wird gepostet, und für jeden fällt die
+älteste Meldung weg.
 
 Mehr ist nicht zu tun.
 
@@ -114,9 +122,9 @@ auch wenn die Produkte längst bekannt sind:
 | `heading` | `Neu im Shop` |
 | `limit` | `3` |
 
-Das umgeht den Spiegel-Abgleich und ist für den Alltag nicht nötig — die
-Testnachrichten räumt der nächste reguläre Lauf wieder weg, sobald die Produkte
-nicht mehr unter den obersten 20 stehen.
+Das umgeht die Neuzugangs-Erkennung und ist für den Alltag nicht nötig — die
+Testnachrichten rutschen von selbst aus dem Kanal, sobald genug echte Neuzugänge
+nachgekommen sind.
 
 ## Zeitplan und Default-Branch
 
@@ -220,37 +228,34 @@ Embed gebildet, nicht nur über den Text.
 }
 ```
 
-> **Die Sortierung muss in der URL stehen.** Ohne `?order=…` liefert der Shop
-> seine Standard-Sortierung — und die ist nicht die, die du im Browser
-> ausgewählt hast. Genau daran ist der Kanal schon einmal abgedriftet: Er
-> spiegelte brav die obersten 20, nur eben einer anderen Liste. Richtig geht es
-> so: Seite im Browser öffnen, gewünschte Sortierung wählen (z. B.
-> „Erscheinungsdatum (Neuste zuerst)"), **die URL aus der Adresszeile** hierher
-> kopieren.
+Bei `/neu-im-shop/` ist „Erscheinungsdatum (Neuste zuerst)" die Voreinstellung
+der Kategorie — die URL braucht keinen Parameter. Willst du eine **andere**
+Sortierung, wähle sie im Browser und kopiere die URL aus der Adresszeile
+hierher; sie enthält dann einen `?order=`-Teil. Für die Erkennung von
+Neuzugängen spielt die Sortierung ohnehin keine Rolle mehr, nur für die
+Reihenfolge, in der mehrere Neuzugänge eines Laufs gepostet werden.
 
-* `listing_url` — die Seite, die gespiegelt wird, samt Sortier-Parameter. Es
-  geht auch jede andere Kategorieseite des Shops.
-* `keep` — so viele Produkte stehen im Kanal (Standard 20).
+* `listing_url` — die beobachtete Seite. Es geht auch jede andere
+  Kategorieseite des Shops.
+* `keep` — so viele Meldungen bleiben im Kanal (Standard 20).
 * `heading` — nur nötig, wenn die Seite mehrere Produktbereiche hat (z. B. die
   Startseite): dann hier die Überschrift des gewünschten Bereichs eintragen,
   etwa `"Neu im Shop"`.
 * `min_listing_items` — Untergrenze für den Schutz oben.
-* `max_churn` — Riegel gegen den stillen Totalumbau: Stehen auf einmal mehr als
-  so viele Meldungen zur Änderung an (neu + entfallen), bricht der Lauf ab,
-  ohne etwas zu posten oder zu löschen. Das ist fast immer das Zeichen, dass die
-  Seite eine andere Reihenfolge liefert als gedacht. `0` schaltet ihn ab.
-* `mode` — `"mirror"` spiegelt die Seite. `"sitemap"` schaltet auf das
-  ursprüngliche Verfahren um: ganzer Shop über die Sitemap, nur Neuzugänge
-  melden, Kanal über `cleanup.*` begrenzen. Für den Alltag ist `mirror` gedacht.
+* `max_churn` — Riegel: Meldet ein Lauf auf einmal mehr als so viele
+  Neuzugänge, bricht er ab, ohne etwas zu posten oder zu löschen. So viele echte
+  Neuzugänge auf einmal heisst fast immer, dass die Seite etwas anderes liefert
+  als gedacht. `0` schaltet ihn ab.
+* `mode` — `"mirror"` beobachtet die Seite. `"sitemap"` schaltet auf das
+  ursprüngliche Verfahren um: ganzer Shop über die Sitemap, Kanal über
+  `cleanup.*` begrenzen. Für den Alltag ist `mirror` gedacht.
 
-Jeder Lauf schreibt die Soll-Liste ins Log — mit Platznummer, Name und Vermerk,
-ob die Meldung schon im Kanal steht. Damit lässt sich in zehn Sekunden
-vergleichen, ob der Melder dieselbe Liste sieht wie der Browser.
+Jeder Lauf schreibt die obersten 20 der Seite ins Log — mit Platznummer, Name und
+Vermerk: `NEU`, `steht im Kanal` oder `bekannt, nachgerückt`. Damit lässt sich in
+zehn Sekunden vergleichen, ob der Melder dieselbe Liste sieht wie der Browser.
 
-War der Umbau beabsichtigt (Erstbefüllung, Wechsel der Sortierung), den Lauf mit
-dem Schalter **`force`** wiederholen: Dann greift der Riegel nicht, und der Kanal
-wird in einem Zug geradegerückt — fehlende Produkte werden gepostet, überzählige
-entfernt.
+War die Menge beabsichtigt (Erstbefüllung, Neustart nach einem Reset), den Lauf
+mit dem Schalter **`force`** wiederholen: Dann greift der Riegel nicht.
 
 Gelöscht wird nur, was dieser Webhook selbst gepostet hat — andere Nachrichten im
 Kanal bleiben unberührt. Schlägt ein Löschen fehl (jemand hat die Nachricht schon
@@ -279,8 +284,13 @@ von Hand entfernt), läuft der Rest trotzdem durch.
   gebraucht; sie stammt aus dem Sitemap-Modus und bleibt nur stehen, damit ein
   Wechsel dorthin nicht den ganzen Shop erneut für neu hält.
 * `products` — **das ist der Kanal**: Was hier steht, hat eine Nachricht in
-  Discord, samt Message-ID. Verschwindet ein Produkt aus den obersten `keep`,
-  wird die Nachricht gelöscht und der Eintrag entfernt.
+  Discord, samt Message-ID und Zeitpunkt. Kommt ein Neuzugang dazu, wird der
+  älteste Eintrag gelöscht — erkannt am Zeitstempel und, bei Gleichstand, an der
+  Discord-Message-ID (die vergibt Discord aufsteigend).
+* `page_seen` — jede URL, die je auf der beobachteten Seite stand. Daran hängt
+  die ganze Erkennung: Was hier fehlt, ist ein Neuzugang. Beim ersten Lauf nach
+  der Umstellung wird die Liste einmalig mit der aktuellen Seite gefüllt, ohne
+  etwas zu posten.
 * Ein Produkt wird **erst dann** als gesehen eingetragen, wenn es wirklich
   gepostet wurde. Fehlt das Secret oder ist die Obergrenze erreicht, kommt es im
   nächsten Lauf dran.

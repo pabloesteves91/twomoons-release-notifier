@@ -1348,12 +1348,16 @@ def run_from_listing(
 def run_mirror(
     config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace
 ) -> tuple[int, list[str]]:
-    """Spiegelt die obersten Produkte einer Shop-Seite in den Kanal.
+    """Führt den Kanal als laufende Liste der letzten Neuzugänge einer Shop-Seite.
 
-    Der Kanal zeigt genau das, was auf "Neu im Shop" zuoberst steht: Kommt ein
-    Produkt dazu, wird es gepostet; fällt eines aus den obersten N heraus, wird
-    seine Nachricht gelöscht. Damit bleibt der Kanal von selbst aktuell und
-    kurz, ohne Alterslogik.
+    Gepostet wird ein Produkt genau dann, wenn es **erstmals** auf der Seite
+    auftaucht. Danach bleiben im Kanal die `keep` jüngsten Meldungen; für jede
+    neue fällt die älteste weg.
+
+    Bewusst nicht "die obersten N der Seite spiegeln": Produkte fallen mit der
+    Zeit aus der Kategorie "Neu im Shop" heraus, wodurch die darunterliegenden
+    nachrücken. Ein solcher Aufrücker ist kein Neuzugang — er ist im Gegenteil
+    der älteste der Liste. Ein reiner Positions-Spiegel hätte ihn gepostet.
     """
     report: list[str] = []
     channel = config.get("channel", {})
@@ -1377,32 +1381,54 @@ def run_mirror(
             "es wird nichts gepostet und nichts gelöscht"
         )
 
-    oben = alle[:keep]
     posted: dict[str, Any] = state.setdefault("products", {})
-    fehlt = [url for url in oben if url not in posted]
-    raus = [url for url in posted if url not in oben]
     karten = listing_cards(html, listing_url, config)
+    erster_lauf = "page_seen" not in state
+    gesehen = set(state.get("page_seen", []))
+
+    if erster_lauf and not posted:
+        # Frischer Kanal: einmalig mit den obersten `keep` befüllen.
+        neu = alle[:keep]
+        LOG.info("Erstbefüllung: die obersten %s Produkte werden gepostet", len(neu))
+    elif erster_lauf:
+        # Der Kanal steht schon (aus dem früheren Positions-Spiegel). Nur die
+        # aktuelle Seite merken, damit ab jetzt echte Neuzugänge erkennbar sind.
+        neu = []
+        LOG.info(
+            "Umstellung: %s Produkt(e) der Seite werden als bekannt gemerkt, "
+            "der Kanal bleibt wie er ist",
+            len(alle),
+        )
+    else:
+        neu = [url for url in alle if url not in gesehen]
 
     # Die Reihenfolge der Seite gehört ins Log: Nur daran ist zu erkennen, ob der
-    # Melder dieselbe Liste sieht wie der Shop im Browser — eine falsche
-    # Sortierung fällt sonst erst auf, wenn der Kanal voller fremder Produkte ist.
-    LOG.info("Kanal-Soll, oberste %s von %s:", keep, listing_url)
-    for platz, url in enumerate(oben, start=1):
-        stand = "NEU" if url in fehlt else "steht im Kanal"
+    # Melder dieselbe Liste sieht wie der Shop im Browser — und welche Produkte
+    # wirklich neu sind statt bloss nachgerückt.
+    LOG.info("Oberste %s auf %s:", min(keep, len(alle)), listing_url)
+    for platz, url in enumerate(alle[:keep], start=1):
+        if url in neu:
+            stand = "NEU"
+        elif url in posted:
+            stand = "steht im Kanal"
+        else:
+            stand = "bekannt, nachgerückt"
         LOG.info("  %2s. %-55s %s", platz, (karten.get(url, {}).get("name") or url)[:55], stand)
-    for url in raus:
-        LOG.info("   –  %-55s fällt raus", (posted[url].get("name") or url)[:55])
-    LOG.info("%s davon noch nicht im Kanal, %s Meldung(en) sind nicht mehr oben", len(fehlt), len(raus))
+    for url in neu:
+        if url not in alle[:keep]:
+            platz = alle.index(url) + 1
+            LOG.info("  %2s. %-55s NEU (weiter unten)", platz, (karten.get(url, {}).get("name") or url)[:55])
+    LOG.info("%s echte(r) Neuzugang/Neuzugänge, %s Meldung(en) im Kanal", len(neu), len(posted))
 
     max_churn = int(channel.get("max_churn", 0))
-    if max_churn and len(fehlt) + len(raus) > max_churn and not args.force:
-        # Ein Totalumbau heisst fast immer: Die Seite liefert eine andere
-        # Sortierung als gedacht. Dann lieber rot werden als den Kanal
+    if max_churn and len(neu) > max_churn and not args.force:
+        # So viele Neuzugänge auf einmal heisst fast immer: Die Seite liefert
+        # etwas anderes als gedacht. Dann lieber rot werden als den Kanal
         # stillschweigend mit den falschen Produkten füllen.
         raise RuntimeError(
-            f"{len(fehlt)} neue und {len(raus)} entfallene Meldung(en) auf einmal — mehr als "
-            f"channel.max_churn ({max_churn}). Es wird nichts gepostet und nichts gelöscht. "
-            "Stimmt die Reihenfolge oben, den Lauf mit 'force' wiederholen."
+            f"{len(neu)} Neuzugänge auf einmal — mehr als channel.max_churn ({max_churn}). "
+            "Es wird nichts gepostet und nichts gelöscht. Stimmt die Liste oben, "
+            "den Lauf mit 'force' wiederholen."
         )
 
     if not webhook_url and not args.dry_run:
@@ -1415,7 +1441,7 @@ def run_mirror(
         # Umgekehrte Seitenreihenfolge: das älteste der neuen Produkte zuerst,
         # damit der Kanal von oben nach unten chronologisch liest.
         posted_count = post_new_products(
-            list(reversed(fehlt)),
+            list(reversed(neu)),
             config,
             state,
             known,
@@ -1423,19 +1449,46 @@ def run_mirror(
             webhook_url,
             report,
             cards=karten,
-            limit=keep,
+            limit=max(keep, len(neu)),
         )
-        entfernt = drop_messages(raus, config, state, args, webhook_url)
+        entfernt = drop_messages(ueberzaehlige(posted, keep), config, state, args, webhook_url)
         if entfernt:
-            report.append(f"{entfernt} Meldung(en) entfernt, weil nicht mehr unter den obersten {keep}")
+            report.append(f"{entfernt} älteste Meldung(en) entfernt — im Kanal bleiben {keep}")
     finally:
         if not args.dry_run:
+            # Alles, was jetzt auf der Seite steht, gilt künftig als bekannt —
+            # auch was heute nicht gepostet wurde (Filter, Fehler, Erstlauf).
+            state["page_seen"] = sorted(gesehen | set(alle))
             state["initialized"] = True
             state["last_run"] = timestamp()
             save_state(args.state, state, known)
         else:
             LOG.info("DRY-RUN — state.json bleibt unverändert")
     return posted_count, report
+
+
+def ueberzaehlige(posted: dict[str, Any], keep: int) -> list[str]:
+    """Die ältesten Meldungen, die über `keep` hinausgehen — älteste zuerst.
+
+    "Älteste" heisst: zuerst gepostet. Für jeden Neuzugang fällt damit genau die
+    Meldung weg, die am längsten im Kanal steht.
+    """
+    if keep <= 0 or len(posted) <= keep:
+        return []
+
+    def alter(eintrag: tuple[str, dict[str, Any]]) -> tuple[float, int]:
+        # Die Message-ID als zweites Kriterium: Discord vergibt sie aufsteigend,
+        # und mehrere Meldungen desselben Laufs tragen denselben Zeitstempel.
+        # Auf die Reihenfolge in state.json ist kein Verlass — sie wird sortiert
+        # gespeichert.
+        try:
+            nummer = int(eintrag[1].get("message_id") or 0)
+        except (TypeError, ValueError):
+            nummer = 0
+        return parse_timestamp(eintrag[1].get("first_seen", "")), nummer
+
+    nach_alter = sorted(posted.items(), key=alter)
+    return [url for url, _ in nach_alter[: len(posted) - keep]]
 
 
 def drop_messages(

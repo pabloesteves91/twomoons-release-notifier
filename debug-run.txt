@@ -27,4 +27,4 @@ Ohne modus-Zeile läuft ein normaler Dry-Run.
 # quelle: https://www.twomoons.ch/
 # bereich: Neu im Shop
 
-Letzter Anstoss: 2026-09-20 — Soll-Liste im Log, Riegel gegen Totalumbau.
+Letzter Anstoss: 2026-09-20 — nur noch echte Neuzugänge posten.

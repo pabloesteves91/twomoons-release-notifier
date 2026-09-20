@@ -375,9 +375,61 @@ class SpiegelTest(unittest.TestCase):
         self.assertEqual((posted, post.call_count), (1, 1))
         self.assertEqual(geloescht.call_count, 1)
         self.assertIn("https://www.twomoons.ch/produkt-neu", state["products"])
-        # Produkt 3 stand auf Platz 3 und ist damit herausgefallen.
+        # Produkt 3 stand zuunterst auf der Seite, wurde also zuerst gepostet und
+        # ist damit die älteste Meldung im Kanal.
         self.assertNotIn("https://www.twomoons.ch/produkt-3", state["products"])
-        self.assertTrue(any("nicht mehr unter den obersten" in line for line in report))
+        self.assertTrue(any("älteste Meldung" in line for line in report))
+
+    def test_aufruecker_wird_nicht_gepostet(self):
+        """Der Fehler, der Uraltprodukte in den Kanal gespült hat.
+
+        Fällt ein Produkt aus der Kategorie, rücken die darunter auf. Ein
+        Aufrücker ist kein Neuzugang — er ist der älteste der Liste.
+        """
+        state = notifier.empty_state()
+        self.lauf(state)  # Kanal enthält Produkt 1-3, gemerkt sind 1-5
+
+        # Produkt 1 und 2 verschwinden von der Seite, 4 und 5 rücken in die
+        # obersten drei nach.
+        for nummer in (1, 2):
+            anfang = self.listing.index(f'href="https://www.twomoons.ch/produkt-{nummer}"') - 200
+            ende = self.listing.index("</div></div>", anfang) + len("</div></div>")
+            self.listing = self.listing[:anfang] + self.listing[ende:]
+
+        posted, _, post, geloescht = self.lauf(state)
+
+        self.assertEqual(posted, 0)
+        post.assert_not_called()
+        geloescht.assert_not_called()
+
+    def test_neuzugang_unterhalb_der_grenze_wird_trotzdem_gepostet(self):
+        """Neu ist neu — auch wenn das Erscheinungsdatum weiter unten einsortiert."""
+        state = notifier.empty_state()
+        self.lauf(state)
+
+        neue_karte = (
+            '<div class="card product-box box-standard"><div class="card-body">'
+            '<a class="product-name" href="https://www.twomoons.ch/spaet-eingestiegen">Spät</a>'
+            "</div></div>"
+        )
+        self.listing = self.listing.replace("</div>\n</body>", neue_karte + "</div>\n</body>")
+        posted, _, post, _ = self.lauf(state)
+
+        self.assertEqual((posted, post.call_count), (1, 1))
+        self.assertIn("https://www.twomoons.ch/spaet-eingestiegen", state["products"])
+
+    def test_aelteste_meldung_auch_nach_dem_speichern_richtig_erkannt(self):
+        """state.json wird alphabetisch sortiert — die Postreihenfolge geht dabei verloren."""
+        posted = {
+            "https://www.twomoons.ch/a-zuletzt": {"first_seen": "2026-09-20T07:00:00Z", "message_id": "300"},
+            "https://www.twomoons.ch/m-zuerst": {"first_seen": "2026-09-20T07:00:00Z", "message_id": "100"},
+            "https://www.twomoons.ch/z-mittig": {"first_seen": "2026-09-20T07:00:00Z", "message_id": "200"},
+        }
+        self.assertEqual(
+            notifier.ueberzaehlige(posted, 2),
+            ["https://www.twomoons.ch/m-zuerst"],
+        )
+        self.assertEqual(notifier.ueberzaehlige(posted, 3), [])
 
     def test_kaputte_seite_loescht_nichts(self):
         state = notifier.empty_state()
