@@ -35,6 +35,7 @@
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
+    "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
     "https://www.twomoons.ch/3d-druck-filamente",
     "https://www.twomoons.ch/3d-druck-filamente/panchroma",
@@ -6651,10 +6652,11 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-20T12:24:58Z",
+  "last_run": "2026-09-20T16:49:50Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
+    "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
     "https://www.twomoons.ch/abra",
     "https://www.twomoons.ch/anego",
@@ -6764,6 +6766,20 @@
       "message_id": "1550426307282731029",
       "name": "30th Celebration Japanese",
       "price": "CHF 179.90"
+    },
+    "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "db9191931f23eb44",
+      "first_seen": "2026-09-20T16:49:49Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-09-20T16:49:49Z",
+      "message_id": "1551274184556941355",
+      "name": "30th Celebration Nymphali ex Box",
+      "price": "CHF 49.90"
     },
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch": {
       "badges": [
@@ -6967,16 +6983,6 @@
       "message_id": "1550426113040322671",
       "name": "Topps NFL Flagship Football 2026",
       "price": "CHF 199.90"
-    },
-    "https://www.twomoons.ch/topps-star-wars-chrome-galaxy-2026-hobby-box": {
-      "badges": [],
-      "digest": "997a5a1f97bc33d3",
-      "first_seen": "2026-09-18T08:39:41Z",
-      "languages": [],
-      "last_checked": "2026-09-18T08:39:41Z",
-      "message_id": "1550426059588116551",
-      "name": "Topps Star Wars Chrome Galaxy 2026",
-      "price": "CHF 399.90"
     },
     "https://www.twomoons.ch/topps-ufc-stadium-club-2026-hobby-box": {
       "badges": [],
