@@ -4,8 +4,9 @@ Beobachtet die Seite [„Neu im Shop"](https://www.twomoons.ch/neu-im-shop/) von
 twomoons.ch und meldet jeden Neuzugang in einen Discord-Kanal — mit Name, Preis,
 Sprachen, Badges („Neu", „Vorbestellung"), Produktbild und Link.
 
-Im Kanal stehen die **20 jüngsten Meldungen**: Taucht ein Produkt erstmals auf
-der Seite auf, wird es gepostet — und die älteste Meldung verschwindet dafür.
+Im Kanal stehen die **20 jüngsten Meldungen**: Taucht ein Produkt erstmals unter
+den obersten 20 der Seite auf, wird es gepostet — und die älteste Meldung
+verschwindet dafür.
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -43,8 +44,9 @@ Ein Lauf besteht aus vier Schritten:
 1. **Seite holen.** `https://www.twomoons.ch/neu-im-shop/` liefert die Neuheiten
    in der Reihenfolge „neuste zuerst" — alle Produkte in einem Abruf, ohne
    Paginierung.
-2. **Neuzugänge erkennen.** Jede URL, die schon einmal auf der Seite stand,
-   merkt sich `state.json` unter `page_seen`. Neu ist, was dort noch fehlt.
+2. **Neuzugänge erkennen.** Gepostet wird ein Produkt, wenn **beides** gilt:
+   Es stand noch nie auf der Seite (`state.json` merkt jede je gesehene URL
+   unter `page_seen`) **und** es steht unter den obersten 20.
 3. **Produktseiten auswerten.** Nur für die neu hinzugekommenen Produkte werden
    Name, Preis, Sprachen, Hersteller und Bild von der Produktseite gelesen. Die
    **Badges stehen nur auf den Listenkarten**, nicht auf der Produktseite — sie
@@ -63,10 +65,16 @@ für einen Neuzugang und postet ihn — obwohl er das *älteste* Produkt der Lis
 ist. Deshalb zählt nicht die Position, sondern ob eine URL schon einmal auf der
 Seite stand.
 
-Ein weiterer Vorteil: Die Seite ist nach **Erscheinungsdatum** sortiert, nicht
-danach, wann ein Produkt in den Shop kam. Ein Neuzugang mit weiter entferntem
-Erscheinungstermin landet mitten in der Liste statt oben — gemeldet wird er
-trotzdem.
+**Warum dann überhaupt eine Positionsgrenze?** Weil die Seite nach
+**Erscheinungsdatum** sortiert, nicht danach, wann ein Produkt in den Shop kam.
+Merch mit altem Erscheinungstermin ist neu im Shop, landet aber auf Platz 50 —
+ohne Grenze verdrängt es echte Neuheiten aus dem Kanal. Genau das ist passiert:
+Zwei Pokémon-Schlüsselanhänger von Platz 51 und 52 haben zwei Produkte von Platz
+15 und 16 hinausgeworfen.
+
+Produkte, die neu auf der Seite auftauchen, aber unterhalb der Grenze stehen,
+werden als bekannt vermerkt und auch später nicht mehr gepostet — sonst käme der
+Aufrücker-Fehler über die Hintertür zurück. Das Log weist sie ausdrücklich aus.
 
 **Schutz gegen Fehlalarm:** Liefert die Seite plötzlich weniger als
 `channel.min_listing_items` Produkte (Umbau, Wartungsseite, Bot-Schutz), bricht
@@ -287,10 +295,11 @@ von Hand entfernt), läuft der Rest trotzdem durch.
   Discord, samt Message-ID und Zeitpunkt. Kommt ein Neuzugang dazu, wird der
   älteste Eintrag gelöscht — erkannt am Zeitstempel und, bei Gleichstand, an der
   Discord-Message-ID (die vergibt Discord aufsteigend).
-* `page_seen` — jede URL, die je auf der beobachteten Seite stand. Daran hängt
-  die ganze Erkennung: Was hier fehlt, ist ein Neuzugang. Beim ersten Lauf nach
-  der Umstellung wird die Liste einmalig mit der aktuellen Seite gefüllt, ohne
-  etwas zu posten.
+* `page_seen` — jede URL, die je auf der beobachteten Seite stand, auch die weit
+  unten. Daran hängt die Erkennung: Ein Neuzugang fehlt hier — und wird nur
+  gepostet, wenn er zugleich unter den obersten `keep` steht. Beim ersten Lauf
+  nach der Umstellung wird die Liste einmalig mit der aktuellen Seite gefüllt,
+  ohne etwas zu posten.
 * Ein Produkt wird **erst dann** als gesehen eingetragen, wenn es wirklich
   gepostet wurde. Fehlt das Secret oder ist die Obergrenze erreicht, kommt es im
   nächsten Lauf dran.

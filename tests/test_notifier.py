@@ -303,6 +303,13 @@ class SpiegelTest(unittest.TestCase):
             channel={"mode": "mirror", "listing_url": self.LISTE, "heading": "", "keep": 3, "min_listing_items": 2},
         )
 
+    def karte(self, slug: str, name: str) -> str:
+        return (
+            '<div class="card product-box box-standard"><div class="card-body">'
+            f'<a class="product-name" href="https://www.twomoons.ch/{slug}">{name}</a>'
+            "</div></div>"
+        )
+
     def seite(self, url, config):
         if url == self.LISTE:
             return self.listing
@@ -402,21 +409,48 @@ class SpiegelTest(unittest.TestCase):
         post.assert_not_called()
         geloescht.assert_not_called()
 
-    def test_neuzugang_unterhalb_der_grenze_wird_trotzdem_gepostet(self):
-        """Neu ist neu — auch wenn das Erscheinungsdatum weiter unten einsortiert."""
+    def test_neuzugang_unterhalb_der_grenze_wird_nicht_gepostet(self):
+        """Der Fehler, der zwei Schlüsselanhänger von Platz 51/52 in den Kanal spülte.
+
+        Die Seite sortiert nach Erscheinungsdatum. Ein Produkt kann neu im Shop
+        sein und trotzdem weit unten stehen — dann gehört es nicht zu den
+        neuesten `keep` und verdrängt auch keine echte Neuheit.
+        """
         state = notifier.empty_state()
         self.lauf(state)
+        vorher = dict(state["products"])
 
-        neue_karte = (
-            '<div class="card product-box box-standard"><div class="card-body">'
-            '<a class="product-name" href="https://www.twomoons.ch/spaet-eingestiegen">Spät</a>'
-            "</div></div>"
+        self.listing = self.listing.replace(
+            "</div>\n</body>", self.karte("spaet-eingestiegen", "Spät") + "</div>\n</body>"
         )
-        self.listing = self.listing.replace("</div>\n</body>", neue_karte + "</div>\n</body>")
+        posted, _, post, geloescht = self.lauf(state)
+
+        self.assertEqual(posted, 0)
+        post.assert_not_called()
+        geloescht.assert_not_called()
+        self.assertEqual(state["products"], vorher)
+
+    def test_spaeter_aufgeruecktes_produkt_bleibt_draussen(self):
+        """Einmal gesehen heisst bekannt — auch wenn es später nach oben rutscht."""
+        state = notifier.empty_state()
+        self.lauf(state)
+        self.listing = self.listing.replace(
+            "</div>\n</body>", self.karte("spaet-eingestiegen", "Spät") + "</div>\n</body>"
+        )
+        self.lauf(state)  # unterhalb der Grenze gesehen, nicht gepostet
+
+        # Jetzt rückt es in die obersten drei: nur noch es selbst und zwei andere.
+        self.listing = (
+            '<html><body><div class="cms-element-product-listing">'
+            + self.karte("spaet-eingestiegen", "Spät")
+            + self.karte("produkt-1", "Produkt 1")
+            + self.karte("produkt-2", "Produkt 2")
+            + "</div>\n</body></html>"
+        )
         posted, _, post, _ = self.lauf(state)
 
-        self.assertEqual((posted, post.call_count), (1, 1))
-        self.assertIn("https://www.twomoons.ch/spaet-eingestiegen", state["products"])
+        self.assertEqual(posted, 0)
+        post.assert_not_called()
 
     def test_aelteste_meldung_auch_nach_dem_speichern_richtig_erkannt(self):
         """state.json wird alphabetisch sortiert — die Postreihenfolge geht dabei verloren."""

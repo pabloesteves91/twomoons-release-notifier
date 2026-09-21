@@ -1385,14 +1385,15 @@ def run_mirror(
     karten = listing_cards(html, listing_url, config)
     erster_lauf = "page_seen" not in state
     gesehen = set(state.get("page_seen", []))
+    oben = alle[:keep]
 
     if erster_lauf and not posted:
         # Frischer Kanal: einmalig mit den obersten `keep` befüllen.
-        neu = alle[:keep]
+        neu = list(oben)
         LOG.info("Erstbefüllung: die obersten %s Produkte werden gepostet", len(neu))
     elif erster_lauf:
-        # Der Kanal steht schon (aus dem früheren Positions-Spiegel). Nur die
-        # aktuelle Seite merken, damit ab jetzt echte Neuzugänge erkennbar sind.
+        # Der Kanal steht schon. Nur die aktuelle Seite merken, damit ab jetzt
+        # echte Neuzugänge erkennbar sind.
         neu = []
         LOG.info(
             "Umstellung: %s Produkt(e) der Seite werden als bekannt gemerkt, "
@@ -1400,13 +1401,19 @@ def run_mirror(
             len(alle),
         )
     else:
-        neu = [url for url in alle if url not in gesehen]
+        # Beide Bedingungen zusammen: erstmals auf der Seite UND unter den
+        # obersten `keep`. Ohne die Positionsgrenze landen Produkte im Kanal,
+        # die zwar neu im Shop sind, aber weit unten stehen (die Seite sortiert
+        # nach Erscheinungsdatum) — und verdrängen dabei echte Neuheiten.
+        neu = [url for url in oben if url not in gesehen]
+
+    spaet = [url for url in alle[keep:] if url not in gesehen]
 
     # Die Reihenfolge der Seite gehört ins Log: Nur daran ist zu erkennen, ob der
     # Melder dieselbe Liste sieht wie der Shop im Browser — und welche Produkte
     # wirklich neu sind statt bloss nachgerückt.
     LOG.info("Oberste %s auf %s:", min(keep, len(alle)), listing_url)
-    for platz, url in enumerate(alle[:keep], start=1):
+    for platz, url in enumerate(oben, start=1):
         if url in neu:
             stand = "NEU"
         elif url in posted:
@@ -1414,11 +1421,15 @@ def run_mirror(
         else:
             stand = "bekannt, nachgerückt"
         LOG.info("  %2s. %-55s %s", platz, (karten.get(url, {}).get("name") or url)[:55], stand)
-    for url in neu:
-        if url not in alle[:keep]:
-            platz = alle.index(url) + 1
-            LOG.info("  %2s. %-55s NEU (weiter unten)", platz, (karten.get(url, {}).get("name") or url)[:55])
-    LOG.info("%s echte(r) Neuzugang/Neuzugänge, %s Meldung(en) im Kanal", len(neu), len(posted))
+    for url in spaet[:10]:
+        LOG.info(
+            "  %2s. %-55s neu auf der Seite, aber ausserhalb der obersten %s — kein Post",
+            alle.index(url) + 1,
+            (karten.get(url, {}).get("name") or url)[:55],
+            keep,
+        )
+    LOG.info("%s Neuzugang/Neuzugänge unter den obersten %s, %s Meldung(en) im Kanal",
+             len(neu), keep, len(posted))
 
     max_churn = int(channel.get("max_churn", 0))
     if max_churn and len(neu) > max_churn and not args.force:
