@@ -6653,8 +6653,9 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-22T05:00:13Z",
+  "last_run": "2026-09-22T09:59:40Z",
   "page_seen": [
+    "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
@@ -6743,6 +6744,21 @@
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
+    "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "d136e15271ceee0e",
+      "first_seen": "2026-09-22T09:59:40Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-09-22T09:59:40Z",
+      "message_id": "1551895743089086511",
+      "name": "30th Anniversary Deck Set Featuring Espeon ex & Umbreon ex",
+      "price": "CHF 239.90"
+    },
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch": {
       "badges": [
         "Neu",
