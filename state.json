@@ -2240,6 +2240,7 @@
     "https://www.twomoons.ch/foundations-of-metropolis-englisch",
     "https://www.twomoons.ch/foundations-prerelease",
     "https://www.twomoons.ch/foundations-sealed",
+    "https://www.twomoons.ch/foundations-starter-commander-deck-calling-all-angels-englisch-mono-white",
     "https://www.twomoons.ch/foundations-twoheaded-giant-prerelease",
     "https://www.twomoons.ch/four-gardens-im-schatten-der-pagode-deutsch",
     "https://www.twomoons.ch/four-gardens-im-schatten-der-pagode-englisch",
@@ -4457,6 +4458,7 @@
     "https://www.twomoons.ch/rayquaza",
     "https://www.twomoons.ch/rayquaza-rayquaza",
     "https://www.twomoons.ch/rcq-sealed-reality-fracture-sul-district",
+    "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch",
     "https://www.twomoons.ch/regice-regice",
     "https://www.twomoons.ch/regirock-regirock",
     "https://www.twomoons.ch/reign-of-jafar-booster-box-englisch",
@@ -6653,7 +6655,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-23T06:00:41Z",
+  "last_run": "2026-09-23T11:41:48Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
@@ -6668,6 +6670,7 @@
     "https://www.twomoons.ch/bisasam",
     "https://www.twomoons.ch/bulbasaur-bisasam",
     "https://www.twomoons.ch/charmander-glumanda",
+    "https://www.twomoons.ch/detail/01a047b0f09470c390600ba1c7aa83cf",
     "https://www.twomoons.ch/detail/01a0563abcef7575960231f021abf599",
     "https://www.twomoons.ch/detail/01a05653c4ed745a856c6d7bf5fbf1ea",
     "https://www.twomoons.ch/detail/01a0567c0c237003aeb49acc7e429790",
@@ -6687,6 +6690,7 @@
     "https://www.twomoons.ch/evoli",
     "https://www.twomoons.ch/felino",
     "https://www.twomoons.ch/flareon-flamara",
+    "https://www.twomoons.ch/foundations-starter-commander-deck-calling-all-angels-englisch-mono-white",
     "https://www.twomoons.ch/fuecoco-krokel",
     "https://www.twomoons.ch/fuegro",
     "https://www.twomoons.ch/galagladi",
@@ -6726,6 +6730,7 @@
     "https://www.twomoons.ch/pummeluff",
     "https://www.twomoons.ch/quaxly-kwaks",
     "https://www.twomoons.ch/rayquaza",
+    "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch",
     "https://www.twomoons.ch/relaxo",
     "https://www.twomoons.ch/rowlet-bauz",
     "https://www.twomoons.ch/scorbunny-hopplo",
@@ -6859,6 +6864,21 @@
       "name": "Disney Lorcana Hyperia City Booster Display",
       "price": "CHF 119.90"
     },
+    "https://www.twomoons.ch/foundations-starter-commander-deck-calling-all-angels-englisch-mono-white": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "70ccf865f9ebb45e",
+      "first_seen": "2026-09-23T11:41:35Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-09-23T11:41:35Z",
+      "message_id": "1552283777017974838",
+      "name": "Foundations Starter Commander Deck Calling All Angels",
+      "price": "CHF 29.90"
+    },
     "https://www.twomoons.ch/homeworlds-booster-display-booster-box-regular-englisch": {
       "badges": [
         "Aldria Deal!",
@@ -6946,20 +6966,6 @@
       "name": "One Piece Card Game Japanese 3rd Anniversary Set",
       "price": "CHF 699.90"
     },
-    "https://www.twomoons.ch/op17-booster-box-booster-box-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "43ccfddbf370a0b4",
-      "first_seen": "2026-09-18T08:40:03Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-18T08:40:03Z",
-      "message_id": "1550426156229201981",
-      "name": "OP17 Booster Box",
-      "price": "CHF 129.90"
-    },
     "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch": {
       "badges": [
         "Neu"
@@ -6984,6 +6990,21 @@
       "name": "Pokémon 151 Art Figure Blind Box",
       "price": "CHF 29.90"
     },
+    "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "3ecd91c3768840d4",
+      "first_seen": "2026-09-23T11:41:45Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-09-23T11:41:45Z",
+      "message_id": "1552283820768890881",
+      "name": "Reality Fracture Commander - Multiverse Reforged",
+      "price": "CHF 49.90"
+    },
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-booster-box": {
       "badges": [
         "Neu"
@@ -6995,18 +7016,6 @@
       "message_id": "1550426242845507587",
       "name": "SportZoo Brack Super League 2026/27 Duel",
       "price": "CHF 24.90"
-    },
-    "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "52b5515dfa8449be",
-      "first_seen": "2026-09-18T08:39:58Z",
-      "languages": [],
-      "last_checked": "2026-09-18T08:39:58Z",
-      "message_id": "1550426134800498800",
-      "name": "Topps Chrome Black Basketball 2025-26",
-      "price": "CHF 449.90"
     },
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto": {
       "badges": [],
