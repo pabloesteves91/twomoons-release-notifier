@@ -33,6 +33,7 @@
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
+    "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
@@ -6655,10 +6656,11 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-24T04:55:21Z",
+  "last_run": "2026-09-24T10:04:02Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
+    "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
@@ -6778,6 +6780,21 @@
       "message_id": "1550426327033847839",
       "name": "30th Celebration Display",
       "price": "CHF 119.90"
+    },
+    "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "bcd508af461a36f4",
+      "first_seen": "2026-09-24T10:04:00Z",
+      "languages": [
+        "Chinesisch"
+      ],
+      "last_checked": "2026-09-24T10:04:00Z",
+      "message_id": "1552621609980928031",
+      "name": "30th Celebration Espeon Deluxe Card Set",
+      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/30th-celebration-etb-italienisch": {
       "badges": [
@@ -6951,20 +6968,6 @@
       "message_id": "1550426199157768335",
       "name": "Mega-Kräfte ex Tin Mega-Zeraora",
       "price": "CHF 29.90"
-    },
-    "https://www.twomoons.ch/one-piece-card-game-japanese-3rd-anniversary-set-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "2d69fd4d48e16e05",
-      "first_seen": "2026-09-18T08:40:08Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-18T08:40:08Z",
-      "message_id": "1550426177901174825",
-      "name": "One Piece Card Game Japanese 3rd Anniversary Set",
-      "price": "CHF 699.90"
     },
     "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch": {
       "badges": [
