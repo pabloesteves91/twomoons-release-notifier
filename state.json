@@ -6657,7 +6657,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-25T18:39:09Z",
+  "last_run": "2026-09-25T22:23:33Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
@@ -6695,6 +6695,7 @@
     "https://www.twomoons.ch/evoli",
     "https://www.twomoons.ch/felino",
     "https://www.twomoons.ch/flareon-flamara",
+    "https://www.twomoons.ch/flesh-blood-usurp-the-shadow-throne-booster-display-booster-box-englisch",
     "https://www.twomoons.ch/foundations-starter-commander-deck-calling-all-angels-englisch-mono-white",
     "https://www.twomoons.ch/fuecoco-krokel",
     "https://www.twomoons.ch/fuegro",
@@ -6901,6 +6902,20 @@
       "name": "Disney Lorcana Hyperia City Booster Display",
       "price": "CHF 119.90"
     },
+    "https://www.twomoons.ch/flesh-blood-usurp-the-shadow-throne-booster-display-booster-box-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "7c53512c89c89fba",
+      "first_seen": "2026-09-25T22:23:31Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-09-25T22:23:31Z",
+      "message_id": "1553170102059405383",
+      "name": "Flesh & Blood - Usurp the Shadow Throne Booster Display",
+      "price": "CHF 94.90"
+    },
     "https://www.twomoons.ch/foundations-starter-commander-deck-calling-all-angels-englisch-mono-white": {
       "badges": [
         "Neu",
@@ -6960,20 +6975,6 @@
       "message_id": "1551115799907934260",
       "name": "M6 Storm Emeralda",
       "price": "CHF 89.90"
-    },
-    "https://www.twomoons.ch/magnificent-monsters": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "9c92a326b3f6008f",
-      "first_seen": "2026-09-18T08:40:18Z",
-      "languages": [
-        "Deutsch"
-      ],
-      "last_checked": "2026-09-18T08:40:18Z",
-      "message_id": "1550426220645064805",
-      "name": "Magnificent Monsters",
-      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch": {
       "badges": [
