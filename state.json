@@ -6129,6 +6129,7 @@
     "https://www.twomoons.ch/ultimate-guard-zipfolio-480-24-pocket-xenoskin-quadrow-rot",
     "https://www.twomoons.ch/ultimate-guard-zipfolio-480-24-pocket-xenoskin-quadrow-schwarz",
     "https://www.twomoons.ch/ultimate-guard-zipfolio-480-24-pocket-xenoskin-quadrow-weiss",
+    "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant",
     "https://www.twomoons.ch/ultimate-masters-booster-box-draft-englisch",
     "https://www.twomoons.ch/ultimate-masters-booster-draft-englisch",
     "https://www.twomoons.ch/ultimate-star-wars-unlimited-compatible-upgrade-token-set-ultimate",
@@ -6658,7 +6659,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-28T06:57:37Z",
+  "last_run": "2026-09-28T15:31:39Z",
   "page_seen": [
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
@@ -6767,6 +6768,7 @@
     "https://www.twomoons.ch/ultimate-guard-sidewinder-133-xenoskin-magic-the-gathering-reality-fracture-jace-building-reality-jace-building-reality",
     "https://www.twomoons.ch/ultimate-guard-sidewinder-133-xenoskin-magic-the-gathering-reality-fracture-tam-beleren-conflicted-tam-beleren-conflicted",
     "https://www.twomoons.ch/ultimate-guard-spielmatte",
+    "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant",
     "https://www.twomoons.ch/umbreon-nachtara",
     "https://www.twomoons.ch/vaporeon-aquana",
     "https://www.twomoons.ch/vikavolt-donarion",
@@ -6992,20 +6994,6 @@
       "name": "M6 Storm Emeralda",
       "price": "CHF 89.90"
     },
-    "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "39d2e42454acde0e",
-      "first_seen": "2026-09-18T08:40:29Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-18T08:40:29Z",
-      "message_id": "1550426266459705345",
-      "name": "OP17 The Worlds Strongest Warriors",
-      "price": "CHF 1999.90"
-    },
     "https://www.twomoons.ch/pokemon-151-art-figure-blind-box": {
       "badges": [],
       "digest": "5135e617549ff1b0",
@@ -7043,6 +7031,19 @@
       "message_id": "1553041053823537204",
       "name": "Squaroes Squaroe Dungeons & Dragons DND001 / Beholder",
       "price": "CHF 19.90"
+    },
+    "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "e79e7c9bf2665631",
+      "first_seen": "2026-09-28T15:31:37Z",
+      "languages": [],
+      "last_checked": "2026-09-28T15:31:37Z",
+      "message_id": "1554153608453431297",
+      "name": "Ultimate Guard Zipfolio 480 Xenoskin Magic: The Gathering \"Reality Fracture\" / Liliana the Faultless / Liliana the Repentant",
+      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto": {
       "badges": [],
