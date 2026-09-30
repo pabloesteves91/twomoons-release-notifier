@@ -5703,6 +5703,8 @@
     "https://www.twomoons.ch/topps-premier-league-merlin-2026-hobby-box",
     "https://www.twomoons.ch/topps-real-madrid-los-blancos-2025-2026-hobby-box",
     "https://www.twomoons.ch/topps-real-madrid-team-set-25-26-deck-box",
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box",
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-galaxy-2026-hobby-box",
     "https://www.twomoons.ch/topps-star-wars-smugglers-outpost-2025-hobby-box",
     "https://www.twomoons.ch/topps-tier-one-baseball-2026-hobby-box-hobby-box",
@@ -6660,8 +6662,10 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-09-30T13:47:11Z",
+  "last_run": "2026-09-30T19:23:30Z",
   "page_seen": [
+    "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
+    "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
@@ -6762,7 +6766,14 @@
     "https://www.twomoons.ch/squaroes-squaroe-dungeons-dragons-dnd001-beholder-beholder",
     "https://www.twomoons.ch/tatsugiri-nigiragi",
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
+    "https://www.twomoons.ch/topps-collector-tin-2026-2027-chelsea",
+    "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-city",
+    "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-united",
+    "https://www.twomoons.ch/topps-museum-uefa-club-competitions-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-nfl-flagship-football-2026-hobby-box",
+    "https://www.twomoons.ch/topps-premier-league-flagship-2026-2027-value-box",
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box",
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-galaxy-2026-hobby-box",
     "https://www.twomoons.ch/topps-ufc-stadium-club-2026-hobby-box",
     "https://www.twomoons.ch/torchic-flemmli",
@@ -6794,21 +6805,6 @@
       "message_id": "1551895743089086511",
       "name": "30th Anniversary Deck Set Featuring Espeon ex & Umbreon ex",
       "price": "CHF 239.90"
-    },
-    "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "c998276f588a33ac",
-      "first_seen": "2026-09-18T08:40:44Z",
-      "languages": [
-        "Chinesisch"
-      ],
-      "last_checked": "2026-09-18T08:40:44Z",
-      "message_id": "1550426327033847839",
-      "name": "30th Celebration Display",
-      "price": "CHF 119.90"
     },
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch": {
       "badges": [
@@ -6940,21 +6936,6 @@
       "name": "Homeworlds Booster Display",
       "price": "CHF 99.90"
     },
-    "https://www.twomoons.ch/homeworlds-spotlight-deck-chewbacca-chewbacca-englisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "87886784f34d4b1f",
-      "first_seen": "2026-09-18T08:40:49Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-09-18T08:40:49Z",
-      "message_id": "1550426349976551466",
-      "name": "Homeworlds Spotlight Deck - Chewbacca",
-      "price": "CHF 24.90"
-    },
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch": {
       "badges": [
         "Aldria Deal!"
@@ -7032,6 +7013,30 @@
       "message_id": "1553041053823537204",
       "name": "Squaroes Squaroe Dungeons & Dragons DND001 / Beholder",
       "price": "CHF 19.90"
+    },
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "f720f8145d1b2029",
+      "first_seen": "2026-09-30T19:23:26Z",
+      "languages": [],
+      "last_checked": "2026-09-30T19:23:26Z",
+      "message_id": "1554936723660734567",
+      "name": "Topps Star Wars Chrome 2026",
+      "price": "CHF 269.90"
+    },
+    "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "6a18a04e228a965e",
+      "first_seen": "2026-09-30T19:23:21Z",
+      "languages": [],
+      "last_checked": "2026-09-30T19:23:21Z",
+      "message_id": "1554936700818555013",
+      "name": "Topps Star Wars Chrome 2026",
+      "price": "CHF 44.90"
     },
     "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant": {
       "badges": [
