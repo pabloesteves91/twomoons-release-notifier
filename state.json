@@ -3221,6 +3221,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-booster-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/machamp-machomei",
     "https://www.twomoons.ch/machi-koro-2-englisch",
@@ -6666,7 +6667,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-02T12:40:04Z",
+  "last_run": "2026-10-02T18:26:43Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6757,6 +6758,7 @@
     "https://www.twomoons.ch/limited-pack-world-championship-2026-display-10-packs-ygo-englisch",
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/magearna",
     "https://www.twomoons.ch/magnificent-monsters",
@@ -6957,6 +6959,20 @@
       "name": "Foundations Starter Commander Deck Calling All Angels",
       "price": "CHF 29.90"
     },
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "e76ba4f63272fc27",
+      "first_seen": "2026-10-02T18:26:41Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-10-02T18:26:41Z",
+      "message_id": "1555647217422049341",
+      "name": "M6a 30th Celebration Japanese",
+      "price": "CHF 199.90"
+    },
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch": {
       "badges": [
         "Neu"
@@ -7093,16 +7109,6 @@
       "message_id": "1554153608453431297",
       "name": "Ultimate Guard Zipfolio 480 Xenoskin Magic: The Gathering \"Reality Fracture\" / Liliana the Faultless / Liliana the Repentant",
       "price": "CHF 34.90"
-    },
-    "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto": {
-      "badges": [],
-      "digest": "49b26a0683cde93e",
-      "first_seen": "2026-09-20T06:20:34Z",
-      "languages": [],
-      "last_checked": "2026-09-20T06:20:34Z",
-      "message_id": "1551115828328661003",
-      "name": "Zeitloses Abenteuer Johto Schlüsselanhänger",
-      "price": "CHF 11.90"
     }
   },
   "version": 1
