@@ -32,6 +32,7 @@
     "https://www.twomoons.ch/3-x-4-regular-toploaders-card-sleeves-200",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch",
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
@@ -6665,11 +6666,12 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-01T23:54:18Z",
+  "last_run": "2026-10-02T05:41:55Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
@@ -6715,6 +6717,7 @@
     "https://www.twomoons.ch/detail/01a08137f3727b89bdf36f80f47d23c3",
     "https://www.twomoons.ch/detail/01a08a8a90ad7c06a7719327b94eb4bb",
     "https://www.twomoons.ch/detail/01a08b7e96ed7aefae188ba91441e13e",
+    "https://www.twomoons.ch/detail/01a0c29bc4537b4b99370375324b8693",
     "https://www.twomoons.ch/detail/01a0c2b874a67c39b1034f24374d1991",
     "https://www.twomoons.ch/detail/01a0c34efd347aa1abe661de22940990",
     "https://www.twomoons.ch/dewpider-araqua",
@@ -6854,6 +6857,20 @@
       "name": "30th Anniversary Deck Set Featuring Espeon ex & Umbreon ex",
       "price": "CHF 239.90"
     },
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "96d461f454874023",
+      "first_seen": "2026-10-02T05:41:53Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-10-02T05:41:53Z",
+      "message_id": "1555454745274093649",
+      "name": "30th Celebration Booster Bundle",
+      "price": "CHF 64.90"
+    },
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch": {
       "badges": [
         "Neu",
@@ -6939,20 +6956,6 @@
       "message_id": "1552283777017974838",
       "name": "Foundations Starter Commander Deck Calling All Angels",
       "price": "CHF 29.90"
-    },
-    "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch": {
-      "badges": [
-        "Aldria Deal!"
-      ],
-      "digest": "56b3569d546f6ee6",
-      "first_seen": "2026-09-20T06:20:27Z",
-      "languages": [
-        "Chinesisch"
-      ],
-      "last_checked": "2026-09-20T06:20:27Z",
-      "message_id": "1551115799907934260",
-      "name": "M6 Storm Emeralda",
-      "price": "CHF 89.90"
     },
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch": {
       "badges": [
