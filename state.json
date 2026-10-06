@@ -6585,6 +6585,7 @@
     "https://www.twomoons.ch/yu-gi-oh",
     "https://www.twomoons.ch/yu-gi-oh-2025-mega-pack-tin-deutsch",
     "https://www.twomoons.ch/yu-gi-oh-advanced-sunday-cup",
+    "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-deutsch",
     "https://www.twomoons.ch/yu-gi-oh-burst-protocol-prerelease",
     "https://www.twomoons.ch/yu-gi-oh-chaos-origins-prerelease",
     "https://www.twomoons.ch/yu-gi-oh-doom-of-dimensions-prerelease",
@@ -6667,7 +6668,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-06T13:30:19Z",
+  "last_run": "2026-10-06T17:13:21Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6803,6 +6804,8 @@
     "https://www.twomoons.ch/scorbunny-hopplo",
     "https://www.twomoons.ch/scyther-sichlor",
     "https://www.twomoons.ch/slurpuff-sabbaione",
+    "https://www.twomoons.ch/smiski-smiski-construction-series",
+    "https://www.twomoons.ch/smiski-smiski-moving-series",
     "https://www.twomoons.ch/smoochum-kussilla",
     "https://www.twomoons.ch/snibunna",
     "https://www.twomoons.ch/snorlax-relaxo",
@@ -6843,6 +6846,7 @@
     "https://www.twomoons.ch/vikavolt-donarion",
     "https://www.twomoons.ch/vivillon",
     "https://www.twomoons.ch/weedle-hornliu",
+    "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-deutsch",
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
@@ -6989,16 +6993,6 @@
       "name": "M6a 30th Celebration Japanese",
       "price": "CHF 10.90"
     },
-    "https://www.twomoons.ch/pokemon-151-art-figure-blind-box": {
-      "badges": [],
-      "digest": "5135e617549ff1b0",
-      "first_seen": "2026-09-20T06:20:40Z",
-      "languages": [],
-      "last_checked": "2026-09-20T06:20:40Z",
-      "message_id": "1551115854874148968",
-      "name": "Pokémon 151 Art Figure Blind Box",
-      "price": "CHF 29.90"
-    },
     "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch": {
       "badges": [
         "Neu",
@@ -7111,6 +7105,21 @@
       "message_id": "1554153608453431297",
       "name": "Ultimate Guard Zipfolio 480 Xenoskin Magic: The Gathering \"Reality Fracture\" / Liliana the Faultless / Liliana the Repentant",
       "price": "CHF 34.90"
+    },
+    "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-deutsch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "6e7f7abed45bab9d",
+      "first_seen": "2026-10-06T17:13:19Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-10-06T17:13:19Z",
+      "message_id": "1557078269294149647",
+      "name": "Yu-Gi-Oh Beyond the Brave Display",
+      "price": "CHF 69.90"
     }
   },
   "version": 1
