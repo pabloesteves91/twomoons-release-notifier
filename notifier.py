@@ -1040,6 +1040,28 @@ def load_state(path: Path) -> dict[str, Any]:
     return state
 
 
+def reset_state(state: dict[str, Any]) -> None:
+    """Alles vergessen — der nächste Lauf ist wieder ein Erstlauf.
+
+    `page_seen` muss mit weg: Im Spiegel-Modus entscheidet allein sein Fehlen
+    darüber, ob ein Lauf als Erstlauf gilt und den Kanal neu befüllt.
+
+    Bewusst ohne Löschen: Die gespeicherten Message-IDs gehören zum bisherigen
+    Kanal. Nach einem Kanalwechsel zeigen sie ins Leere, und beim Neuaufbau
+    desselben Kanals sollen die alten Meldungen von Hand weg.
+    """
+    LOG.warning(
+        "Reset: %s Meldung(en) und %s gemerkte Seiten-URL(s) werden vergessen. "
+        "Der nächste Lauf füllt den Kanal neu.",
+        len(state.get("products", {})),
+        len(state.get("page_seen", [])),
+    )
+    state["known"] = []
+    state["products"] = {}
+    state.pop("page_seen", None)
+    state["initialized"] = False
+
+
 def save_state(path: Path, state: dict[str, Any], known: set[str]) -> None:
     state["known"] = sorted(known)
     path.write_text(json.dumps(state, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
@@ -1387,7 +1409,9 @@ def run_mirror(
     gesehen = set(state.get("page_seen", []))
     oben = alle[:keep]
 
-    if erster_lauf and not posted:
+    erstbefuellung = erster_lauf and not posted
+
+    if erstbefuellung:
         # Frischer Kanal: einmalig mit den obersten `keep` befüllen.
         neu = list(oben)
         LOG.info("Erstbefüllung: die obersten %s Produkte werden gepostet", len(neu))
@@ -1431,8 +1455,12 @@ def run_mirror(
     LOG.info("%s Neuzugang/Neuzugänge unter den obersten %s, %s Meldung(en) im Kanal",
              len(neu), keep, len(posted))
 
+    # Die Erstbefüllung ist von der Notbremse ausgenommen: Ihre Menge ist per
+    # Konstruktion genau `keep`, sie kann also gar nichts Verdächtiges anzeigen.
+    # `max_churn` würde sie bei kleinerem Wert schlicht unmöglich machen. Gegen
+    # eine kaputte Seite schützt weiterhin `min_listing_items` weiter oben.
     max_churn = int(channel.get("max_churn", 0))
-    if max_churn and len(neu) > max_churn and not args.force:
+    if max_churn and len(neu) > max_churn and not args.force and not erstbefuellung:
         # So viele Neuzugänge auf einmal heisst fast immer: Die Seite liefert
         # etwas anderes als gedacht. Dann lieber rot werden als den Kanal
         # stillschweigend mit den falschen Produkten füllen.
@@ -1539,15 +1567,6 @@ def run(config: dict[str, Any], state: dict[str, Any], args: argparse.Namespace)
     discord_config = config.get("discord", {})
     webhook_env = discord_config.get("webhook_env", "DISCORD_WEBHOOK_RELEASES")
     webhook_url = os.environ.get(webhook_env, "").strip()
-
-    if args.reset:
-        # Auch im Dry-Run zurücksetzen: Gespeichert wird dort ohnehin nichts, und
-        # nur so lässt sich nach dem Erstlauf überhaupt eine Vorschau erzeugen
-        # ("--dry-run --reset --post-existing --limit 3").
-        LOG.warning("Reset: %s gemerkte URL(s) werden vergessen", len(state.get("known", [])))
-        state["known"] = []
-        state["products"] = {}
-        state["initialized"] = False
 
     urls = discover_urls(config)
     if not urls:
@@ -1930,6 +1949,13 @@ def main(argv: list[str] | None = None) -> int:
         return inspect(config, args)
 
     state = load_state(args.state)
+
+    # Vor der Verzweigung, damit der Schalter in jeder Betriebsart dasselbe
+    # bedeutet. Auch im Dry-Run: Gespeichert wird dort ohnehin nichts, und nur so
+    # lässt sich die Erstbefüllung überhaupt vorab ansehen ("--dry-run --reset").
+    if args.reset:
+        reset_state(state)
+
     try:
         if args.post_from:
             posted, report = run_from_listing(config, state, args)

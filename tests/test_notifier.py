@@ -575,6 +575,78 @@ class SpiegelTest(unittest.TestCase):
         geloescht.assert_not_called()
         self.assertFalse(self.state_path.exists())
 
+    # --- Zurücksetzen: der Kanal wird neu befüllt ------------------------- #
+
+    def test_reset_state_vergisst_alles(self):
+        state = notifier.empty_state()
+        self.lauf(state)
+        self.assertTrue(state["products"] and state["page_seen"])
+
+        notifier.reset_state(state)
+
+        self.assertEqual(state["products"], {})
+        self.assertEqual(state["known"], [])
+        self.assertNotIn("page_seen", state)
+        self.assertFalse(state["initialized"])
+
+    def test_reset_fuellt_den_kanal_neu(self):
+        """Der Fall aus Lauf #118: voller Kanal, Reset, danach wieder die obersten N.
+
+        `page_seen` muss mit weg — allein sein Fehlen macht den Lauf zum
+        Erstlauf. Blieb es stehen, lief der Reset ins Leere und es passierte
+        nichts.
+        """
+        state = notifier.empty_state()
+        self.lauf(state)
+        alt = dict(state["products"])
+
+        notifier.reset_state(state)
+        posted, _, post, geloescht = self.lauf(state)
+
+        self.assertEqual((posted, post.call_count), (3, 3))
+        geloescht.assert_not_called()
+        self.assertEqual(sorted(state["products"]), sorted(alt))
+        # Neue Nachrichten, nicht die alten Einträge von vorhin.
+        self.assertNotEqual(
+            {eintrag["message_id"] for eintrag in state["products"].values()},
+            {eintrag["message_id"] for eintrag in alt.values()},
+        )
+
+    def test_erstbefuellung_ignoriert_den_riegel(self):
+        """`max_churn` darf die Erstbefüllung nicht verhindern.
+
+        Ihre Menge ist per Konstruktion genau `keep`; ein kleinerer `max_churn`
+        würde sie sonst unmöglich machen — und `force` ist im Dialog von GitHub
+        nicht immer erreichbar.
+        """
+        self.config = dict(self.config, channel=dict(self.config["channel"], max_churn=2))
+        state = notifier.empty_state()
+
+        posted, _, post, _ = self.lauf(state)
+
+        self.assertEqual((posted, post.call_count), (3, 3))
+
+    def test_reset_wirkt_auch_im_spiegel_modus(self):
+        """Über main(), denn genau dort lag der Fehler: Der Reset stand hinter
+        der Verzweigung und wurde im Spiegel-Modus nie erreicht."""
+        config_path = self.tmp / "config.json"
+        config_path.write_text(json.dumps(self.config), encoding="utf-8")
+
+        state = notifier.empty_state()
+        self.lauf(state)
+        notifier.save_state(self.state_path, state, set())
+
+        with mock.patch.object(notifier, "fetch_text", side_effect=self.seite), \
+             mock.patch.object(notifier, "post_embed", side_effect=self.message_id) as post, \
+             mock.patch.object(notifier, "delete_message", return_value=True), \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            code = notifier.main(
+                ["--config", str(config_path), "--state", str(self.state_path), "--reset"]
+            )
+
+        self.assertEqual((code, post.call_count), (0, 3))
+
 
 class AufraeumenTest(unittest.TestCase):
     """Im Kanal sollen nur die neuesten Meldungen stehen bleiben."""

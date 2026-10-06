@@ -31,11 +31,12 @@ Läuft ausschliesslich über GitHub Actions — kein Server, keine Datenbank.
 5. [`config.json` im Detail](#configjson-im-detail)
 6. [Was im Kanal steht](#was-im-kanal-steht)
 7. [`state.json` — das Gedächtnis](#statejson--das-gedächtnis)
-8. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
-9. [Lokal ausführen](#lokal-ausführen)
-10. [Profilbild des Absenders](#profilbild-des-absenders)
-11. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
-12. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
+8. [Umzug auf einen anderen Discord](#umzug-auf-einen-anderen-discord)
+9. [Diagnose ohne Knopfdruck](#diagnose-ohne-knopfdruck)
+10. [Lokal ausführen](#lokal-ausführen)
+11. [Profilbild des Absenders](#profilbild-des-absenders)
+12. [Wenn etwas nicht klappt](#wenn-etwas-nicht-klappt)
+13. [Was am echten Shop gemessen wurde](#was-am-echten-shop-gemessen-wurde)
 
 ## Wie es funktioniert
 
@@ -127,8 +128,11 @@ auch wenn die Produkte längst bekannt sind:
 | Schalter | Wert |
 |---|---|
 | `post_from` | `https://www.twomoons.ch/` |
-| `heading` | `Neu im Shop` |
 | `limit` | `3` |
+
+Einen einzelnen Bereich der Seite auswählen (`--heading "Neu im Shop"`) geht nur
+lokal oder über `debug-run.txt` — im Dialog gibt es dafür kein Feld, siehe
+[Umzug auf einen anderen Discord](#umzug-auf-einen-anderen-discord).
 
 Das umgeht die Neuzugangs-Erkennung und ist für den Alltag nicht nötig — die
 Testnachrichten rutschen von selbst aus dem Kanal, sobald genug echte Neuzugänge
@@ -262,8 +266,14 @@ Jeder Lauf schreibt die obersten 20 der Seite ins Log — mit Platznummer, Name 
 Vermerk: `NEU`, `steht im Kanal` oder `bekannt, nachgerückt`. Damit lässt sich in
 zehn Sekunden vergleichen, ob der Melder dieselbe Liste sieht wie der Browser.
 
-War die Menge beabsichtigt (Erstbefüllung, Neustart nach einem Reset), den Lauf
-mit dem Schalter **`force`** wiederholen: Dann greift der Riegel nicht.
+War die Menge beabsichtigt, den Lauf mit dem Schalter **`force`** wiederholen:
+Dann greift der Riegel nicht.
+
+Für die **Erstbefüllung** ist das nicht nötig — sie ist vom Riegel ausgenommen.
+Ihre Menge ist per Konstruktion genau `keep` und kann darum gar nichts
+Verdächtiges anzeigen; ein kleinerer `max_churn` würde sie sonst schlicht
+unmöglich machen. Gegen eine kaputte Seite schützt dort weiterhin
+`min_listing_items`.
 
 Gelöscht wird nur, was dieser Webhook selbst gepostet hat — andere Nachrichten im
 Kanal bleiben unberührt. Schlägt ein Löschen fehl (jemand hat die Nachricht schon
@@ -304,8 +314,41 @@ von Hand entfernt), läuft der Rest trotzdem durch.
   gepostet wurde. Fehlt das Secret oder ist die Obergrenze erreicht, kommt es im
   nächsten Lauf dran.
 
-Alles vergessen und von vorn anfangen: Workflow mit `reset` starten (ohne
-`post_existing` wird der aktuelle Stand dann einfach neu gemerkt).
+Alles vergessen und von vorn anfangen: Workflow mit **`reset`** starten. Der
+Schalter leert `products`, `page_seen` und `known` — der Lauf gilt damit wieder
+als Erstlauf und **füllt den Kanal neu mit den obersten 20 Produkten**.
+`post_existing` braucht es dafür nicht; der Schalter wirkt nur im Sitemap-Modus.
+
+Gelöscht wird beim Reset nichts: Die gemerkten Message-IDs gehören zum bisherigen
+Kanal. Nach einem Kanalwechsel zeigen sie ohnehin ins Leere, und beim Neuaufbau
+desselben Kanals müssen die alten Nachrichten von Hand weg — sonst stehen sie
+doppelt da.
+
+## Umzug auf einen anderen Discord
+
+Nachrichten lassen sich in Discord nicht verschieben, und ein Webhook darf nur
+anfassen, was er selbst geschrieben hat. Ein Umzug heisst darum: neue Webhook-URL
+als Secret-Wert, Gedächtnis leeren, Kanal neu befüllen. **Die Reihenfolge zählt.**
+
+1. Im neuen Discord den Kanal anlegen → Kanal bearbeiten → Integrationen →
+   Webhooks → **Neuer Webhook** → URL kopieren. Name und Bild dort leer lassen,
+   beides kommt aus der `config.json`.
+2. **Settings** → **Secrets and variables** → **Actions** →
+   `DISCORD_WEBHOOK_RELEASES` → **Update secret**. Der Name bleibt, nur der Wert
+   wechselt; in der `config.json` ist nichts zu ändern.
+3. **Erst danach** Actions → **Run workflow**, nur das Häkchen **„Alles
+   vergessen"** (`reset`). Umgekehrt landen die 20 Produkte im alten Kanal.
+4. Den alten Kanal in Discord löschen — seine Meldungen verwaltet der Melder nach
+   dem Reset nicht mehr.
+
+Vorschau vorher: `debug-run.txt` mit `modus: erstbefuellung` ändern. Der Lauf
+zeigt im Log die 20 Produkte, die er posten würde, und ändert nichts.
+
+**Zu den Feldern im Dialog:** GitHub zeigt bei `workflow_dispatch` höchstens zehn
+Eingaben an; sind mehr definiert, rendert es eine ältere Fassung des Formulars
+und einzelne Schalter fehlen wortlos. Der Workflow bleibt deshalb bei acht
+Feldern. Die Feinsteuerung der Diagnose (`--inspect-url`, `--dump-html`,
+`--heading`) gibt es dafür über `debug-run.txt`.
 
 ## Diagnose ohne Knopfdruck
 
@@ -316,14 +359,16 @@ Jede Änderung an **`debug-run.txt`** startet einen Lauf, der **niemals postet u
 modus: inspect              Sitemap-Übersicht und je Stichprobe, welcher
                             Selektor was gefunden hat — inklusive fertigem Embed
 modus: inspect+dump         zusätzlich ein aufgeräumtes HTML-Abbild
+modus: erstbefuellung       Vorschau: welche 20 Produkte ein Lauf mit dem
+                            Häkchen "Alles vergessen" posten würde
 urls: <URL>, <URL>          genau diese Produktseiten ansehen
 stichprobe: 30              so viele zufällige Produktseiten abrufen und ihre
                             Kategorien zählen
 ```
 
 Ohne `modus:`-Zeile läuft ein normaler Dry-Run. Eine Vorschau der Embeds nach dem
-Erstlauf gibt es lokal mit `--dry-run --reset --post-existing --limit 3` oder eben
-über `modus: inspect`.
+Erstlauf gibt es lokal mit `--dry-run --reset --limit 3` oder eben über
+`modus: inspect`.
 
 Die Übersicht steht immer am **Ende** des Logs — ein Diagnose-Log wird schnell
 mehrere hundert Zeilen lang, und nur das Ende ist bequem lesbar.
