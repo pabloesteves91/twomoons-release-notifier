@@ -3302,6 +3302,7 @@
     "https://www.twomoons.ch/magnemite-magnetilo",
     "https://www.twomoons.ch/magneton-magneton",
     "https://www.twomoons.ch/magnezone",
+    "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/magnificent-monsters-display-deutsch",
     "https://www.twomoons.ch/magnificent-monsters-display-englisch",
@@ -4817,6 +4818,7 @@
     "https://www.twomoons.ch/small-totoro-standing-pocket-statue-my-neighbor-totoro",
     "https://www.twomoons.ch/smallworld-deutsch",
     "https://www.twomoons.ch/smart-10-deutsch",
+    "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch",
     "https://www.twomoons.ch/smiski-smiski-bath-series",
     "https://www.twomoons.ch/smiski-smiski-cheer-series",
     "https://www.twomoons.ch/smiski-smiski-exercising-series",
@@ -6668,7 +6670,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-07T08:42:51Z",
+  "last_run": "2026-10-07T16:32:40Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6762,6 +6764,7 @@
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/magearna",
+    "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/marill",
     "https://www.twomoons.ch/marshtomp-moorabbel",
@@ -6804,6 +6807,7 @@
     "https://www.twomoons.ch/scorbunny-hopplo",
     "https://www.twomoons.ch/scyther-sichlor",
     "https://www.twomoons.ch/slurpuff-sabbaione",
+    "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch",
     "https://www.twomoons.ch/smiski-smiski-construction-series",
     "https://www.twomoons.ch/smiski-smiski-moving-series",
     "https://www.twomoons.ch/smoochum-kussilla",
@@ -6894,20 +6898,6 @@
       "name": "30th Celebration Espeon Deluxe Card Set",
       "price": "CHF 34.90"
     },
-    "https://www.twomoons.ch/30th-celebration-etb-italienisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "05cf923773a55df8",
-      "first_seen": "2026-09-21T19:31:37Z",
-      "languages": [
-        "Italienisch"
-      ],
-      "last_checked": "2026-09-21T19:31:37Z",
-      "message_id": "1551677278608564379",
-      "name": "30th Celebration",
-      "price": "CHF 99.90"
-    },
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch": {
       "badges": [
         "Neu"
@@ -6921,20 +6911,6 @@
       "message_id": "1553681101493506099",
       "name": "30th Celebration Japanese",
       "price": "CHF 10.90"
-    },
-    "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "db9191931f23eb44",
-      "first_seen": "2026-09-20T16:49:49Z",
-      "languages": [
-        "Französisch"
-      ],
-      "last_checked": "2026-09-20T16:49:49Z",
-      "message_id": "1551274184556941355",
-      "name": "30th Celebration Nymphali ex Box",
-      "price": "CHF 49.90"
     },
     "https://www.twomoons.ch/flesh-blood-usurp-the-shadow-throne-booster-display-booster-box-englisch": {
       "badges": [
@@ -6993,6 +6969,20 @@
       "name": "M6a 30th Celebration Japanese",
       "price": "CHF 10.90"
     },
+    "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch": {
+      "badges": [
+        "Vorbestellung"
+      ],
+      "digest": "e69a1e7ec8edcc37",
+      "first_seen": "2026-10-07T16:32:37Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-10-07T16:32:37Z",
+      "message_id": "1557430449599549591",
+      "name": "Magnificent Maestros",
+      "price": "CHF 34.90"
+    },
     "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch": {
       "badges": [
         "Neu",
@@ -7007,6 +6997,21 @@
       "message_id": "1552283820768890881",
       "name": "Reality Fracture Commander - Multiverse Reforged",
       "price": "CHF 49.90"
+    },
+    "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "059e4eeda7276297",
+      "first_seen": "2026-10-07T16:32:32Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-10-07T16:32:32Z",
+      "message_id": "1557430414233174168",
+      "name": "Smash Palace: Chorus of Steel",
+      "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-retail-box": {
       "badges": [
