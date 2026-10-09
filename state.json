@@ -33,6 +33,7 @@
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
@@ -6670,13 +6671,14 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-09T16:15:29Z",
+  "last_run": "2026-10-09T20:59:45Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-value-box",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
@@ -6862,21 +6864,6 @@
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
-    "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "d136e15271ceee0e",
-      "first_seen": "2026-09-22T09:59:40Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-22T09:59:40Z",
-      "message_id": "1551895743089086511",
-      "name": "30th Anniversary Deck Set Featuring Espeon ex & Umbreon ex",
-      "price": "CHF 239.90"
-    },
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch": {
       "badges": [
         "Neu"
@@ -6890,6 +6877,20 @@
       "message_id": "1555454745274093649",
       "name": "30th Celebration Booster Bundle",
       "price": "CHF 64.90"
+    },
+    "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "f08a7066761676df",
+      "first_seen": "2026-10-09T20:59:43Z",
+      "languages": [
+        "Italienisch"
+      ],
+      "last_checked": "2026-10-09T20:59:43Z",
+      "message_id": "1558222434220507248",
+      "name": "30th Celebration Booster Bundle",
+      "price": "CHF 59.90"
     },
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch": {
       "badges": [
