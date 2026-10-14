@@ -5689,6 +5689,9 @@
     "https://www.twomoons.ch/toploader-3-x-4-regular-clear-premium-25-pieces",
     "https://www.twomoons.ch/toploader-box",
     "https://www.twomoons.ch/topps",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-value-box",
     "https://www.twomoons.ch/topps-2026-ufc-chrome-value-box-value-box",
     "https://www.twomoons.ch/topps-arsenal-team-set-25-26-deck-box",
     "https://www.twomoons.ch/topps-bundesliga-gold-2025-26-hobby-box",
@@ -6672,7 +6675,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-14T17:14:17Z",
+  "last_run": "2026-10-14T20:44:54Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6839,6 +6842,9 @@
     "https://www.twomoons.ch/stufful-velursi",
     "https://www.twomoons.ch/tatsugiri-nigiragi",
     "https://www.twomoons.ch/terrakion-terrakium",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box",
+    "https://www.twomoons.ch/topps-2026-marvel-neon-value-box",
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-arsenal",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-chelsea",
@@ -6899,21 +6905,6 @@
       "name": "30th Celebration Booster Bundle",
       "price": "CHF 59.90"
     },
-    "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "bcd508af461a36f4",
-      "first_seen": "2026-09-24T10:04:00Z",
-      "languages": [
-        "Chinesisch"
-      ],
-      "last_checked": "2026-09-24T10:04:00Z",
-      "message_id": "1552621609980928031",
-      "name": "30th Celebration Espeon Deluxe Card Set",
-      "price": "CHF 34.90"
-    },
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch": {
       "badges": [
         "Neu"
@@ -6942,20 +6933,6 @@
       "message_id": "1559977638976815255",
       "name": "Dragon Ball Super Card Game - Fusion World FB-11 Display",
       "price": "CHF 199.90"
-    },
-    "https://www.twomoons.ch/flesh-blood-usurp-the-shadow-throne-booster-display-booster-box-englisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "7c53512c89c89fba",
-      "first_seen": "2026-09-25T22:23:31Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-09-25T22:23:31Z",
-      "message_id": "1553170102059405383",
-      "name": "Flesh & Blood - Usurp the Shadow Throne Booster Display",
-      "price": "CHF 94.90"
     },
     "https://www.twomoons.ch/homeworlds-booster-display-booster-box-regular-deutsch": {
       "badges": [
@@ -7041,18 +7018,41 @@
       "name": "SportZoo Brack Super League 2026/27 Duel",
       "price": "CHF 69.90"
     },
-    "https://www.twomoons.ch/squaroes-squaroe-dungeons-dragons-dnd001-beholder-beholder": {
+    "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box": {
       "badges": [
-        "Neu",
-        "Vorbestellung"
+        "Neu"
       ],
-      "digest": "d317dee50635e02b",
-      "first_seen": "2026-09-25T13:50:44Z",
+      "digest": "744c0125d3ca77ad",
+      "first_seen": "2026-10-14T20:44:49Z",
       "languages": [],
-      "last_checked": "2026-09-25T13:50:44Z",
-      "message_id": "1553041053823537204",
-      "name": "Squaroes Squaroe Dungeons & Dragons DND001 / Beholder",
-      "price": "CHF 19.90"
+      "last_checked": "2026-10-14T20:44:49Z",
+      "message_id": "1560030632166297641",
+      "name": "Topps 2026 Marvel Neon",
+      "price": "CHF 199.90"
+    },
+    "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "b0d0ff7e2e2d807b",
+      "first_seen": "2026-10-14T20:44:42Z",
+      "languages": [],
+      "last_checked": "2026-10-14T20:44:42Z",
+      "message_id": "1560030603229921303",
+      "name": "Topps 2026 Marvel Neon",
+      "price": "CHF 79.90"
+    },
+    "https://www.twomoons.ch/topps-2026-marvel-neon-value-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "a25a883f515f4ee9",
+      "first_seen": "2026-10-14T20:44:37Z",
+      "languages": [],
+      "last_checked": "2026-10-14T20:44:37Z",
+      "message_id": "1560030575966822451",
+      "name": "Topps 2026 Marvel Neon",
+      "price": "CHF 39.90"
     },
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box": {
       "badges": [
