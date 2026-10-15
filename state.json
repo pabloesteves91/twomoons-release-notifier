@@ -5699,6 +5699,7 @@
     "https://www.twomoons.ch/topps-chrome-2026-wwe-value-box-value-box",
     "https://www.twomoons.ch/topps-chrome-baseball-2026-value-box",
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
+    "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box",
     "https://www.twomoons.ch/topps-disney-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-finest-fantastic-four-2026-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-forever-fc-barcelona-2025-26-hobby-box-hobby-box",
@@ -6675,7 +6676,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-15T19:11:10Z",
+  "last_run": "2026-10-15T22:22:10Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6846,6 +6847,7 @@
     "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box",
     "https://www.twomoons.ch/topps-2026-marvel-neon-value-box",
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
+    "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-arsenal",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-chelsea",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-city",
@@ -6904,20 +6906,6 @@
       "message_id": "1558222434220507248",
       "name": "30th Celebration Booster Bundle",
       "price": "CHF 59.90"
-    },
-    "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "b0623f852728768f",
-      "first_seen": "2026-09-27T08:14:03Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-27T08:14:03Z",
-      "message_id": "1553681101493506099",
-      "name": "30th Celebration Japanese",
-      "price": "CHF 10.90"
     },
     "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-fb-11-display-booster-box-englisch": {
       "badges": [
@@ -7053,6 +7041,18 @@
       "message_id": "1560030575966822451",
       "name": "Topps 2026 Marvel Neon",
       "price": "CHF 39.90"
+    },
+    "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "1806fcec8e1b2344",
+      "first_seen": "2026-10-15T22:22:08Z",
+      "languages": [],
+      "last_checked": "2026-10-15T22:22:08Z",
+      "message_id": "1560417507213574175",
+      "name": "Topps Chrome Formula One 2026",
+      "price": "CHF 59.90"
     },
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box": {
       "badges": [
