@@ -1619,6 +1619,7 @@
     "https://www.twomoons.ch/disney-lorcana-first-chapter-cruella-de-vil-aladdin-starter-deck-en",
     "https://www.twomoons.ch/disney-lorcana-first-chapter-moana-mickey-mouse-starter-deck-en",
     "https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch",
+    "https://www.twomoons.ch/disney-lorcana-hyperia-city-gift-box-deutsch",
     "https://www.twomoons.ch/disney-lorcana-lorebook-card-portfolio-252-disney-figures",
     "https://www.twomoons.ch/disney-lorcana-lorebook-card-portfolio-252-lorcana-logo",
     "https://www.twomoons.ch/disney-lorcana-lorebook-card-portfolio-queen",
@@ -6676,7 +6677,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-16T12:28:54Z",
+  "last_run": "2026-10-16T17:27:05Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6740,6 +6741,7 @@
     "https://www.twomoons.ch/dewpider-araqua",
     "https://www.twomoons.ch/diancie",
     "https://www.twomoons.ch/disney-lorcana-hyperia-city-booster-display-booster-box-deutsch",
+    "https://www.twomoons.ch/disney-lorcana-hyperia-city-gift-box-deutsch",
     "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-fb-11-display-booster-box-englisch",
     "https://www.twomoons.ch/drifzepeli",
     "https://www.twomoons.ch/eneco",
@@ -6922,6 +6924,20 @@
       "message_id": "1558222434220507248",
       "name": "30th Celebration Booster Bundle",
       "price": "CHF 59.90"
+    },
+    "https://www.twomoons.ch/disney-lorcana-hyperia-city-gift-box-deutsch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "7183bd73a03157ac",
+      "first_seen": "2026-10-16T17:27:03Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-10-16T17:27:03Z",
+      "message_id": "1560705608708128976",
+      "name": "Disney Lorcana Hyperia City",
+      "price": "CHF 29.90"
     },
     "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-fb-11-display-booster-box-englisch": {
       "badges": [
@@ -7129,19 +7145,6 @@
       "message_id": "1555207939621654660",
       "name": "Ultimate Guard Zipfolio 360 Xenoskin Magic: The Gathering \"Reality Fracture\" / Jace, Reality Sculptor / Tam, the Possibility",
       "price": "CHF 39.90"
-    },
-    "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "e79e7c9bf2665631",
-      "first_seen": "2026-09-28T15:31:37Z",
-      "languages": [],
-      "last_checked": "2026-09-28T15:31:37Z",
-      "message_id": "1554153608453431297",
-      "name": "Ultimate Guard Zipfolio 480 Xenoskin Magic: The Gathering \"Reality Fracture\" / Liliana the Faultless / Liliana the Repentant",
-      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-deutsch": {
       "badges": [
