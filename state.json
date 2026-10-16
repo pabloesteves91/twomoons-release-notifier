@@ -3434,6 +3434,7 @@
     "https://www.twomoons.ch/masking-tape-set-whisper-of-the-heart",
     "https://www.twomoons.ch/masters-25-booster-englisch",
     "https://www.twomoons.ch/masters-25-display-englisch",
+    "https://www.twomoons.ch/mastery-pack-assassin",
     "https://www.twomoons.ch/matte-scythe-and-or-lost-cities-sleeves-72-x-112-mm-clear-60-sleeves",
     "https://www.twomoons.ch/maze-of-muertos-display-englisch",
     "https://www.twomoons.ch/maze-of-the-master-booster-box-deutsch",
@@ -6677,7 +6678,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-16T17:27:05Z",
+  "last_run": "2026-10-16T21:13:05Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6794,6 +6795,7 @@
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/marill",
     "https://www.twomoons.ch/marshtomp-moorabbel",
+    "https://www.twomoons.ch/mastery-pack-assassin",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-zeraora-mega-zeraora-deutsch",
     "https://www.twomoons.ch/mega-tyranitar-mega-despotar",
     "https://www.twomoons.ch/meloetta",
@@ -7011,6 +7013,21 @@
       "name": "Magnificent Maestros",
       "price": "CHF 34.90"
     },
+    "https://www.twomoons.ch/mastery-pack-assassin": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "a06ba1c191c7e83e",
+      "first_seen": "2026-10-16T21:13:04Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-10-16T21:13:04Z",
+      "message_id": "1560762505146408991",
+      "name": "Mastery Pack: Assassin",
+      "price": "CHF 59.90"
+    },
     "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch": {
       "badges": [
         "Neu",
@@ -7024,18 +7041,6 @@
       "last_checked": "2026-10-07T16:32:32Z",
       "message_id": "1557430414233174168",
       "name": "Smash Palace: Chorus of Steel",
-      "price": "CHF 69.90"
-    },
-    "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-retail-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "316f08670af25440",
-      "first_seen": "2026-09-30T13:47:03Z",
-      "languages": [],
-      "last_checked": "2026-09-30T13:47:03Z",
-      "message_id": "1554852061470789713",
-      "name": "SportZoo Brack Super League 2026/27 Duel",
       "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box": {
