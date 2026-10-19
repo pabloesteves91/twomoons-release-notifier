@@ -3224,6 +3224,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-booster-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/machamp-machomei",
@@ -6678,7 +6679,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-19T01:21:49Z",
+  "last_run": "2026-10-19T07:50:25Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6787,6 +6788,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
     "https://www.twomoons.ch/m6a-30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-futuristic-box-futuristic-box-japanisch",
@@ -6971,6 +6973,21 @@
       "name": "Homeworlds Booster Display",
       "price": "CHF 99.90"
     },
+    "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "2d47afa224c91fc3",
+      "first_seen": "2026-10-19T07:50:23Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-10-19T07:50:23Z",
+      "message_id": "1561647628674932808",
+      "name": "M6a 30th Celebration Japanese",
+      "price": "CHF 39.90"
+    },
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch": {
       "badges": [
         "Neu"
@@ -6984,20 +7001,6 @@
       "message_id": "1555647217422049341",
       "name": "M6a 30th Celebration Japanese",
       "price": "CHF 199.90"
-    },
-    "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "12c572533d31c3bd",
-      "first_seen": "2026-09-30T13:47:08Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-09-30T13:47:08Z",
-      "message_id": "1554852090285793413",
-      "name": "M6a 30th Celebration Japanese",
-      "price": "CHF 10.90"
     },
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch": {
       "badges": [
