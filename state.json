@@ -3224,6 +3224,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-booster-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
@@ -3285,6 +3286,7 @@
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-quandrix-unlimited-deutsch-simic-green-blue",
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-quandrix-unlimited-englisch-simic-green-blue",
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-silverquill-influence-deutsch-orzhov-black-white",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering/booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/collector-booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/draft-booster",
@@ -6679,7 +6681,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-19T07:50:25Z",
+  "last_run": "2026-10-19T15:39:21Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6788,11 +6790,13 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-box-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
     "https://www.twomoons.ch/m6a-30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-futuristic-box-futuristic-box-japanisch",
     "https://www.twomoons.ch/magearna",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/marill",
@@ -6815,6 +6819,7 @@
     "https://www.twomoons.ch/one-piece-card-game-japanese-3rd-anniversary-set-japanisch",
     "https://www.twomoons.ch/op17-booster-box-booster-box-japanisch",
     "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch",
+    "https://www.twomoons.ch/oricorio-choreogel",
     "https://www.twomoons.ch/pachirisu-pachirisu",
     "https://www.twomoons.ch/panchroma-pla-matte-army-dark-green-army-dark-green",
     "https://www.twomoons.ch/panchroma-pla-matte-pastel-ice-pastel-ice",
@@ -6826,6 +6831,7 @@
     "https://www.twomoons.ch/plinfa",
     "https://www.twomoons.ch/pokemon-151-art-figure-blind-box",
     "https://www.twomoons.ch/pokemon-center-original-plush-snorlax",
+    "https://www.twomoons.ch/pokemon-kartenillustrations-figurensammlung",
     "https://www.twomoons.ch/pokemon-sleeves",
     "https://www.twomoons.ch/pokemon-tokyo-stationmaster-plush-toy-pikachu",
     "https://www.twomoons.ch/popplio-robball",
@@ -6838,10 +6844,12 @@
     "https://www.twomoons.ch/rampardos-rameidon",
     "https://www.twomoons.ch/rayquaza",
     "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch",
+    "https://www.twomoons.ch/rebirth-aufbruch-in-eine-neue-zeit-englisch",
     "https://www.twomoons.ch/relaxo",
     "https://www.twomoons.ch/rowlet-bauz",
     "https://www.twomoons.ch/scorbunny-hopplo",
     "https://www.twomoons.ch/scyther-sichlor",
+    "https://www.twomoons.ch/shaymin",
     "https://www.twomoons.ch/shiftry-tengulist",
     "https://www.twomoons.ch/slurpuff-sabbaione",
     "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch",
@@ -6973,6 +6981,21 @@
       "name": "Homeworlds Booster Display",
       "price": "CHF 99.90"
     },
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "c7f8360da3ad3af7",
+      "first_seen": "2026-10-19T15:39:12Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-10-19T15:39:12Z",
+      "message_id": "1561765657039872044",
+      "name": "M6a 30th Celebration First Partner Collection",
+      "price": "CHF 34.90"
+    },
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch": {
       "badges": [
         "Neu",
@@ -7001,6 +7024,21 @@
       "message_id": "1555647217422049341",
       "name": "M6a 30th Celebration Japanese",
       "price": "CHF 199.90"
+    },
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "d04f753c045ac6a0",
+      "first_seen": "2026-10-19T15:39:17Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-10-19T15:39:17Z",
+      "message_id": "1561765684458037269",
+      "name": "Magic: The Gathering Star Trek",
+      "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch": {
       "badges": [
@@ -7093,30 +7131,6 @@
       "message_id": "1560417507213574175",
       "name": "Topps Chrome Formula One 2026",
       "price": "CHF 59.90"
-    },
-    "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "f720f8145d1b2029",
-      "first_seen": "2026-09-30T19:23:26Z",
-      "languages": [],
-      "last_checked": "2026-09-30T19:23:26Z",
-      "message_id": "1554936723660734567",
-      "name": "Topps Star Wars Chrome 2026",
-      "price": "CHF 269.90"
-    },
-    "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "6a18a04e228a965e",
-      "first_seen": "2026-09-30T19:23:21Z",
-      "languages": [],
-      "last_checked": "2026-09-30T19:23:21Z",
-      "message_id": "1554936700818555013",
-      "name": "Topps Star Wars Chrome 2026",
-      "price": "CHF 44.90"
     },
     "https://www.twomoons.ch/ultimate-guard-art-sleeves-magic-the-gathering-reality-fracture-vindictive-triumph-vindictive-triumph": {
       "badges": [
