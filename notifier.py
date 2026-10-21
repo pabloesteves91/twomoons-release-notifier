@@ -266,6 +266,15 @@ def url_matches(url: str, patterns: list[re.Pattern[str]]) -> str:
 # --------------------------------------------------------------------------- #
 
 
+class ShopNichtErreichbar(RuntimeError):
+    """Der Shop hat den Abruf abgewiesen — nichts, was der Melder beheben kann.
+
+    Bewusst von allen anderen Fehlern getrennt: Ein 403 aus einem Rechenzentrum
+    oder eine Zeitüberschreitung ist kein Defekt des Melders. Solche Läufe soll
+    er eine Weile stillschweigend aussitzen, statt jedes Mal rot zu werden.
+    """
+
+
 def fetch_bytes(url: str, request_config: dict[str, Any]) -> bytes:
     """Lädt eine URL mit Wiederholung; ``file://`` für Testläufe ohne Netz."""
     if url.startswith("file://"):
@@ -288,9 +297,16 @@ def fetch_bytes(url: str, request_config: dict[str, Any]) -> bytes:
         except requests.RequestException as error:
             last_error = error
             LOG.warning("Abruf fehlgeschlagen (%s/%s) für %s: %s", attempt, retries, url, error)
+            status = getattr(error.response, "status_code", None)
+            if status is not None and 400 <= status < 500:
+                # Eine Sperre oder eine entfernte Seite wird durch Warten nicht
+                # besser — die übrigen Versuche kosten nur Zeit.
+                break
             if attempt < retries:
-                time.sleep(2**attempt)
-    raise RuntimeError(f"Konnte {url} nicht laden: {last_error}")
+                # Gedeckelt: Bei einer überlasteten Seite hilft Geduld, aber ein
+                # Lauf darf nicht minutenlang im Wartezustand hängen.
+                time.sleep(min(2**attempt * 2, 60))
+    raise ShopNichtErreichbar(f"Konnte {url} nicht laden: {last_error}")
 
 
 def decode_body(payload: bytes) -> str:
@@ -1060,6 +1076,22 @@ def reset_state(state: dict[str, Any]) -> None:
     state["products"] = {}
     state.pop("page_seen", None)
     state["initialized"] = False
+
+
+def sperre_vermerken(state: dict[str, Any]) -> int:
+    """Zählt die Läufe in Folge, in denen der Shop nicht erreichbar war."""
+    eintrag = state.get("shop_unreachable")
+    if not isinstance(eintrag, dict):
+        eintrag = {"count": 0, "since": timestamp()}
+    eintrag["count"] = int(eintrag.get("count", 0)) + 1
+    eintrag.setdefault("since", timestamp())
+    state["shop_unreachable"] = eintrag
+    return int(eintrag["count"])
+
+
+def sperre_aufheben(state: dict[str, Any]) -> bool:
+    """Räumt den Zähler weg, sobald der Shop wieder antwortet."""
+    return state.pop("shop_unreachable", None) is not None
 
 
 def save_state(path: Path, state: dict[str, Any], known: set[str]) -> None:
@@ -1963,9 +1995,34 @@ def main(argv: list[str] | None = None) -> int:
             posted, report = run_mirror(config, state, args)
         else:
             posted, report = run(config, state, args)
+    except ShopNichtErreichbar as error:
+        # Der Shop sperrt zeitweise Anfragen aus Rechenzentren aus; GitHub-Runner
+        # stehen in einem. Daran ist hier nichts zu reparieren, und ein roter Lauf
+        # je Stunde wäre nur Lärm. Deshalb erst nach mehreren Läufen in Folge
+        # Alarm schlagen — so bleibt die Mail ein Signal.
+        schwelle = max(1, int(config.get("request", {}).get("quiet_failures", 3)))
+        stand = sperre_vermerken(state)
+        if not args.dry_run:
+            save_state(args.state, state, set(state.get("known", [])))
+        LOG.warning("Shop nicht erreichbar (%s. Lauf in Folge): %s", stand, error)
+        LOG.warning("Es wurde nichts gepostet und nichts gelöscht.")
+        if stand < schwelle:
+            # Eigene Zeile ohne Log-Präfix, sonst erkennt GitHub die Anmerkung nicht.
+            print(
+                f"::warning::Shop nicht erreichbar ({stand}. Lauf in Folge) — "
+                f"nichts gepostet, nichts gelöscht. Alarm ab {schwelle} Läufen in Folge.",
+                flush=True,
+            )
+            return 0
+        LOG.error("Seit %s Läufen in Folge keine Antwort vom Shop — das ist keine Störung mehr.", stand)
+        return 1
     except Exception as error:
         LOG.exception("Lauf abgebrochen: %s", error)
         return 1
+
+    if sperre_aufheben(state) and not args.dry_run:
+        LOG.info("Shop wieder erreichbar — Sperrzähler zurückgesetzt")
+        save_state(args.state, state, set(state.get("known", [])))
 
     # Ein Diagnose-Log wird schnell mehrere hundert Zeilen lang — die Übersicht
     # gehört ans Ende, dort ist sie bequem lesbar.

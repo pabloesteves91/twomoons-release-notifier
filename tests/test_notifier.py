@@ -934,5 +934,109 @@ class AblaufTest(unittest.TestCase):
         self.assertNotIn(KATEGORIE, state["products"])
 
 
+class SperreTest(unittest.TestCase):
+    """Der Shop weist Anfragen aus Rechenzentren mit 403 ab.
+
+    Daran ist im Melder nichts zu reparieren. Statt bei jedem Lauf rot zu werden
+    (und eine Mail zu schicken), sitzt er die Sperre eine Weile aus und schlägt
+    erst nach mehreren Läufen in Folge Alarm.
+    """
+
+    LISTE = "https://www.twomoons.ch/neu-im-shop/"
+
+    def setUp(self):
+        self.tmp = Path(self.enterContext(tempfile.TemporaryDirectory()))
+        self.state_path = self.tmp / "state.json"
+        self.config_path = self.tmp / "config.json"
+        config = dict(
+            CONFIG,
+            channel={"mode": "mirror", "listing_url": self.LISTE, "heading": "", "keep": 3,
+                     "min_listing_items": 2},
+            request=dict(CONFIG["request"], retries=3, quiet_failures=3),
+        )
+        self.config_path.write_text(json.dumps(config), encoding="utf-8")
+
+    def antwort(self, status: int):
+        response = mock.Mock()
+        response.status_code = status
+        fehler = notifier.requests.HTTPError(f"{status} Client Error")
+        fehler.response = response
+        response.raise_for_status.side_effect = fehler
+        return response
+
+    def lauf(self, status: int = 403):
+        """Ein ganzer Durchlauf über main(), bei dem der Shop nur `status` liefert."""
+        with mock.patch.object(notifier.requests, "get", return_value=self.antwort(status)), \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.object(notifier, "post_embed") as post, \
+             mock.patch.object(notifier, "delete_message") as geloescht, \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            code = notifier.main(["--config", str(self.config_path), "--state", str(self.state_path)])
+        return code, post, geloescht
+
+    def gespeichert(self) -> dict:
+        return json.loads(self.state_path.read_text(encoding="utf-8"))
+
+    def test_403_wird_nicht_wiederholt(self):
+        """Gegen eine Sperre hilft Warten nicht — die weiteren Versuche kosten nur Zeit."""
+        antwort = self.antwort(403)
+        with mock.patch.object(notifier.requests, "get", return_value=antwort) as get, \
+             mock.patch.object(notifier.time, "sleep"):
+            with self.assertRaises(notifier.ShopNichtErreichbar):
+                notifier.fetch_bytes(self.LISTE, {"retries": 3})
+        self.assertEqual(get.call_count, 1)
+
+    def test_500_wird_wiederholt(self):
+        """Eine überlastete Seite kann sich erholen — hier lohnt Geduld."""
+        antwort = self.antwort(500)
+        with mock.patch.object(notifier.requests, "get", return_value=antwort) as get, \
+             mock.patch.object(notifier.time, "sleep"):
+            with self.assertRaises(notifier.ShopNichtErreichbar):
+                notifier.fetch_bytes(self.LISTE, {"retries": 3})
+        self.assertEqual(get.call_count, 3)
+
+    def test_erster_fehlschlag_bleibt_gruen(self):
+        code, post, geloescht = self.lauf()
+
+        self.assertEqual(code, 0)
+        post.assert_not_called()
+        geloescht.assert_not_called()
+        state = self.gespeichert()
+        self.assertEqual(state["shop_unreachable"]["count"], 1)
+        self.assertTrue(state["shop_unreachable"]["since"])
+        # Das Gedächtnis des Kanals bleibt unangetastet.
+        self.assertEqual(state["products"], {})
+        self.assertNotIn("page_seen", state)
+
+    def test_dritter_fehlschlag_wird_rot(self):
+        self.assertEqual(self.lauf()[0], 0)
+        self.assertEqual(self.lauf()[0], 0)
+        code, _, _ = self.lauf()
+
+        self.assertEqual(code, 1)
+        self.assertEqual(self.gespeichert()["shop_unreachable"]["count"], 3)
+
+    def test_erfolgreicher_lauf_setzt_den_zaehler_zurueck(self):
+        self.lauf()
+        self.assertEqual(self.gespeichert()["shop_unreachable"]["count"], 1)
+
+        seiten = {self.LISTE: fixture("neu_im_shop.html")}
+
+        def seite(url, config):
+            if "search" in url:
+                return fixture("suche.html")
+            return seiten.get(url, fixture("produkt_mit_badges.html"))
+
+        with mock.patch.object(notifier, "fetch_text", side_effect=seite), \
+             mock.patch.object(notifier, "post_embed", return_value="4711"), \
+             mock.patch.object(notifier, "delete_message", return_value=True), \
+             mock.patch.object(notifier.time, "sleep"), \
+             mock.patch.dict("os.environ", {"DISCORD_WEBHOOK_RELEASES": "https://discord.test/hook"}):
+            code = notifier.main(["--config", str(self.config_path), "--state", str(self.state_path)])
+
+        self.assertEqual(code, 0)
+        self.assertNotIn("shop_unreachable", self.gespeichert())
+
+
 if __name__ == "__main__":
     unittest.main()

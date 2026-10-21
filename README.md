@@ -205,6 +205,7 @@ die naheliegenden Kandidaten für `exclude_categories`.
 | `shop.listing_urls` | Ersatzquelle, falls die Sitemap ausfällt; wird Seite für Seite abgeklappert |
 | `shop.always_use_listings` | `true` nutzt beide Quellen gleichzeitig |
 | `request.*` | Zeitlimit, Wiederholungen, Pause zwischen Abrufen, User-Agent |
+| `request.quiet_failures` | So viele Läufe in Folge darf der Shop unerreichbar sein, bevor der Lauf rot wird |
 | `filters.*` | siehe oben |
 | `product.container_anchors` | Ankerpunkt, von dem aus der Produktbereich bestimmt wird |
 | `product.container_selectors` | Ersatz, falls der Anker fehlt |
@@ -452,6 +453,32 @@ welcher Selektor gegriffen hat. Was leer bleibt, wird in `config.json` unter
 **Nichts läuft mehr stündlich.** Prüfen, ob der Branch mit dem Workflow der
 Default-Branch ist (siehe oben). GitHub schaltet geplante Läufe ausserdem in
 Repos ohne Aktivität nach 60 Tagen ab.
+
+**Im Log steht „Shop nicht erreichbar" (403).** Der Shop weist Anfragen aus
+Rechenzentren ab — und GitHub-Runner stehen in einem. Erkennbar daran, dass
+selbst `robots.txt` mit `403 Forbidden` beantwortet wird, während der Shop im
+Browser normal lädt. Ein besserer User-Agent hilft dagegen nicht: Die Sperre
+greift auf Netzwerkebene, vor jeder Inhaltsprüfung.
+
+Der Melder sitzt das aus, statt jedes Mal rot zu werden:
+
+* Ein 403 wird nicht wiederholt — Warten macht eine Sperre nicht besser. Bei
+  Zeitüberschreitungen und 5xx wird dagegen geduldig wiederholt, mit Pausen bis
+  zu einer Minute.
+* Jeder erfolglose Lauf erhöht `shop_unreachable.count` in der `state.json` und
+  endet **grün mit einer Warnung** — keine Fehlermail. In `shop_unreachable.since`
+  steht, seit wann die Sperre besteht.
+* Erst ab `request.quiet_failures` Läufen in Folge (Vorgabe **3**, also sechs bis
+  neun Stunden) wird der Lauf rot und GitHub schickt eine Mail.
+* Der erste erfolgreiche Abruf räumt den Zähler wieder weg.
+
+Gepostet oder gelöscht wird dabei nie etwas — der Lauf scheitert, bevor er den
+Kanal anfasst. Hält die Sperre an, hilft nur ein anderer Standort (der Melder
+läuft per Cron auf einem Gerät mit normaler Internetleitung) oder eine
+Freischaltung durch den Shop. Ein Nachteil bleibt: Produkte, die während der
+Sperre erscheinen und bis zur Rückkehr aus den obersten 20 herausrutschen, gelten
+danach als „neu auf der Seite, aber ausserhalb der obersten 20" und werden nicht
+nachgemeldet.
 
 ## Was am echten Shop gemessen wurde
 

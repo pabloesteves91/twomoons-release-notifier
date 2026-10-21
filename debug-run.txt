@@ -22,11 +22,10 @@ und ändert state.json nicht. Diese optionalen Zeilen steuern, was geprüft wird
 
 Ohne modus-Zeile läuft ein normaler Dry-Run.
 
-modus: erstbefuellung
 
 
 # Zum Ausprobieren die beiden Zeilen ohne das Gatter davor stehen lassen:
 # quelle: https://www.twomoons.ch/
 # bereich: Neu im Shop
 
-Letzter Anstoss: 2026-10-06 — Vorschau der Erstbefüllung nach dem Reset.
+Letzter Anstoss: 2026-10-21 — Probe: Lauf bleibt grün, wenn der Shop mit 403 sperrt.
