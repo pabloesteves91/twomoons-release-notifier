@@ -4437,6 +4437,7 @@
     "https://www.twomoons.ch/qwirkle-deutsch",
     "https://www.twomoons.ch/race-for-the-galaxy-deutsch",
     "https://www.twomoons.ch/race-for-the-galaxy-englisch",
+    "https://www.twomoons.ch/radiance",
     "https://www.twomoons.ch/raichu-pluesch",
     "https://www.twomoons.ch/raichu-raichu",
     "https://www.twomoons.ch/raikou-raikou",
@@ -6681,7 +6682,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-23T10:07:05Z",
+  "last_run": "2026-10-23T15:07:13Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6843,6 +6844,7 @@
     "https://www.twomoons.ch/pyroar-pyroleo",
     "https://www.twomoons.ch/pyukumuku-gufa",
     "https://www.twomoons.ch/quaxly-kwaks",
+    "https://www.twomoons.ch/radiance",
     "https://www.twomoons.ch/rampardos-rameidon",
     "https://www.twomoons.ch/rayquaza",
     "https://www.twomoons.ch/reality-fracture-commander-multiverse-reforged-multiverse-reforged-deutsch",
@@ -7074,6 +7076,20 @@
       "name": "Mastery Pack: Assassin",
       "price": "CHF 59.90"
     },
+    "https://www.twomoons.ch/radiance": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "db7f8b5c8049aaf9",
+      "first_seen": "2026-10-23T15:07:11Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-10-23T15:07:11Z",
+      "message_id": "1563207155413418025",
+      "name": "Radiance Booster Display",
+      "price": "CHF 139.90"
+    },
     "https://www.twomoons.ch/smash-palace-chorus-of-steel-englisch": {
       "badges": [
         "Neu",
@@ -7160,18 +7176,6 @@
       "message_id": "1555207985427390485",
       "name": "Ultimate Guard RTE Boulder 100+ Magic: The Gathering \"Reality Fracture\" / Way of the Pyromancer / Way of the Cryomancer",
       "price": "CHF 14.90"
-    },
-    "https://www.twomoons.ch/ultimate-guard-zipfolio-360-xenoskin-magic-the-gathering-reality-fracture-jace-reality-sculptor-tam-the-possibility-jace-reality-sculptor-tam-the-possibility": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "6e349b40be781779",
-      "first_seen": "2026-10-01T13:21:09Z",
-      "languages": [],
-      "last_checked": "2026-10-01T13:21:09Z",
-      "message_id": "1555207939621654660",
-      "name": "Ultimate Guard Zipfolio 360 Xenoskin Magic: The Gathering \"Reality Fracture\" / Jace, Reality Sculptor / Tam, the Possibility",
-      "price": "CHF 39.90"
     },
     "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-deutsch": {
       "badges": [
