@@ -3225,6 +3225,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-booster-chinesisch",
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
     "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-4.-generation-premium-collection-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
@@ -6682,7 +6683,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-25T06:11:12Z",
+  "last_run": "2026-10-25T11:35:30Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6793,6 +6794,7 @@
     "https://www.twomoons.ch/m6-storm-emeralda-partner-set-chinesisch",
     "https://www.twomoons.ch/m6a-30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch",
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-4.-generation-premium-collection-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-booster-japanisch",
@@ -7003,6 +7005,20 @@
       "name": "M6a 30th Celebration First Partner Collection",
       "price": "CHF 34.90"
     },
+    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-4.-generation-premium-collection-japanisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "8422f588c6f3d01d",
+      "first_seen": "2026-10-25T11:35:28Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-10-25T11:35:28Z",
+      "message_id": "1563878615748321427",
+      "name": "M6a 30th Celebration First Partner Collection",
+      "price": "CHF 29.90"
+    },
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch": {
       "badges": [
         "Neu",
@@ -7152,18 +7168,6 @@
       "message_id": "1560417507213574175",
       "name": "Topps Chrome Formula One 2026",
       "price": "CHF 59.90"
-    },
-    "https://www.twomoons.ch/ultimate-guard-art-sleeves-magic-the-gathering-reality-fracture-vindictive-triumph-vindictive-triumph": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "efae276a626b4289",
-      "first_seen": "2026-10-01T13:21:15Z",
-      "languages": [],
-      "last_checked": "2026-10-01T13:21:15Z",
-      "message_id": "1555207961729572935",
-      "name": "Ultimate Guard Art Sleeves Magic: The Gathering \"Reality Fracture\" / Vindictive Triumph",
-      "price": "CHF 14.90"
     },
     "https://www.twomoons.ch/ultimate-guard-rte-boulder-100-magic-the-gathering-reality-fracture-way-of-the-pyromancer-way-of-the-cryomancer-way-of-the-pyromancer-way-of-the-cryomancer": {
       "badges": [
