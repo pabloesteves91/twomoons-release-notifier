@@ -32,6 +32,7 @@
     "https://www.twomoons.ch/3-x-4-regular-toploaders-card-sleeves-200",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
     "https://www.twomoons.ch/30th-celebration-2-pack-blister-2-pack-blister-franzoesisch",
+    "https://www.twomoons.ch/30th-celebration-battle-deck-espeon-ex-espeon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
@@ -6690,12 +6691,13 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-10-30T07:10:17Z",
+  "last_run": "2026-10-30T14:13:06Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-value-box",
     "https://www.twomoons.ch/30th-anniversary-deck-set-featuring-espeon-ex-umbreon-ex-deck-japanisch",
+    "https://www.twomoons.ch/30th-celebration-battle-deck-espeon-ex-espeon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
@@ -6940,6 +6942,20 @@
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
+    "https://www.twomoons.ch/30th-celebration-battle-deck-espeon-ex-espeon-battler-deck-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "e88c78de5a9238d3",
+      "first_seen": "2026-10-30T14:13:04Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-10-30T14:13:04Z",
+      "message_id": "1565730251546300507",
+      "name": "30th Celebration Battle Deck Espeon Ex",
+      "price": "CHF 24.90"
+    },
     "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch": {
       "badges": [
         "Neu",
@@ -7012,21 +7028,6 @@
       "message_id": "1565397306847527004",
       "name": "Enhanced 2-Pack Q4 2026",
       "price": "CHF 14.90"
-    },
-    "https://www.twomoons.ch/homeworlds-booster-display-booster-box-regular-deutsch": {
-      "badges": [
-        "Aldria Deal!",
-        "Neu"
-      ],
-      "digest": "4e4f699ec9edfe4b",
-      "first_seen": "2026-10-11T20:19:43Z",
-      "languages": [
-        "Deutsch"
-      ],
-      "last_checked": "2026-10-11T20:19:43Z",
-      "message_id": "1558937150576136286",
-      "name": "Homeworlds Booster Display",
-      "price": "CHF 99.90"
     },
     "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch": {
       "badges": [
