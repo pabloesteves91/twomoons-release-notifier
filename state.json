@@ -42,6 +42,7 @@
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch",
+    "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch",
     "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
     "https://www.twomoons.ch/3d-druck-filamente",
@@ -3293,6 +3294,7 @@
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-quandrix-unlimited-englisch-simic-green-blue",
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-silverquill-influence-deutsch-orzhov-black-white",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magic-the-gathering/booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/collector-booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/draft-booster",
@@ -6691,7 +6693,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-03T06:51:53Z",
+  "last_run": "2026-11-03T15:12:31Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6707,6 +6709,7 @@
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch",
+    "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch",
     "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
     "https://www.twomoons.ch/abra",
@@ -6815,6 +6818,7 @@
     "https://www.twomoons.ch/m6a-30th-celebration-japanese-futuristic-box-futuristic-box-japanisch",
     "https://www.twomoons.ch/magearna",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/mampfaxo-munchlax",
@@ -6974,6 +6978,18 @@
       "name": "30th Celebration Battle Deck Umbreon Ex",
       "price": "CHF 24.90"
     },
+    "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch": {
+      "badges": [],
+      "digest": "674cce6588f233c1",
+      "first_seen": "2026-11-03T15:12:21Z",
+      "languages": [
+        "Italienisch"
+      ],
+      "last_checked": "2026-11-03T15:12:21Z",
+      "message_id": "1567194705978982421",
+      "name": "30th Celebration Mini Tin",
+      "price": "CHF 19.90"
+    },
     "https://www.twomoons.ch/disney-lorcana-hyperia-city-gift-box-deutsch": {
       "badges": [
         "Neu"
@@ -7002,21 +7018,6 @@
       "message_id": "1565397391392252087",
       "name": "Dragon Ball Super Card Game Fusion World - 2nd Anniversary Set",
       "price": "CHF 399.90"
-    },
-    "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-fb-11-display-booster-box-englisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "c064ebb6fef04af6",
-      "first_seen": "2026-10-14T17:14:16Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-10-14T17:14:16Z",
-      "message_id": "1559977638976815255",
-      "name": "Dragon Ball Super Card Game - Fusion World FB-11 Display",
-      "price": "CHF 199.90"
     },
     "https://www.twomoons.ch/enhanced-2-pack-q4-2026-deutsch": {
       "badges": [
@@ -7105,6 +7106,21 @@
       "name": "Magic: The Gathering Star Trek",
       "price": "CHF 69.90"
     },
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "ac2b10848ce40384",
+      "first_seen": "2026-11-03T15:12:25Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-11-03T15:12:25Z",
+      "message_id": "1567194741861261323",
+      "name": "Magic: The Gathering Star Trek Commander",
+      "price": "CHF 69.90"
+    },
     "https://www.twomoons.ch/mastery-pack-assassin": {
       "badges": [
         "Neu",
@@ -7171,18 +7187,6 @@
       "message_id": "1560030603229921303",
       "name": "Topps 2026 Marvel Neon",
       "price": "CHF 79.90"
-    },
-    "https://www.twomoons.ch/topps-2026-marvel-neon-value-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "a25a883f515f4ee9",
-      "first_seen": "2026-10-14T20:44:37Z",
-      "languages": [],
-      "last_checked": "2026-10-14T20:44:37Z",
-      "message_id": "1560030575966822451",
-      "name": "Topps 2026 Marvel Neon",
-      "price": "CHF 39.90"
     },
     "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box": {
       "badges": [
