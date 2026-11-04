@@ -3452,6 +3452,7 @@
     "https://www.twomoons.ch/maze-of-the-master-booster-box-englisch",
     "https://www.twomoons.ch/maze-of-the-master-booster-deutsch",
     "https://www.twomoons.ch/maze-of-the-master-booster-englisch",
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
     "https://www.twomoons.ch/mechanicus-standard-grey-12ml-mechanicus-standard-grey",
     "https://www.twomoons.ch/medicham-meditalis",
     "https://www.twomoons.ch/mega-amphinobi-ex-premium-collection-franzoesisch",
@@ -5716,6 +5717,7 @@
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box",
     "https://www.twomoons.ch/topps-disney-chrome-2026-value-box",
+    "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
     "https://www.twomoons.ch/topps-finest-fantastic-four-2026-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-forever-fc-barcelona-2025-26-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-liverpool-fokus-2025-2026-deck-box",
@@ -5728,6 +5730,7 @@
     "https://www.twomoons.ch/topps-premier-league-merlin-2026-hobby-box",
     "https://www.twomoons.ch/topps-real-madrid-los-blancos-2025-2026-hobby-box",
     "https://www.twomoons.ch/topps-real-madrid-team-set-25-26-deck-box",
+    "https://www.twomoons.ch/topps-stadium-club-chrome-ucl-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-galaxy-2026-hobby-box",
@@ -6693,7 +6696,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-04T09:18:31Z",
+  "last_run": "2026-11-04T18:00:02Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6825,6 +6828,7 @@
     "https://www.twomoons.ch/marill",
     "https://www.twomoons.ch/marshtomp-moorabbel",
     "https://www.twomoons.ch/mastery-pack-assassin",
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-zeraora-mega-zeraora-deutsch",
     "https://www.twomoons.ch/mega-tyranitar-mega-despotar",
     "https://www.twomoons.ch/meloetta",
@@ -6914,12 +6918,14 @@
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-city",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-united",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-psg",
+    "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-mega-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-value-box",
     "https://www.twomoons.ch/topps-holiday-football-2026-mega-box",
     "https://www.twomoons.ch/topps-museum-uefa-club-competitions-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-nfl-flagship-football-2026-hobby-box",
     "https://www.twomoons.ch/topps-premier-league-flagship-2026-2027-value-box",
+    "https://www.twomoons.ch/topps-stadium-club-chrome-ucl-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-hobby-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-star-wars-chrome-galaxy-2026-hobby-box",
@@ -7136,6 +7142,21 @@
       "name": "Mastery Pack: Assassin",
       "price": "CHF 59.90"
     },
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch": {
+      "badges": [
+        "Neu",
+        "Vorbestellung"
+      ],
+      "digest": "c7f06edee6d4ad89",
+      "first_seen": "2026-11-04T17:59:57Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-11-04T17:59:57Z",
+      "message_id": "1567599287095918632",
+      "name": "ME06 Delta Reign",
+      "price": "CHF 219.90"
+    },
     "https://www.twomoons.ch/pokemon-deck-crafter-s-collection-2026-deutsch": {
       "badges": [
         "Neu"
@@ -7164,41 +7185,29 @@
       "name": "Radiance Booster Display",
       "price": "CHF 139.90"
     },
-    "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box": {
+    "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box": {
       "badges": [
         "Neu"
       ],
-      "digest": "744c0125d3ca77ad",
-      "first_seen": "2026-10-14T20:44:49Z",
+      "digest": "73f95547404f7cb5",
+      "first_seen": "2026-11-04T17:59:51Z",
       "languages": [],
-      "last_checked": "2026-10-14T20:44:49Z",
-      "message_id": "1560030632166297641",
-      "name": "Topps 2026 Marvel Neon",
-      "price": "CHF 199.90"
+      "last_checked": "2026-11-04T17:59:51Z",
+      "message_id": "1567599264903864354",
+      "name": "Topps Disney Mint 2026",
+      "price": "CHF 549.90"
     },
-    "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box": {
+    "https://www.twomoons.ch/topps-stadium-club-chrome-ucl-2025-26-hobby-box": {
       "badges": [
         "Neu"
       ],
-      "digest": "b0d0ff7e2e2d807b",
-      "first_seen": "2026-10-14T20:44:42Z",
+      "digest": "2d9ea98d27d9e9a1",
+      "first_seen": "2026-11-04T17:59:46Z",
       "languages": [],
-      "last_checked": "2026-10-14T20:44:42Z",
-      "message_id": "1560030603229921303",
-      "name": "Topps 2026 Marvel Neon",
-      "price": "CHF 79.90"
-    },
-    "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "1806fcec8e1b2344",
-      "first_seen": "2026-10-15T22:22:08Z",
-      "languages": [],
-      "last_checked": "2026-10-15T22:22:08Z",
-      "message_id": "1560417507213574175",
-      "name": "Topps Chrome Formula One 2026",
-      "price": "CHF 59.90"
+      "last_checked": "2026-11-04T17:59:46Z",
+      "message_id": "1567599235614904527",
+      "name": "Topps Stadium Club Chrome UCL 2025-26",
+      "price": "CHF 379.90"
     },
     "https://www.twomoons.ch/ultimate-guard-sidewinder-80-magic-the-gathering-mox-pearl-mox-pearl": {
       "badges": [
