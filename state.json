@@ -3295,6 +3295,7 @@
     "https://www.twomoons.ch/magic-the-gathering-secrets-of-strixhaven-commander-deck-silverquill-influence-deutsch-orzhov-black-white",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magic-the-gathering/booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/collector-booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/draft-booster",
@@ -5719,6 +5720,7 @@
     "https://www.twomoons.ch/topps-disney-chrome-2026-value-box",
     "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
     "https://www.twomoons.ch/topps-finest-fantastic-four-2026-hobby-box-hobby-box",
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box",
     "https://www.twomoons.ch/topps-forever-fc-barcelona-2025-26-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-liverpool-fokus-2025-2026-deck-box",
     "https://www.twomoons.ch/topps-marvel-cinema-chrome-2025-hobby-box-hobby-box",
@@ -6696,7 +6698,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-06T10:57:01Z",
+  "last_run": "2026-11-06T17:59:53Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6823,6 +6825,7 @@
     "https://www.twomoons.ch/magearna",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/mampfaxo-munchlax",
@@ -6920,6 +6923,7 @@
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-manchester-united",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-psg",
     "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-mega-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-value-box",
     "https://www.twomoons.ch/topps-holiday-football-2026-mega-box",
@@ -6996,20 +7000,6 @@
       "message_id": "1567194705978982421",
       "name": "30th Celebration Mini Tin",
       "price": "CHF 19.90"
-    },
-    "https://www.twomoons.ch/disney-lorcana-hyperia-city-gift-box-deutsch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "7183bd73a03157ac",
-      "first_seen": "2026-10-16T17:27:03Z",
-      "languages": [
-        "Deutsch"
-      ],
-      "last_checked": "2026-10-16T17:27:03Z",
-      "message_id": "1560705608708128976",
-      "name": "Disney Lorcana Hyperia City",
-      "price": "CHF 29.90"
     },
     "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-2nd-anniversary-set-englisch": {
       "badges": [
@@ -7128,20 +7118,19 @@
       "name": "Magic: The Gathering Star Trek Commander",
       "price": "CHF 69.90"
     },
-    "https://www.twomoons.ch/mastery-pack-assassin": {
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white": {
       "badges": [
-        "Neu",
-        "Vorbestellung"
+        "Neu"
       ],
-      "digest": "a06ba1c191c7e83e",
-      "first_seen": "2026-10-16T21:13:04Z",
+      "digest": "b0a6d2f75ea621cc",
+      "first_seen": "2026-11-06T17:59:50Z",
       "languages": [
         "Englisch"
       ],
-      "last_checked": "2026-10-16T21:13:04Z",
-      "message_id": "1560762505146408991",
-      "name": "Mastery Pack: Assassin",
-      "price": "CHF 59.90"
+      "last_checked": "2026-11-06T17:59:50Z",
+      "message_id": "1568324024742838363",
+      "name": "Magic: The Gathering Star Trek Commander",
+      "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch": {
       "badges": [
@@ -7197,6 +7186,18 @@
       "message_id": "1567599264903864354",
       "name": "Topps Disney Mint 2026",
       "price": "CHF 549.90"
+    },
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "0e86df1e83d63f7e",
+      "first_seen": "2026-11-06T17:59:42Z",
+      "languages": [],
+      "last_checked": "2026-11-06T17:59:42Z",
+      "message_id": "1568323987216269413",
+      "name": "Topps Flagship Basketball 2026/2027",
+      "price": "CHF 26.90"
     },
     "https://www.twomoons.ch/topps-stadium-club-chrome-ucl-2025-26-hobby-box": {
       "badges": [
