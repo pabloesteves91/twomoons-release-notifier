@@ -3453,6 +3453,7 @@
     "https://www.twomoons.ch/maze-of-the-master-booster-box-englisch",
     "https://www.twomoons.ch/maze-of-the-master-booster-deutsch",
     "https://www.twomoons.ch/maze-of-the-master-booster-englisch",
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
     "https://www.twomoons.ch/mechanicus-standard-grey-12ml-mechanicus-standard-grey",
     "https://www.twomoons.ch/medicham-meditalis",
@@ -6698,7 +6699,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-09T06:37:53Z",
+  "last_run": "2026-11-09T17:33:24Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6832,6 +6833,7 @@
     "https://www.twomoons.ch/marill",
     "https://www.twomoons.ch/marshtomp-moorabbel",
     "https://www.twomoons.ch/mastery-pack-assassin",
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-zeraora-mega-zeraora-deutsch",
     "https://www.twomoons.ch/mega-tyranitar-mega-despotar",
@@ -7074,21 +7076,6 @@
       "name": "M6a 30th Celebration First Partner Collection",
       "price": "CHF 29.90"
     },
-    "https://www.twomoons.ch/m6a-30th-celebration-japanese-1.-generation-japanisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "2d47afa224c91fc3",
-      "first_seen": "2026-10-19T07:50:23Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-10-19T07:50:23Z",
-      "message_id": "1561647628674932808",
-      "name": "M6a 30th Celebration Japanese",
-      "price": "CHF 39.90"
-    },
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch": {
       "badges": [
         "Neu",
@@ -7132,6 +7119,20 @@
       "message_id": "1568324024742838363",
       "name": "Magic: The Gathering Star Trek Commander",
       "price": "CHF 69.90"
+    },
+    "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "f423db10ac569c59",
+      "first_seen": "2026-11-09T17:33:22Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-11-09T17:33:22Z",
+      "message_id": "1569404523968073773",
+      "name": "ME06 Delta Reign",
+      "price": "CHF 179.90"
     },
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch": {
       "badges": [
