@@ -36,6 +36,7 @@
     "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
+    "https://www.twomoons.ch/30th-celebration-booster-deutsch-30-jahre-booster-deutsch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
@@ -6699,7 +6700,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-10T23:25:22Z",
+  "last_run": "2026-11-11T06:29:10Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6709,6 +6710,7 @@
     "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-booster-bundle-booster-bundle-italienisch",
+    "https://www.twomoons.ch/30th-celebration-booster-deutsch-30-jahre-booster-deutsch",
     "https://www.twomoons.ch/30th-celebration-coin-set-coin-set-chinesisch",
     "https://www.twomoons.ch/30th-celebration-display-booster-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-espeon-deluxe-card-set-espeon-deluxe-card-set-chinesisch",
@@ -6992,6 +6994,18 @@
       "name": "30th Celebration Battle Deck Umbreon Ex",
       "price": "CHF 24.90"
     },
+    "https://www.twomoons.ch/30th-celebration-booster-deutsch-30-jahre-booster-deutsch": {
+      "badges": [],
+      "digest": "1afe21427c5cd080",
+      "first_seen": "2026-11-11T06:29:08Z",
+      "languages": [
+        "Deutsch"
+      ],
+      "last_checked": "2026-11-11T06:29:08Z",
+      "message_id": "1569962100502171659",
+      "name": "30th Celebration Booster Deutsch 30 Jahre",
+      "price": "CHF 14.90"
+    },
     "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch": {
       "badges": [],
       "digest": "674cce6588f233c1",
@@ -7032,21 +7046,6 @@
       "message_id": "1565397306847527004",
       "name": "Enhanced 2-Pack Q4 2026",
       "price": "CHF 14.90"
-    },
-    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-2.-generation-premium-collection-japanisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "c7f8360da3ad3af7",
-      "first_seen": "2026-10-19T15:39:12Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-10-19T15:39:12Z",
-      "message_id": "1561765657039872044",
-      "name": "M6a 30th Celebration First Partner Collection",
-      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-4.-generation-premium-collection-japanisch": {
       "badges": [
