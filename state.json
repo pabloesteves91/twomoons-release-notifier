@@ -372,6 +372,7 @@
     "https://www.twomoons.ch/armory-deck-ira-englisch",
     "https://www.twomoons.ch/armory-deck-malice-englisch",
     "https://www.twomoons.ch/armory-deck-maxx-nitro-englisch",
+    "https://www.twomoons.ch/armory-deck-min-englisch",
     "https://www.twomoons.ch/armory-deck-origins-hala-englisch",
     "https://www.twomoons.ch/armory-deck-origins-olympia-englisch",
     "https://www.twomoons.ch/armory-deck-origins-zyggy-englisch",
@@ -1987,6 +1988,7 @@
     "https://www.twomoons.ch/earth-gambit-light-deutsch",
     "https://www.twomoons.ch/earth-gambit-light-englisch",
     "https://www.twomoons.ch/eb05-booster-display-booster-box-englisch",
+    "https://www.twomoons.ch/eb05-booster-display-booster-box-japanisch",
     "https://www.twomoons.ch/eclipse-das-zweite-galaktische-zeitalter-deutsch",
     "https://www.twomoons.ch/eco-bag-jiji-silhouette-40x20-cm-kiki-s-delivery-service",
     "https://www.twomoons.ch/edge-of-eternities-booster-box-play-deutsch",
@@ -5726,6 +5728,7 @@
     "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
     "https://www.twomoons.ch/topps-finest-fantastic-four-2026-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box",
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hobby-box",
     "https://www.twomoons.ch/topps-forever-fc-barcelona-2025-26-hobby-box-hobby-box",
     "https://www.twomoons.ch/topps-liverpool-fokus-2025-2026-deck-box",
     "https://www.twomoons.ch/topps-marvel-cinema-chrome-2025-hobby-box-hobby-box",
@@ -6703,7 +6706,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-11T15:16:25Z",
+  "last_run": "2026-11-11T22:02:12Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6730,6 +6733,7 @@
     "https://www.twomoons.ch/anego",
     "https://www.twomoons.ch/anorith",
     "https://www.twomoons.ch/armory-deck-malice-englisch",
+    "https://www.twomoons.ch/armory-deck-min-englisch",
     "https://www.twomoons.ch/banette",
     "https://www.twomoons.ch/bauz",
     "https://www.twomoons.ch/beedrill-bibor",
@@ -6779,6 +6783,7 @@
     "https://www.twomoons.ch/dragon-shield-fortress-card-drawers-vertical-3-schwarz",
     "https://www.twomoons.ch/drifzepeli",
     "https://www.twomoons.ch/eb05-booster-display-booster-box-englisch",
+    "https://www.twomoons.ch/eb05-booster-display-booster-box-japanisch",
     "https://www.twomoons.ch/eneco",
     "https://www.twomoons.ch/enhanced-2-pack-q4-2026-deutsch",
     "https://www.twomoons.ch/entei",
@@ -6935,6 +6940,7 @@
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-psg",
     "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box",
     "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box",
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hobby-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-mega-box",
     "https://www.twomoons.ch/topps-heritage-football-2026-value-box",
     "https://www.twomoons.ch/topps-holiday-football-2026-mega-box",
@@ -7024,6 +7030,20 @@
       "name": "30th Celebration Mini Tin",
       "price": "CHF 19.90"
     },
+    "https://www.twomoons.ch/armory-deck-min-englisch": {
+      "badges": [
+        "Vorbestellung"
+      ],
+      "digest": "dc0e92a90c8919c1",
+      "first_seen": "2026-11-11T22:02:06Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-11T22:02:06Z",
+      "message_id": "1570196942267359474",
+      "name": "Armory Deck Min",
+      "price": "CHF 34.90"
+    },
     "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-2nd-anniversary-set-englisch": {
       "badges": [
         "Neu",
@@ -7053,6 +7073,20 @@
       "name": "EB05 Booster Display",
       "price": "CHF 199.90"
     },
+    "https://www.twomoons.ch/eb05-booster-display-booster-box-japanisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "1b1dadcb8b2e0e02",
+      "first_seen": "2026-11-11T22:02:01Z",
+      "languages": [
+        "Japanisch"
+      ],
+      "last_checked": "2026-11-11T22:02:01Z",
+      "message_id": "1570196920520024116",
+      "name": "EB05 Booster Display",
+      "price": "CHF 109.90"
+    },
     "https://www.twomoons.ch/enhanced-2-pack-q4-2026-deutsch": {
       "badges": [
         "Neu"
@@ -7080,20 +7114,6 @@
       "message_id": "1570094826966483015",
       "name": "Flesh and Blood Outbreak",
       "price": "CHF 94.90"
-    },
-    "https://www.twomoons.ch/m6a-30th-celebration-first-partner-collection-5.-generation-premium-collection-japanisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "dce6965e7b76c98b",
-      "first_seen": "2026-10-29T01:49:51Z",
-      "languages": [
-        "Japanisch"
-      ],
-      "last_checked": "2026-10-29T01:49:51Z",
-      "message_id": "1565180823035052093",
-      "name": "M6a 30th Celebration First Partner Collection",
-      "price": "CHF 29.90"
     },
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white": {
       "badges": [
@@ -7207,6 +7227,18 @@
       "name": "Topps Flagship Basketball 2026/2027",
       "price": "CHF 26.90"
     },
+    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hobby-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "371e8a2e0e500046",
+      "first_seen": "2026-11-11T22:01:56Z",
+      "languages": [],
+      "last_checked": "2026-11-11T22:01:56Z",
+      "message_id": "1570196897035984999",
+      "name": "Topps Flagship Basketball 2026/2027",
+      "price": "CHF 249.90"
+    },
     "https://www.twomoons.ch/topps-stadium-club-chrome-ucl-2025-26-hobby-box": {
       "badges": [
         "Neu"
@@ -7218,32 +7250,6 @@
       "message_id": "1567599235614904527",
       "name": "Topps Stadium Club Chrome UCL 2025-26",
       "price": "CHF 379.90"
-    },
-    "https://www.twomoons.ch/ultimate-guard-sidewinder-80-magic-the-gathering-mox-pearl-mox-pearl": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "6a321a27e2b405ed",
-      "first_seen": "2026-10-28T16:39:51Z",
-      "languages": [],
-      "last_checked": "2026-10-28T16:39:51Z",
-      "message_id": "1565042415742754817",
-      "name": "Ultimate Guard Sidewinder 80+ Magic: The Gathering - Mox Pearl",
-      "price": "CHF 19.90"
-    },
-    "https://www.twomoons.ch/yu-gi-oh-beyond-the-brave-display-booster-box-englisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "f50401f409180b2b",
-      "first_seen": "2026-10-28T21:40:29Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-10-28T21:40:29Z",
-      "message_id": "1565118063773360132",
-      "name": "Yu-Gi-Oh Beyond the Brave Display",
-      "price": "CHF 69.90"
     }
   },
   "version": 1
