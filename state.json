@@ -3301,6 +3301,7 @@
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering/booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/collector-booster",
     "https://www.twomoons.ch/magic-the-gathering/booster/draft-booster",
@@ -4984,6 +4985,9 @@
     "https://www.twomoons.ch/sportzoo-fia-wrc-2026-collection-blaster-box",
     "https://www.twomoons.ch/sportzoo-fia-wrc-2026-collection-retail-box",
     "https://www.twomoons.ch/sportzoo-fia-wrc-2026-collection-starterpack",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-booster-box",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-retail-box",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-starterpack",
     "https://www.twomoons.ch/sprigatito-felori",
     "https://www.twomoons.ch/spritzee-parfi",
     "https://www.twomoons.ch/squaroe-teenage-mutant-ninja-turtles-action-mode-donatello",
@@ -5718,6 +5722,7 @@
     "https://www.twomoons.ch/topps-2026-marvel-neon-value-box",
     "https://www.twomoons.ch/topps-2026-ufc-chrome-value-box-value-box",
     "https://www.twomoons.ch/topps-arsenal-team-set-25-26-deck-box",
+    "https://www.twomoons.ch/topps-bundesliga-2026-27-flagship-value-box",
     "https://www.twomoons.ch/topps-bundesliga-gold-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-bundesliga-match-attax-trading-cards-2025-26-sonder-tin-sonder-tin",
     "https://www.twomoons.ch/topps-chrome-2026-wwe-value-box-value-box",
@@ -6706,7 +6711,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-12T11:18:09Z",
+  "last_run": "2026-11-12T19:57:47Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6839,6 +6844,7 @@
     "https://www.twomoons.ch/magic-the-gathering-star-trek-bundle-play-englisch",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-deutsch-jeskai-blue-red-white",
     "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white",
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch",
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-deutsch",
     "https://www.twomoons.ch/magnificent-monsters",
     "https://www.twomoons.ch/mampfaxo-munchlax",
@@ -6914,6 +6920,9 @@
     "https://www.twomoons.ch/sonny-angel-vegetable-series",
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-booster-box",
     "https://www.twomoons.ch/sportzoo-brack-super-league-2026-27-duel-retail-box",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-booster-box",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-retail-box",
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-starterpack",
     "https://www.twomoons.ch/sprigatito-felori",
     "https://www.twomoons.ch/squaroes-squaroe-dungeons-dragons-dnd001-beholder-beholder",
     "https://www.twomoons.ch/stakataka-muramura",
@@ -6931,6 +6940,7 @@
     "https://www.twomoons.ch/topps-2026-marvel-neon-hobby-box",
     "https://www.twomoons.ch/topps-2026-marvel-neon-mega-box",
     "https://www.twomoons.ch/topps-2026-marvel-neon-value-box",
+    "https://www.twomoons.ch/topps-bundesliga-2026-27-flagship-value-box",
     "https://www.twomoons.ch/topps-chrome-black-basketball-2025-26-hobby-box",
     "https://www.twomoons.ch/topps-chrome-formula-one-2026-value-box",
     "https://www.twomoons.ch/topps-collector-tin-2026-2027-arsenal",
@@ -6977,35 +6987,6 @@
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
-    "https://www.twomoons.ch/30th-celebration-battle-deck-espeon-ex-espeon-battler-deck-englisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "e88c78de5a9238d3",
-      "first_seen": "2026-10-30T14:13:04Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-10-30T14:13:04Z",
-      "message_id": "1565730251546300507",
-      "name": "30th Celebration Battle Deck Espeon Ex",
-      "price": "CHF 24.90"
-    },
-    "https://www.twomoons.ch/30th-celebration-battle-deck-umbreon-ex-umbreon-battler-deck-englisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "740a649463071cc1",
-      "first_seen": "2026-10-29T16:10:31Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-10-29T16:10:31Z",
-      "message_id": "1565397417853984908",
-      "name": "30th Celebration Battle Deck Umbreon Ex",
-      "price": "CHF 24.90"
-    },
     "https://www.twomoons.ch/30th-celebration-booster-deutsch-30-jahre-booster-deutsch": {
       "badges": [],
       "digest": "1afe21427c5cd080",
@@ -7044,21 +7025,6 @@
       "name": "Armory Deck Min",
       "price": "CHF 34.90"
     },
-    "https://www.twomoons.ch/dragon-ball-super-card-game-fusion-world-2nd-anniversary-set-englisch": {
-      "badges": [
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "f8e6857c85c65ce8",
-      "first_seen": "2026-10-29T16:10:24Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-10-29T16:10:24Z",
-      "message_id": "1565397391392252087",
-      "name": "Dragon Ball Super Card Game Fusion World - 2nd Anniversary Set",
-      "price": "CHF 399.90"
-    },
     "https://www.twomoons.ch/eb05-booster-display-booster-box-englisch": {
       "badges": [
         "Neu"
@@ -7086,20 +7052,6 @@
       "message_id": "1570196920520024116",
       "name": "EB05 Booster Display",
       "price": "CHF 109.90"
-    },
-    "https://www.twomoons.ch/enhanced-2-pack-q4-2026-deutsch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "7720cb39fe429dbc",
-      "first_seen": "2026-10-29T16:10:13Z",
-      "languages": [
-        "Deutsch"
-      ],
-      "last_checked": "2026-10-29T16:10:13Z",
-      "message_id": "1565397306847527004",
-      "name": "Enhanced 2-Pack Q4 2026",
-      "price": "CHF 14.90"
     },
     "https://www.twomoons.ch/flesh-and-blood-outbreak-booster-box-englisch": {
       "badges": [
@@ -7144,6 +7096,20 @@
       "name": "Magic: The Gathering Star Trek Commander",
       "price": "CHF 69.90"
     },
+    "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "f9c7486c5a3ea900",
+      "first_seen": "2026-11-12T19:57:33Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-12T19:57:33Z",
+      "message_id": "1570527986367733832",
+      "name": "Magic: The Gathering Star Trek",
+      "price": "CHF 39.90"
+    },
     "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch": {
       "badges": [
         "Neu"
@@ -7173,19 +7139,41 @@
       "name": "ME06 Delta Reign",
       "price": "CHF 219.90"
     },
-    "https://www.twomoons.ch/pokemon-deck-crafter-s-collection-2026-deutsch": {
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-booster-box": {
       "badges": [
         "Neu"
       ],
-      "digest": "d2d30cec4ae2738c",
-      "first_seen": "2026-10-29T16:10:18Z",
-      "languages": [
-        "Deutsch"
+      "digest": "97b2055372ea5d3c",
+      "first_seen": "2026-11-12T19:57:17Z",
+      "languages": [],
+      "last_checked": "2026-11-12T19:57:17Z",
+      "message_id": "1570527898853703763",
+      "name": "SportZoo National League 2026/27 Duel",
+      "price": "CHF 24.90"
+    },
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-retail-box": {
+      "badges": [
+        "Neu"
       ],
-      "last_checked": "2026-10-29T16:10:18Z",
-      "message_id": "1565397367685914811",
-      "name": "Pokémon Deck Crafter's Collection 2026",
-      "price": "CHF 14.90"
+      "digest": "ca325cb4263c6108",
+      "first_seen": "2026-11-12T19:57:28Z",
+      "languages": [],
+      "last_checked": "2026-11-12T19:57:28Z",
+      "message_id": "1570527963798175768",
+      "name": "SportZoo National League 2026/27 Duel",
+      "price": "CHF 69.90"
+    },
+    "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-starterpack": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "758cd2acb3f956ab",
+      "first_seen": "2026-11-12T19:57:22Z",
+      "languages": [],
+      "last_checked": "2026-11-12T19:57:22Z",
+      "message_id": "1570527940758741014",
+      "name": "SportZoo National League 2026/27 Duel",
+      "price": "CHF 24.90"
     },
     "https://www.twomoons.ch/star-wars-unlimited-icons-2027-booster-box-englisch": {
       "badges": [
@@ -7202,6 +7190,18 @@
       "message_id": "1570094805986451699",
       "name": "Star Wars: Unlimited - Icons 2027",
       "price": "CHF 84.90"
+    },
+    "https://www.twomoons.ch/topps-bundesliga-2026-27-flagship-value-box": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "54327b2878870f35",
+      "first_seen": "2026-11-12T19:57:38Z",
+      "languages": [],
+      "last_checked": "2026-11-12T19:57:38Z",
+      "message_id": "1570528007913873421",
+      "name": "Topps Bundesliga 2026-27 Flagship",
+      "price": "CHF 39.90"
     },
     "https://www.twomoons.ch/topps-disney-mint-2026-hobby-box": {
       "badges": [
