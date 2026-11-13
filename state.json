@@ -368,6 +368,7 @@
     "https://www.twomoons.ch/arler-erde-deutsch",
     "https://www.twomoons.ch/armageddon-dust-24ml-armageddon-dust",
     "https://www.twomoons.ch/armory-deck-arakni-englisch",
+    "https://www.twomoons.ch/armory-deck-dr.-mortimer-englisch",
     "https://www.twomoons.ch/armory-deck-gravy-bones-englisch",
     "https://www.twomoons.ch/armory-deck-ira-englisch",
     "https://www.twomoons.ch/armory-deck-malice-englisch",
@@ -6711,7 +6712,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-13T16:28:05Z",
+  "last_run": "2026-11-13T22:40:19Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6737,6 +6738,7 @@
     "https://www.twomoons.ch/ambipom-ambidiffel",
     "https://www.twomoons.ch/anego",
     "https://www.twomoons.ch/anorith",
+    "https://www.twomoons.ch/armory-deck-dr.-mortimer-englisch",
     "https://www.twomoons.ch/armory-deck-malice-englisch",
     "https://www.twomoons.ch/armory-deck-min-englisch",
     "https://www.twomoons.ch/banette",
@@ -6999,17 +7001,19 @@
       "name": "30th Celebration Booster Deutsch 30 Jahre",
       "price": "CHF 14.90"
     },
-    "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch": {
-      "badges": [],
-      "digest": "674cce6588f233c1",
-      "first_seen": "2026-11-03T15:12:21Z",
-      "languages": [
-        "Italienisch"
+    "https://www.twomoons.ch/armory-deck-dr.-mortimer-englisch": {
+      "badges": [
+        "Neu"
       ],
-      "last_checked": "2026-11-03T15:12:21Z",
-      "message_id": "1567194705978982421",
-      "name": "30th Celebration Mini Tin",
-      "price": "CHF 19.90"
+      "digest": "b8aa9a698f685a7b",
+      "first_seen": "2026-11-13T22:40:17Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-13T22:40:17Z",
+      "message_id": "1570931312477343898",
+      "name": "Armory Deck Dr. Mortimer",
+      "price": "CHF 34.90"
     },
     "https://www.twomoons.ch/armory-deck-min-englisch": {
       "badges": [
