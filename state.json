@@ -6018,8 +6018,10 @@
     "https://www.twomoons.ch/ultimate-guard-omnihive-1000-xenoskin-petrolblau",
     "https://www.twomoons.ch/ultimate-guard-omnihive-1000-xenoskin-rot",
     "https://www.twomoons.ch/ultimate-guard-omnihive-1000-xenoskin-schwarz",
+    "https://www.twomoons.ch/ultimate-guard-omnihive-500-xenoskin-magic-the-gathering-star-trek-enterprise-magelan-enterprise-magelan",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-dandan-secret-lair",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-edge-of-eternities-godless-shrine",
+    "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-locutus-of-borg-locutus-of-borg",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-u.s.s.-enterprise-free-spirit-u.s.s.-enterprise-free-spirit",
     "https://www.twomoons.ch/ultimate-guard-playmat-60-monochrome-61x61cm-schwarz",
     "https://www.twomoons.ch/ultimate-guard-playmat-artist-edition-artist-edition-dominik-mayer-3",
@@ -6716,7 +6718,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-18T14:04:03Z",
+  "last_run": "2026-11-18T21:59:15Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6975,8 +6977,10 @@
     "https://www.twomoons.ch/ultimate-guard-boulder-100-magic-the-gathering-star-trek-we-are-the-borg-we-are-the-borg",
     "https://www.twomoons.ch/ultimate-guard-flip-n-tray-133-xenoskin-magic-the-gathering-reality-fracture-way-of-the-mind-sculptor-way-of-the-paradox-way-of-the-mind-sculptor-way-of-the-paradox",
     "https://www.twomoons.ch/ultimate-guard-omnihive-1000-xenoskin-magic-the-gathering",
+    "https://www.twomoons.ch/ultimate-guard-omnihive-500-xenoskin-magic-the-gathering-star-trek-enterprise-magelan-enterprise-magelan",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-aetherdrift-hazoret-godseeker-aetherdrift-hazoret-godseeker",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-aetherdrift-ketramose-the-new-dawn-ketramose-the-new-dawn",
+    "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-locutus-of-borg-locutus-of-borg",
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-u.s.s.-enterprise-free-spirit-u.s.s.-enterprise-free-spirit",
     "https://www.twomoons.ch/ultimate-guard-rte-boulder-100-magic-the-gathering-reality-fracture-way-of-the-pyromancer-way-of-the-cryomancer-way-of-the-pyromancer-way-of-the-cryomancer",
     "https://www.twomoons.ch/ultimate-guard-rte-boulder-100-magic-the-gathering-secrets-of-strixhaven-lorehold-lorehold",
@@ -6987,6 +6991,7 @@
     "https://www.twomoons.ch/ultimate-guard-sidewinder-80-magic-the-gathering-mox-sapphire-mox-sapphire",
     "https://www.twomoons.ch/ultimate-guard-spielmatte",
     "https://www.twomoons.ch/ultimate-guard-zipfolio-360-xenoskin-magic-the-gathering-reality-fracture-jace-reality-sculptor-tam-the-possibility-jace-reality-sculptor-tam-the-possibility",
+    "https://www.twomoons.ch/ultimate-guard-zipfolio-360-xenoskin-magic-the-gathering-tarkir-dragonstorm-feral-deathgorger-feral-deathgorger",
     "https://www.twomoons.ch/ultimate-guard-zipfolio-480-xenoskin-magic-the-gathering-reality-fracture-liliana-the-faultless-liliana-the-repentant-liliana-the-faultless-liliana-the-repentant",
     "https://www.twomoons.ch/umbreon-nachtara",
     "https://www.twomoons.ch/vaporeon-aquana",
@@ -7081,20 +7086,6 @@
       "message_id": "1570094826966483015",
       "name": "Flesh and Blood Outbreak",
       "price": "CHF 94.90"
-    },
-    "https://www.twomoons.ch/magic-the-gathering-star-trek-commander-play-englisch-jeskai-blue-red-white": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "b0a6d2f75ea621cc",
-      "first_seen": "2026-11-06T17:59:50Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-11-06T17:59:50Z",
-      "message_id": "1568324024742838363",
-      "name": "Magic: The Gathering Star Trek Commander",
-      "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch": {
       "badges": [
@@ -7202,18 +7193,6 @@
       "name": "Topps Bundesliga 2026-27 Flagship",
       "price": "CHF 39.90"
     },
-    "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hanger-box": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "0e86df1e83d63f7e",
-      "first_seen": "2026-11-06T17:59:42Z",
-      "languages": [],
-      "last_checked": "2026-11-06T17:59:42Z",
-      "message_id": "1568323987216269413",
-      "name": "Topps Flagship Basketball 2026/2027",
-      "price": "CHF 26.90"
-    },
     "https://www.twomoons.ch/topps-flagship-basketball-2026-2027-hobby-box": {
       "badges": [
         "Neu"
@@ -7237,6 +7216,30 @@
       "message_id": "1572613233221697649",
       "name": "Ultimate Guard Boulder 100+ Magic: The Gathering | Star Trek - We are the Borg",
       "price": "CHF 14.90"
+    },
+    "https://www.twomoons.ch/ultimate-guard-omnihive-500-xenoskin-magic-the-gathering-star-trek-enterprise-magelan-enterprise-magelan": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "4e29d0d198e9938b",
+      "first_seen": "2026-11-18T21:59:11Z",
+      "languages": [],
+      "last_checked": "2026-11-18T21:59:11Z",
+      "message_id": "1572732925844131935",
+      "name": "Ultimate Guard Omnihive 500+ Xenoskin Magic: The Gathering | Star Trek - Enterprise & Magelan",
+      "price": "CHF 59.90"
+    },
+    "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-locutus-of-borg-locutus-of-borg": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "2aa2b937230de020",
+      "first_seen": "2026-11-18T21:59:07Z",
+      "languages": [],
+      "last_checked": "2026-11-18T21:59:07Z",
+      "message_id": "1572732901689266257",
+      "name": "Ultimate Guard Play-Mat Magic: The Gathering | Star Trek - Locutus of Borg",
+      "price": "CHF 19.90"
     },
     "https://www.twomoons.ch/ultimate-guard-play-mat-magic-the-gathering-star-trek-u.s.s.-enterprise-free-spirit-u.s.s.-enterprise-free-spirit": {
       "badges": [
