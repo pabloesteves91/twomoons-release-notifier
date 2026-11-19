@@ -5886,6 +5886,7 @@
     "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-blau",
     "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-grau",
     "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-katana-the-shogun-s-journey",
+    "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-magic-the-gathering-star-trek-shuttlecraft-galileo-star-trek-shuttlecraft-galileo",
     "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-petrolblau",
     "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-rot",
     "https://www.twomoons.ch/ultimate-guard-arkhive-800-xenoskin-blau",
@@ -6718,7 +6719,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-19T03:32:05Z",
+  "last_run": "2026-11-19T13:14:19Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6973,8 +6974,10 @@
     "https://www.twomoons.ch/topps-ufc-stadium-club-2026-hobby-box",
     "https://www.twomoons.ch/torchic-flemmli",
     "https://www.twomoons.ch/traege",
+    "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-magic-the-gathering-star-trek-shuttlecraft-galileo-star-trek-shuttlecraft-galileo",
     "https://www.twomoons.ch/ultimate-guard-art-sleeves-magic-the-gathering-reality-fracture-vindictive-triumph-vindictive-triumph",
     "https://www.twomoons.ch/ultimate-guard-boulder-100-magic-the-gathering-star-trek-we-are-the-borg-we-are-the-borg",
+    "https://www.twomoons.ch/ultimate-guard-flip-n-tray-133-xenoskin-magic-the-gathering",
     "https://www.twomoons.ch/ultimate-guard-flip-n-tray-133-xenoskin-magic-the-gathering-reality-fracture-way-of-the-mind-sculptor-way-of-the-paradox-way-of-the-mind-sculptor-way-of-the-paradox",
     "https://www.twomoons.ch/ultimate-guard-omnihive-1000-xenoskin-magic-the-gathering",
     "https://www.twomoons.ch/ultimate-guard-omnihive-500-xenoskin-magic-the-gathering-star-trek-enterprise-magelan-enterprise-magelan",
@@ -7115,20 +7118,6 @@
       "name": "Magnificent Maestros",
       "price": "CHF 34.90"
     },
-    "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "f423db10ac569c59",
-      "first_seen": "2026-11-09T17:33:22Z",
-      "languages": [
-        "Deutsch"
-      ],
-      "last_checked": "2026-11-09T17:33:22Z",
-      "message_id": "1569404523968073773",
-      "name": "ME06 Delta Reign",
-      "price": "CHF 179.90"
-    },
     "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-booster-box": {
       "badges": [
         "Neu"
@@ -7204,6 +7193,18 @@
       "message_id": "1570196897035984999",
       "name": "Topps Flagship Basketball 2026/2027",
       "price": "CHF 249.90"
+    },
+    "https://www.twomoons.ch/ultimate-guard-arkhive-400-xenoskin-magic-the-gathering-star-trek-shuttlecraft-galileo-star-trek-shuttlecraft-galileo": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "ca01871ded3f53ab",
+      "first_seen": "2026-11-19T13:14:17Z",
+      "languages": [],
+      "last_checked": "2026-11-19T13:14:17Z",
+      "message_id": "1572963216953311436",
+      "name": "Ultimate Guard Arkhive 400+ Xenoskin Magic: The Gathering | Star Trek - Shuttlecraft Galileo",
+      "price": "CHF 39.90"
     },
     "https://www.twomoons.ch/ultimate-guard-boulder-100-magic-the-gathering-star-trek-we-are-the-borg-we-are-the-borg": {
       "badges": [
