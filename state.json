@@ -43,6 +43,7 @@
     "https://www.twomoons.ch/30th-celebration-futuristic-gift-box-gift-box-chinesisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch",
+    "https://www.twomoons.ch/30th-celebration-mew-figure-collection-mew-figure-collection-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch",
     "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
@@ -736,6 +737,7 @@
     "https://www.twomoons.ch/boulder-n-tray-100-ruby",
     "https://www.twomoons.ch/boulder-n-tray-100-sapphire",
     "https://www.twomoons.ch/boulder-n-tray-100-transparent",
+    "https://www.twomoons.ch/brack-super-league-2026-2027-series-1-hobby-box",
     "https://www.twomoons.ch/brass-birmingham-englisch",
     "https://www.twomoons.ch/brass-lancashire-englisch",
     "https://www.twomoons.ch/breloom-kapilz",
@@ -3467,6 +3469,7 @@
     "https://www.twomoons.ch/medicham-meditalis",
     "https://www.twomoons.ch/mega-amphinobi-ex-premium-collection-franzoesisch",
     "https://www.twomoons.ch/mega-charizard-x-mega-glurak-x",
+    "https://www.twomoons.ch/mega-forces-ex-tin-mega-zeraora-englisch",
     "https://www.twomoons.ch/mega-gengar",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-darkrai-mega-darkrai-deutsch",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-dragoran-mega-dragoran-deutsch",
@@ -6719,7 +6722,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-20T12:57:17Z",
+  "last_run": "2026-11-20T21:09:29Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6736,6 +6739,7 @@
     "https://www.twomoons.ch/30th-celebration-etb-italienisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-box-japanisch",
     "https://www.twomoons.ch/30th-celebration-japanese-booster-japanisch",
+    "https://www.twomoons.ch/30th-celebration-mew-figure-collection-mew-figure-collection-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-mini-tin-mini-tin-italienisch",
     "https://www.twomoons.ch/30th-celebration-nymphali-ex-box-feelinara-ex-box-franzoesisch",
     "https://www.twomoons.ch/30th-celebration-poster-kollektion-poster-collection-franzoesisch",
@@ -6753,6 +6757,7 @@
     "https://www.twomoons.ch/beedrill-bibor",
     "https://www.twomoons.ch/bisasam",
     "https://www.twomoons.ch/bouffalant-bisofank",
+    "https://www.twomoons.ch/brack-super-league-2026-2027-series-1-hobby-box",
     "https://www.twomoons.ch/breloom-kapilz",
     "https://www.twomoons.ch/bronzong-bronzong",
     "https://www.twomoons.ch/buizel-bamelin",
@@ -6864,6 +6869,7 @@
     "https://www.twomoons.ch/mastery-pack-assassin",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
+    "https://www.twomoons.ch/mega-forces-ex-tin-mega-zeraora-englisch",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-zeraora-mega-zeraora-deutsch",
     "https://www.twomoons.ch/mega-tyranitar-mega-despotar",
     "https://www.twomoons.ch/meloetta",
@@ -7011,17 +7017,19 @@
     "https://www.twomoons.ch/zeitloses-abenteuer-johto-schluesselanhaenger-johto"
   ],
   "products": {
-    "https://www.twomoons.ch/30th-celebration-booster-deutsch-30-jahre-booster-deutsch": {
-      "badges": [],
-      "digest": "1afe21427c5cd080",
-      "first_seen": "2026-11-11T06:29:08Z",
-      "languages": [
-        "Deutsch"
+    "https://www.twomoons.ch/30th-celebration-mew-figure-collection-mew-figure-collection-franzoesisch": {
+      "badges": [
+        "Neu"
       ],
-      "last_checked": "2026-11-11T06:29:08Z",
-      "message_id": "1569962100502171659",
-      "name": "30th Celebration Booster Deutsch 30 Jahre",
-      "price": "CHF 14.90"
+      "digest": "246057b6610c0b53",
+      "first_seen": "2026-11-20T21:09:13Z",
+      "languages": [
+        "Französisch"
+      ],
+      "last_checked": "2026-11-20T21:09:13Z",
+      "message_id": "1573445100774625351",
+      "name": "30th Celebration Mew Figure Collection",
+      "price": "CHF 59.90"
     },
     "https://www.twomoons.ch/armory-deck-dr.-mortimer-englisch": {
       "badges": [
@@ -7051,19 +7059,17 @@
       "name": "Armory Deck Min",
       "price": "CHF 34.90"
     },
-    "https://www.twomoons.ch/eb05-booster-display-booster-box-englisch": {
+    "https://www.twomoons.ch/brack-super-league-2026-2027-series-1-hobby-box": {
       "badges": [
         "Neu"
       ],
-      "digest": "db3f83a32577f988",
-      "first_seen": "2026-11-11T15:16:09Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-11-11T15:16:09Z",
-      "message_id": "1570094780854042722",
-      "name": "EB05 Booster Display",
-      "price": "CHF 199.90"
+      "digest": "5ef817abd9b5eab8",
+      "first_seen": "2026-11-20T21:09:24Z",
+      "languages": [],
+      "last_checked": "2026-11-20T21:09:24Z",
+      "message_id": "1573445169762668715",
+      "name": "Brack Super League 2026/2027 Series 1",
+      "price": "CHF 89.90"
     },
     "https://www.twomoons.ch/eb05-booster-display-booster-box-japanisch": {
       "badges": [
@@ -7121,6 +7127,20 @@
       "name": "Magnificent Maestros",
       "price": "CHF 34.90"
     },
+    "https://www.twomoons.ch/mega-forces-ex-tin-mega-zeraora-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "664af417a9e6e4cd",
+      "first_seen": "2026-11-20T21:09:18Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-20T21:09:18Z",
+      "message_id": "1573445146253463707",
+      "name": "Mega-Forces ex Tin",
+      "price": "CHF 29.90"
+    },
     "https://www.twomoons.ch/sportzoo-national-league-2026-27-duel-booster-box": {
       "badges": [
         "Neu"
@@ -7156,22 +7176,6 @@
       "message_id": "1570527940758741014",
       "name": "SportZoo National League 2026/27 Duel",
       "price": "CHF 24.90"
-    },
-    "https://www.twomoons.ch/star-wars-unlimited-icons-2027-booster-box-englisch": {
-      "badges": [
-        "Aldria Deal!",
-        "Neu",
-        "Vorbestellung"
-      ],
-      "digest": "8bbb003b761beaf0",
-      "first_seen": "2026-11-11T15:16:15Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-11-11T15:16:15Z",
-      "message_id": "1570094805986451699",
-      "name": "Star Wars: Unlimited - Icons 2027",
-      "price": "CHF 84.90"
     },
     "https://www.twomoons.ch/topps-bundesliga-2026-27-flagship-value-box": {
       "badges": [
