@@ -3465,6 +3465,7 @@
     "https://www.twomoons.ch/maze-of-the-master-booster-englisch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
+    "https://www.twomoons.ch/me06-delta-reign-etb-englisch",
     "https://www.twomoons.ch/mechanicus-standard-grey-12ml-mechanicus-standard-grey",
     "https://www.twomoons.ch/medicham-meditalis",
     "https://www.twomoons.ch/mega-amphinobi-ex-premium-collection-franzoesisch",
@@ -6722,7 +6723,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-23T02:48:50Z",
+  "last_run": "2026-11-23T12:51:36Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6869,6 +6870,7 @@
     "https://www.twomoons.ch/mastery-pack-assassin",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-deutsch",
     "https://www.twomoons.ch/me06-delta-reign-booster-box-franzoesisch",
+    "https://www.twomoons.ch/me06-delta-reign-etb-englisch",
     "https://www.twomoons.ch/mega-forces-ex-tin-mega-zeraora-englisch",
     "https://www.twomoons.ch/mega-kraefte-ex-tin-mega-zeraora-mega-zeraora-deutsch",
     "https://www.twomoons.ch/mega-tyranitar-mega-despotar",
@@ -7085,20 +7087,6 @@
       "name": "EB05 Booster Display",
       "price": "CHF 109.90"
     },
-    "https://www.twomoons.ch/flesh-and-blood-outbreak-booster-box-englisch": {
-      "badges": [
-        "Vorbestellung"
-      ],
-      "digest": "85244c087912aff2",
-      "first_seen": "2026-11-11T15:16:20Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-11-11T15:16:20Z",
-      "message_id": "1570094826966483015",
-      "name": "Flesh and Blood Outbreak",
-      "price": "CHF 94.90"
-    },
     "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch": {
       "badges": [
         "Neu"
@@ -7126,6 +7114,20 @@
       "message_id": "1572010296837406732",
       "name": "Magnificent Maestros",
       "price": "CHF 34.90"
+    },
+    "https://www.twomoons.ch/me06-delta-reign-etb-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "6019e6d4ecffdebd",
+      "first_seen": "2026-11-23T12:51:34Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-23T12:51:34Z",
+      "message_id": "1574407051000549507",
+      "name": "ME06 Delta Reign",
+      "price": "CHF 79.90"
     },
     "https://www.twomoons.ch/mega-forces-ex-tin-mega-zeraora-englisch": {
       "badges": [
