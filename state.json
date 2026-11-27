@@ -3920,6 +3920,7 @@
     "https://www.twomoons.ch/one-piece-card-game-two-legends-booster-op08-booster-englisch",
     "https://www.twomoons.ch/one-piece-heroines-edition-eb03-booster-japanisch",
     "https://www.twomoons.ch/one-piece-heroines-edition-eb03-display-japanisch",
+    "https://www.twomoons.ch/one-piece-heroines-gift-collection-gc2026-englisch",
     "https://www.twomoons.ch/one-piece-natsucomi-2026-meta-kira-eiichiro-oda-japan-exclusive-promo-card-jp",
     "https://www.twomoons.ch/one-piece-plueschfigur-ruffy-25-cm",
     "https://www.twomoons.ch/one-piece-premium-card-collection-volume-6",
@@ -6729,7 +6730,7 @@
     "https://www.twomoons.ch/zug-um-zug-weltreise-deutsch",
     "https://www.twomoons.ch/zweilous-duodino"
   ],
-  "last_run": "2026-11-27T02:52:14Z",
+  "last_run": "2026-11-27T12:27:28Z",
   "page_seen": [
     "https://www.twomoons.ch/2026-topps-universe-wwe-hobby-box",
     "https://www.twomoons.ch/2026-topps-universe-wwe-mega-box",
@@ -6911,6 +6912,8 @@
     "https://www.twomoons.ch/nidorino",
     "https://www.twomoons.ch/nuzleaf-blanas",
     "https://www.twomoons.ch/one-piece-card-game-japanese-3rd-anniversary-set-japanisch",
+    "https://www.twomoons.ch/one-piece-card-game-premium-card-collection-live-action-edition-vol.-2-englisch-strawhat-crew",
+    "https://www.twomoons.ch/one-piece-heroines-gift-collection-gc2026-englisch",
     "https://www.twomoons.ch/op17-booster-box-booster-box-japanisch",
     "https://www.twomoons.ch/op17-the-worlds-strongest-warriors-case-japanisch",
     "https://www.twomoons.ch/op18-the-dominance-of-god",
@@ -7093,20 +7096,6 @@
       "name": "Brack Super League 2026/2027 Series 1",
       "price": "CHF 89.90"
     },
-    "https://www.twomoons.ch/magic-the-gathering-star-trek-prerelease-pack-play-englisch": {
-      "badges": [
-        "Neu"
-      ],
-      "digest": "f9c7486c5a3ea900",
-      "first_seen": "2026-11-12T19:57:33Z",
-      "languages": [
-        "Englisch"
-      ],
-      "last_checked": "2026-11-12T19:57:33Z",
-      "message_id": "1570527986367733832",
-      "name": "Magic: The Gathering Star Trek",
-      "price": "CHF 39.90"
-    },
     "https://www.twomoons.ch/magnificent-maestros-tuck-box-englisch": {
       "badges": [
         "Neu"
@@ -7162,6 +7151,20 @@
       "message_id": "1575596605250343065",
       "name": "Mega Greninja ex League Battle Deck",
       "price": "CHF 44.90"
+    },
+    "https://www.twomoons.ch/one-piece-heroines-gift-collection-gc2026-englisch": {
+      "badges": [
+        "Neu"
+      ],
+      "digest": "04e3f6cfa44b2ed0",
+      "first_seen": "2026-11-27T12:27:26Z",
+      "languages": [
+        "Englisch"
+      ],
+      "last_checked": "2026-11-27T12:27:26Z",
+      "message_id": "1575850493303857193",
+      "name": "One Piece Heroines Gift Collection GC2026",
+      "price": "CHF 69.90"
     },
     "https://www.twomoons.ch/op18-the-dominance-of-god": {
       "badges": [
